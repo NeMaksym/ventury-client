@@ -1,17 +1,11 @@
-import { useState } from 'react'
-import { TopBar, DrawerMenu } from './components'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
+import { TopBar, NavList } from './components'
 import { sideMenuPages, DEFAULT_PAGE } from './pages'
 
 export function App() {
-    const [isDrawerOpen, setDrawerOpen] = useState(false)
-
-    const handleDrawerToggle = () => {
-        setDrawerOpen(!isDrawerOpen)
-    }
-
     return (
         <BrowserRouter>
             <Box
@@ -19,16 +13,21 @@ export function App() {
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100vh',
+                    overflow: 'hidden',
                 }}
             >
                 <CssBaseline />
-                <TopBar onMenuClick={handleDrawerToggle} />
-                <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                    <DrawerMenu
-                        open={isDrawerOpen}
-                        onClose={() => setDrawerOpen(false)}
-                    />
-                    <Box component="main" sx={{ flexGrow: 1, mt: 8 }}>
+                <TopBar />
+                <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
+                    <NavList />
+                    <Box
+                        component="main"
+                        sx={{
+                            flexGrow: 1,
+                            overflow: 'auto',
+                            padding: 2,
+                        }}
+                    >
                         <Routes>
                             {Object.entries(sideMenuPages).map(
                                 ([path, { element }]) => (
