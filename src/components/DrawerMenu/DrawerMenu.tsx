@@ -6,6 +6,8 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
+import { useNavigate } from 'react-router-dom'
+import { sideMenuPages } from '../../pages'
 
 const DRAWER_WIDTH = 240
 
@@ -15,13 +17,20 @@ interface DrawerMenuProps {
 }
 
 const DrawerMenu: React.FC<DrawerMenuProps> = ({ open, onClose }) => {
+    const navigate = useNavigate()
+
+    const handleNavigation = (path: string) => {
+        navigate(path)
+        onClose()
+    }
+
     return (
         <Drawer
             variant="temporary"
             open={open}
             onClose={onClose}
             ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
+                keepMounted: true,
             }}
             sx={{
                 width: DRAWER_WIDTH,
@@ -32,19 +41,18 @@ const DrawerMenu: React.FC<DrawerMenuProps> = ({ open, onClose }) => {
                 },
             }}
         >
-            <Toolbar /> {/* This pushes the content below the AppBar */}
+            <Toolbar />
             <Box sx={{ overflow: 'auto' }}>
                 <List>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemText primary="Menu Item 1" />
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemText primary="Menu Item 2" />
-                        </ListItemButton>
-                    </ListItem>
+                    {Object.entries(sideMenuPages).map(([path, { name }]) => (
+                        <ListItem key={path} disablePadding>
+                            <ListItemButton
+                                onClick={() => handleNavigation(path)}
+                            >
+                                <ListItemText primary={name} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
                 </List>
             </Box>
         </Drawer>
