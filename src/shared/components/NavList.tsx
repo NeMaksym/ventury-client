@@ -6,11 +6,11 @@ import ListItemText from '@mui/material/ListItemText'
 import Box from '@mui/material/Box'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import { sideMenuPages } from '../../pages'
+import { expensesPages } from '../../expenses/pages/routes'
 
 const NAVIGATION_WIDTH = 240
 
-const NavList: React.FC = () => {
+export const NavList: React.FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -24,8 +24,11 @@ const NavList: React.FC = () => {
             }}
         >
             <List sx={{ height: '100%', overflow: 'auto' }}>
-                {Object.entries(sideMenuPages).map(([path, { name }]) => (
-                    <ListItem key={path} disablePadding>
+                <ListItem disablePadding>
+                    <ListItemText primary="Expenses" sx={{ pl: 2 }} />
+                </ListItem>
+                {Object.entries(expensesPages).map(([path, { name }]) => (
+                    <ListItem key={path} disablePadding sx={{ pl: 2 }}>
                         <ListItemButton
                             onClick={() => navigate(path)}
                             selected={location.pathname === path}
@@ -38,5 +41,3 @@ const NavList: React.FC = () => {
         </Box>
     )
 }
-
-export default NavList

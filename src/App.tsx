@@ -1,7 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
-import { Layout } from './components'
-import { sideMenuPages, DEFAULT_PAGE } from './pages'
+
+import {
+    expensesPages,
+    PagePaths as ExpensesPagePaths,
+} from './expenses/pages/routes'
+import { Layout } from './shared/components'
 
 export function App() {
     return (
@@ -10,7 +14,7 @@ export function App() {
             <BrowserRouter>
                 <Layout>
                     <Routes>
-                        {Object.entries(sideMenuPages).map(
+                        {Object.entries(expensesPages).map(
                             ([path, { element }]) => (
                                 <Route
                                     key={path}
@@ -21,7 +25,12 @@ export function App() {
                         )}
                         <Route
                             path="/"
-                            element={<Navigate to={DEFAULT_PAGE} replace />}
+                            element={
+                                <Navigate
+                                    to={ExpensesPagePaths.UPLOAD}
+                                    replace
+                                />
+                            }
                         />
                     </Routes>
                 </Layout>
