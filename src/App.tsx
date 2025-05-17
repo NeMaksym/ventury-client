@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 
-import {
-    expensesPages,
-    PagePaths as ExpensesPagePaths,
-} from './expenses/pages/routes'
-import { Layout } from './shared/components'
+import { uploadPage, PagePaths } from './pages/routes'
+import { Layout } from './components'
+
+const pages = { ...uploadPage }
 
 export function App() {
     return (
@@ -14,23 +13,12 @@ export function App() {
             <BrowserRouter>
                 <Layout>
                     <Routes>
-                        {Object.entries(expensesPages).map(
-                            ([path, { element }]) => (
-                                <Route
-                                    key={path}
-                                    path={path}
-                                    element={element}
-                                />
-                            )
-                        )}
+                        {Object.entries(pages).map(([path, { element }]) => (
+                            <Route key={path} path={path} element={element} />
+                        ))}
                         <Route
                             path="/"
-                            element={
-                                <Navigate
-                                    to={ExpensesPagePaths.UPLOAD}
-                                    replace
-                                />
-                            }
+                            element={<Navigate to={PagePaths.UPLOAD} replace />}
                         />
                     </Routes>
                 </Layout>

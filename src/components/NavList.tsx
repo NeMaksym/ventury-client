@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Box from '@mui/material/Box'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import { expensesPages } from '../../expenses/pages/routes'
+import { uploadPage } from '../pages/routes'
 
 const NAVIGATION_WIDTH = 240
 
@@ -24,11 +24,8 @@ export const NavList: React.FC = () => {
             }}
         >
             <List sx={{ height: '100%', overflow: 'auto' }}>
-                <ListItem disablePadding>
-                    <ListItemText primary="Expenses" sx={{ pl: 2 }} />
-                </ListItem>
-                {Object.entries(expensesPages).map(([path, { name }]) => (
-                    <ListItem key={path} disablePadding sx={{ pl: 2 }}>
+                {Object.entries(uploadPage).map(([path, { name }]) => (
+                    <ListItem key={path} disablePadding>
                         <ListItemButton
                             onClick={() => navigate(path)}
                             selected={location.pathname === path}
