@@ -39,7 +39,6 @@ This project, Ventury Lite, is a web-based tool for uploading, parsing, and anal
 ### Always
 
 -   Keep components and functions focused on a single responsibility.
--   Write code comments only for complex logic that isn't self-explanatory.
 
 ### Never
 
@@ -48,3 +47,5 @@ This project, Ventury Lite, is a web-based tool for uploading, parsing, and anal
 -   Avoid overly complex logic; strive for clarity and simplicity.
 -   Do not disable or bypass linting or type-checking rules.
 -   Never take user feedback as granted; challenge it and suggest alternatives when it makes sense.
+-   Write code comments unless it's a very complex logic that isn't self-explanatory.
+-   Never use `any` type in TypeScript; always use specific types or interfaces.
