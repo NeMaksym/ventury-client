@@ -4,6 +4,9 @@ import { Box } from '@mui/material'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { BankSelector } from './BankSelector'
+import PrivateUploader from '../PrivateUploader'
+import MonoUploader from '../MonoUploader'
+import { SUPPORTED_BANKS, BankType } from '../../constants'
 
 interface UploadStepperProps {
     onComplete?: () => void
@@ -16,12 +19,17 @@ const BANK_OPTIONS = [
     { value: 'private', label: 'Private' },
 ]
 
+const BANK_COMPONENTS_MAP: Record<BankType, React.ComponentType> = {
+    mono: MonoUploader,
+    private: PrivateUploader,
+}
+
 export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const [activeStep, setActiveStep] = useState<number>(0)
     const handleNext = () => setActiveStep((prevStep) => prevStep + 1)
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1)
 
-    const [bankType, setBankType] = useState<'mono' | 'private'>('mono')
+    const [bankType, setBankType] = useState<BankType>(SUPPORTED_BANKS.PRIVATE)
 
     const renderStepContent = (step: number) => {
         switch (step) {
@@ -29,12 +37,14 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
                 return (
                     <BankSelector
                         value={bankType}
-                        onChange={(value) => setBankType(value as any)}
+                        onChange={(value) => setBankType(value as BankType)}
                         options={BANK_OPTIONS}
                     />
                 )
-            case 1:
-                return null
+            case 1: {
+                const BankComponent = BANK_COMPONENTS_MAP[bankType]
+                return <BankComponent />
+            }
             default:
                 throw new Error('Unknown step')
         }
