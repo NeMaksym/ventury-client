@@ -13,6 +13,12 @@ export interface VenturyDB extends DBSchema {
     [Stores.EXPENSES]: {
         key: string
         value: Transaction
+        indexes: {
+            originalId: string
+            bank: string
+            category: string
+            labels: string
+        }
     }
 }
 
@@ -23,7 +29,19 @@ export async function getDb() {
         db = await openDB<VenturyDB>(DB_NAME, DB_VERSION, {
             upgrade(db) {
                 if (!db.objectStoreNames.contains(Stores.EXPENSES)) {
-                    db.createObjectStore(Stores.EXPENSES, { keyPath: 'id' })
+                    const store = db.createObjectStore(Stores.EXPENSES, {
+                        keyPath: 'id',
+                    })
+
+                    store.createIndex('originalId', 'originalId', {
+                        unique: false,
+                    })
+                    store.createIndex('bank', 'bank', { unique: false })
+                    store.createIndex('category', 'category', { unique: false })
+                    store.createIndex('labels', 'labels', {
+                        unique: false,
+                        multiEntry: true,
+                    })
                 }
             },
         })
