@@ -4,9 +4,9 @@ import { Box } from '@mui/material'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { BankSelector } from './BankSelector'
-import PrivateUploader from '../PrivateUploader'
-import MonoUploader from '../MonoUploader'
-import { SUPPORTED_BANKS, BankType } from '../../constants'
+import { PrivateUploader } from '../PrivateUploader'
+import { MonoUploader } from '../MonoUploader'
+import { Bank } from '../../types'
 
 interface UploadStepperProps {
     onComplete?: () => void
@@ -14,12 +14,12 @@ interface UploadStepperProps {
 
 const STEPS = ['Select Bank', 'Upload Data']
 
-const BANK_OPTIONS = [
+const BANK_OPTIONS: { value: Bank; label: string }[] = [
     { value: 'mono', label: 'Mono' },
     { value: 'private', label: 'Private' },
 ]
 
-const BANK_COMPONENTS_MAP: Record<BankType, React.ComponentType> = {
+const BANK_COMPONENTS_MAP: Record<Bank, React.ComponentType> = {
     mono: MonoUploader,
     private: PrivateUploader,
 }
@@ -29,20 +29,20 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const handleNext = () => setActiveStep((prevStep) => prevStep + 1)
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1)
 
-    const [bankType, setBankType] = useState<BankType>(SUPPORTED_BANKS.PRIVATE)
+    const [bank, setBank] = useState<Bank>('private')
 
     const renderStepContent = (step: number) => {
         switch (step) {
             case 0:
                 return (
                     <BankSelector
-                        value={bankType}
-                        onChange={(value) => setBankType(value as BankType)}
+                        value={bank}
+                        onChange={(value) => setBank(value as Bank)}
                         options={BANK_OPTIONS}
                     />
                 )
             case 1: {
-                const BankComponent = BANK_COMPONENTS_MAP[bankType]
+                const BankComponent = BANK_COMPONENTS_MAP[bank]
                 return <BankComponent />
             }
             default:
