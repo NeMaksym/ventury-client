@@ -1,3 +1,5 @@
+import type { SourceTransaction } from '../../types'
+
 /**
  * Represents a financial transaction in the private API.
  * @typedef {Array} PrivateTransaction
@@ -12,7 +14,7 @@
  * @property {number} 8 - Account balance after transaction (e.g. -90785.13)
  * @property {string} 9 - Account balance currency code (e.g. "UAH")
  */
-export type PrivateAPITransaction = [
+export type StatementRow = [
     string, // time
     string, // category
     string, // cardNumber

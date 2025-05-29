@@ -4,25 +4,21 @@ import { Box } from '@mui/material'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { BankSelector } from './BankSelector'
-import { PrivateUploader } from '../PrivateUploader'
-import { MonoUploader } from '../MonoUploader'
-import { Bank } from '../../types'
+import { Bank, SourceTransaction } from '../../types'
+import { plugins } from '../../plugins'
 
 interface UploadStepperProps {
     onComplete?: () => void
 }
 
-const STEPS = ['Select Bank', 'Upload Data']
+const STEPS = ['Select Bank', 'Provide Data', 'Results']
 
-const BANK_OPTIONS: { value: Bank; label: string }[] = [
-    { value: 'mono', label: 'Mono' },
-    { value: 'private', label: 'Private' },
-]
-
-const BANK_COMPONENTS_MAP: Record<Bank, React.ComponentType> = {
-    mono: MonoUploader,
-    private: PrivateUploader,
-}
+const BANK_OPTIONS: { value: string; label: string }[] = Object.entries(
+    plugins
+).map(([key, plugin]) => ({
+    value: key,
+    label: plugin.label,
+}))
 
 export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const [activeStep, setActiveStep] = useState<number>(0)
@@ -30,6 +26,9 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1)
 
     const [bank, setBank] = useState<Bank>('private')
+    const [uploadData, setUploadData] = useState<SourceTransaction[] | null>(
+        null
+    )
 
     const renderStepContent = (step: number) => {
         switch (step) {
@@ -42,8 +41,15 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
                     />
                 )
             case 1: {
-                const BankComponent = BANK_COMPONENTS_MAP[bank]
-                return <BankComponent />
+                const UploaderComponent = plugins[bank].Uploader
+                return (
+                    <UploaderComponent
+                        uploadData={(data) => setUploadData(data)}
+                    />
+                )
+            }
+            case 2: {
+                return <p>Results: {uploadData?.length}</p>
             }
             default:
                 throw new Error('Unknown step')
@@ -57,10 +63,16 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
             <Box sx={{ mt: 4, ml: 2 }}>{renderStepContent(activeStep)}</Box>
 
             <Footer
-                onBack={handleBack}
+                onBack={() => {
+                    setUploadData(null)
+                    handleBack()
+                }}
                 isBackDisabled={activeStep === 0}
                 onNext={handleNext}
-                isNextDisabled={activeStep === STEPS.length - 1}
+                isNextDisabled={
+                    activeStep === STEPS.length - 1 ||
+                    (activeStep === 1 && !uploadData)
+                }
             />
         </Box>
     )

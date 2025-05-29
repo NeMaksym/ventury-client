@@ -1,3 +1,5 @@
+import { SourceTransaction } from '../../types'
+
 /**
  * Represents client information from the Mono API
  * @interface MonoAPIClientInfo
