@@ -9,13 +9,35 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
+const THEME_STORAGE_KEY = 'ventury-theme-mode'
+
+const getInitialTheme = (): PaletteMode => {
+    try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+            return savedTheme
+        }
+    } catch (error) {
+        console.warn('Failed to load theme from localStorage:', error)
+    }
+    return 'light'
+}
+
 export const CustomThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [mode, setMode] = useState<PaletteMode>('light')
+    const [mode, setMode] = useState<PaletteMode>(getInitialTheme)
 
     const toggleMode = () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'))
+        setMode((prevMode) => {
+            const newMode = prevMode === 'light' ? 'dark' : 'light'
+            try {
+                localStorage.setItem(THEME_STORAGE_KEY, newMode)
+            } catch (error) {
+                console.warn('Failed to save theme to localStorage:', error)
+            }
+            return newMode
+        })
     }
 
     const theme = createTheme({
