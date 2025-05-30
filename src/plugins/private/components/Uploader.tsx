@@ -16,6 +16,16 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 })
 
+const getSelectedFile = (event: React.ChangeEvent<HTMLInputElement>): File => {
+    const selectedFile = event.target.files ? event.target.files[0] : null
+
+    if (!selectedFile) {
+        throw new Error('No file selected')
+    }
+
+    return selectedFile
+}
+
 export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
     const [file, setFile] = useState<File | null>(null)
     const [error, setError] = useState<string | null>(null)
@@ -24,27 +34,9 @@ export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
         setError(null)
 
         try {
-            const selectedFile = event.target.files
-                ? event.target.files[0]
-                : null
-            setFile(selectedFile)
+            const selectedFile = getSelectedFile(event)
 
-            if (selectedFile && selectedFile.name.endsWith('.xlsx')) {
-                const dummyTransaction = {
-                    originalId: 'dummy-001',
-                    time: BigInt(Date.now()),
-                    description: 'Dummy Transaction',
-                    amount: BigInt(10000),
-                    currencyCode: 980,
-                    operationAmount: BigInt(10000),
-                    operationCurrencyCode: 980,
-                    accountId: {
-                        type: 'iban' as const,
-                        value: 'UA123456789012345678901234567',
-                    },
-                }
-                uploadData([dummyTransaction])
-            }
+            setFile(selectedFile)
         } catch (error) {
             setError(
                 error instanceof Error
