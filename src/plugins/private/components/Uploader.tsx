@@ -3,6 +3,7 @@ import { Box, Button, Typography, styled } from '@mui/material'
 import { CloudUpload } from '@mui/icons-material'
 
 import { UploaderProps } from '../../../types'
+import { parsePrivateBankStatement } from '../utils/statementParser'
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -29,20 +30,31 @@ const getSelectedFile = (event: React.ChangeEvent<HTMLInputElement>): File => {
 export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
     const [file, setFile] = useState<File | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setError(null)
 
         try {
             const selectedFile = getSelectedFile(event)
 
             setFile(selectedFile)
+
+            setIsLoading(true)
+
+            const transactions = await parsePrivateBankStatement(selectedFile)
+
+            uploadData(transactions)
         } catch (error) {
             setError(
                 error instanceof Error
                     ? error.message
                     : 'An error occurred while processing the file'
             )
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -73,6 +85,12 @@ export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
                 {file && (
                     <Typography variant="body2" color="text.secondary">
                         Selected: {file.name}
+                    </Typography>
+                )}
+
+                {isLoading && (
+                    <Typography variant="body2" color="text.secondary">
+                        Loading...
                     </Typography>
                 )}
 
