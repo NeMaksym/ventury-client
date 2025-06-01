@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 
 import { useDb } from '../context/DbContext'
-import { Transaction } from '../types/transaction'
+import { SystemTransaction } from '../types'
 import { Stores } from '../db/connect'
 
 export function useAddExpense() {
     const { getDb } = useDb()
 
     const addExpense = useCallback(
-        async (expense: Transaction) => {
+        async (expense: SystemTransaction) => {
             const db = await getDb()
             await db.add(Stores.EXPENSES, expense)
         },
