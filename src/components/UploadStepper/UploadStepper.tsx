@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { BankSelector } from './BankSelector'
+import { ResultsRenderer } from './ResultsRenderer'
 import { Bank, SourceTransaction } from '../../types'
 import { plugins } from '../../plugins'
 
@@ -26,9 +27,7 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1)
 
     const [bank, setBank] = useState<Bank>('private')
-    const [uploadData, setUploadData] = useState<SourceTransaction[] | null>(
-        null
-    )
+    const [data, setData] = useState<SourceTransaction[] | null>(null)
 
     const renderStepContent = (step: number) => {
         switch (step) {
@@ -43,13 +42,16 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
             case 1: {
                 const UploaderComponent = plugins[bank].Uploader
                 return (
-                    <UploaderComponent
-                        uploadData={(data) => setUploadData(data)}
-                    />
+                    <UploaderComponent uploadData={(data) => setData(data)} />
                 )
             }
             case 2: {
-                return <p>Results: {uploadData?.length}</p>
+                return (
+                    <ResultsRenderer
+                        bank={bank}
+                        sourceTransactions={data ?? []}
+                    />
+                )
             }
             default:
                 throw new Error('Unknown step')
@@ -64,14 +66,14 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
 
             <Footer
                 onBack={() => {
-                    setUploadData(null)
+                    setData(null)
                     handleBack()
                 }}
                 isBackDisabled={activeStep === 0}
                 onNext={handleNext}
                 isNextDisabled={
                     activeStep === STEPS.length - 1 ||
-                    (activeStep === 1 && !uploadData)
+                    (activeStep === 1 && !data)
                 }
             />
         </Box>
