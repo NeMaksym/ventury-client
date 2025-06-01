@@ -110,12 +110,6 @@ class PrivateBankStatementRow {
         return operationCurrency
     }
 
-    private getTransactionHash(): string {
-        return `${this.getTimestamp()}-${this.maskedPan}-${
-            this.operationAmount
-        }`
-    }
-
     private getTimestamp(): bigint {
         const [datePart, timePart] = this.dateTime.split(' ')
         const [day, month, year] = datePart.split('.')
@@ -158,7 +152,7 @@ class PrivateBankStatementRow {
 
     public get transaction(): SourceTransaction {
         return {
-            originalId: this.getTransactionHash(),
+            originalId: null,
             time: this.getTimestamp(),
             description: this.description.trim(),
             amount: this.toSmallestUnit(this.amount),

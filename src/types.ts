@@ -31,7 +31,7 @@ interface Commission {
 /**
  * Represents the structure for a financial transaction from external sources.
  * @interface SourceTransaction
- * @property {string} originalId - Original identifier from the source system (usually transaction id from external source)
+ * @property {string | null} originalId - Original identifier from the source system (usually transaction id from external source)
  * @property {bigint} time - Timestamp of when the transaction occurred (Unix timestamp in milliseconds)
  * @property {string} description - Description or details of the transaction
  * @property {bigint} amount - Transaction amount in the smallest currency unit (e.g., cents)
@@ -45,7 +45,7 @@ interface Commission {
  * @property {boolean} [hold] - Optional flag indicating if the transaction is on hold
  */
 export interface SourceTransaction {
-    originalId: string
+    originalId: string | null
     time: bigint
     description: string
     amount: bigint
