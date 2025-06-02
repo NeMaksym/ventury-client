@@ -1,9 +1,6 @@
-import cc from 'currency-codes'
-
 import { SourceTransaction, SystemTransaction } from '../../../types'
-import { LoadExchangeRatesDTO } from './loadExchangeRates'
-
-const USD_CODE = 840
+import { encodeKey, LoadExchangeRatesDTO } from './loadExchangeRates'
+import { currency } from '../../../utils/currency'
 
 export interface ToSystemTransactionsDTO extends LoadExchangeRatesDTO {
     systemTransactions: SystemTransaction[]
@@ -18,13 +15,21 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
 
     addMessage('Adding reference amount to transactions...')
 
-    const systemTransactions = sourceTransactions.map((transaction) => ({
-        ...transaction,
-        bank,
-        referenceAmount: getReferenceAmount(transaction, exchangeRatesMap),
-        referenceCurrencyCode: USD_CODE,
-        category: null,
-    }))
+    const systemTransactions = sourceTransactions.map((transaction) => {
+        const referenceCurrencyCode = currency.usdNumCode
+        const referenceAmount =
+            transaction.operationCurrencyCode === currency.usdNumCode
+                ? transaction.operationAmount
+                : calculateRefAmount(transaction, exchangeRatesMap)
+
+        return {
+            ...transaction,
+            bank,
+            referenceAmount,
+            referenceCurrencyCode,
+            category: null,
+        }
+    })
 
     return {
         ...input,
@@ -32,31 +37,16 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
     }
 }
 
-function getReferenceAmount(
+function calculateRefAmount(
     transaction: SourceTransaction,
     exchangeRatesMap: LoadExchangeRatesDTO['exchangeRatesMap']
 ): bigint {
-    if (transaction.operationCurrencyCode === USD_CODE) {
-        return transaction.operationAmount
-    }
+    const key = encodeKey(transaction)
 
-    const date = new Date(Number(transaction.time)).toISOString().split('T')[0]
-
-    const code = cc.number(transaction.operationCurrencyCode.toString())
-
-    if (!code) {
-        throw new Error(
-            `Unknown currency code: ${transaction.operationCurrencyCode}`
-        )
-    }
-
-    const rate: number | undefined =
-        exchangeRatesMap[date][code.code.toLowerCase()]
+    const rate = exchangeRatesMap.get(key)
 
     if (!rate) {
-        throw new Error(
-            `Exchange rate not found for ${date} and ${code.code.toLowerCase()}`
-        )
+        throw new Error(`Exchange rate not found for ${key}`)
     }
 
     return BigInt(Math.round(Number(transaction.operationAmount) * rate))

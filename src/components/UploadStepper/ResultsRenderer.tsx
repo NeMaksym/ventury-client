@@ -4,12 +4,7 @@ import { asyncPipe, CancellationError } from '../../utils/asyncPipe'
 import { Bank, SourceTransaction } from '../../types'
 import { useMessages } from '../../hooks/useMessages'
 
-import {
-    getDateToCurrencyMap,
-    loadExchangeRates,
-    toSystemTransactions,
-    addToDB,
-} from './pipeline'
+import { loadExchangeRates, toSystemTransactions, addToDB } from './pipeline'
 
 interface ResultsRendererProps {
     bank: Bank
@@ -29,7 +24,6 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
 
         asyncPipe(
             { sourceTransactions, addMessage, bank },
-            getDateToCurrencyMap,
             loadExchangeRates,
             toSystemTransactions,
             addToDB,
