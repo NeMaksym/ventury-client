@@ -112,8 +112,17 @@ class PrivateBankStatementRow {
 
     private getTimestamp(): bigint {
         const [datePart, timePart] = this.dateTime.split(' ')
+
+        if (!datePart || !timePart) {
+            throw new Error(`Row ${this.rowIndex} has invalid date value`)
+        }
+
         const [day, month, year] = datePart.split('.')
         const [hours, minutes, seconds] = timePart.split(':')
+
+        if (!day || !month || !year || !hours || !minutes || !seconds) {
+            throw new Error(`Row ${this.rowIndex} has invalid date value`)
+        }
 
         const date = new Date(
             parseInt(year),
