@@ -72,6 +72,12 @@ export async function getDb(): Promise<IDBPDatabase<VenturyDB>> {
                     })
                 }
             },
+            blocked() {
+                console.warn('Database upgrade blocked by another connection')
+            },
+            blocking() {
+                console.warn('Database upgrade is blocking another connection')
+            },
         })
     }
 
