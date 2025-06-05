@@ -63,6 +63,7 @@ export interface SourceTransaction {
  * Represents a transaction with additional system-level metadata.
  * @interface SystemTransaction
  * @extends SourceTransaction
+ * @property {string} id - Unique identifier for the transaction
  * @property {Bank} bank - The bank that originated this transaction
  * @property {bigint} referenceAmount - Reference amount in the smallest currency unit for comparison
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
@@ -70,6 +71,7 @@ export interface SourceTransaction {
  * @property {string[]} [labels] - Optional array of system-assigned labels or tags
  */
 export interface SystemTransaction extends SourceTransaction {
+    id: string
     bank: Bank
     referenceAmount: bigint
     referenceCurrencyCode: number
