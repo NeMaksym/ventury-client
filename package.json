@@ -21,8 +21,9 @@
         "read-excel-file": "^5.8.8"
     },
     "devDependencies": {
+        "@parcel/validator-typescript": "^2.15.2",
         "@types/react": "^19.0.0",
         "@types/react-dom": "^19.0.0",
-        "parcel": "^2.14.0"
+        "parcel": "^2.15.2"
     }
 }
