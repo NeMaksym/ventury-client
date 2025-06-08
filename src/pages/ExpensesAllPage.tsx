@@ -20,7 +20,9 @@ export const ExpensesAllPage: React.FC<ExpensesAllPageProps> = () => {
                 setLoading(true)
                 setError(null)
                 const data = await getAllTransactions()
-                setTransactions(data)
+                setTransactions(
+                    data.sort((a, b) => b.time.getTime() - a.time.getTime())
+                )
             } catch (err) {
                 setError(
                     err instanceof Error
