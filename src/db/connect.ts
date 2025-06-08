@@ -15,8 +15,8 @@ export interface VenturyDB extends DBSchema {
         key: string
         value: SystemTransaction
         indexes: {
+            time: Date
             bank: string
-            time: string
             category: string
             labels: string
         }
@@ -25,8 +25,8 @@ export interface VenturyDB extends DBSchema {
         key: string
         value: SystemTransaction
         indexes: {
+            time: Date
             bank: string
-            time: string
             category: string
             labels: string
         }
@@ -44,25 +44,18 @@ export async function getDb(): Promise<IDBPDatabase<VenturyDB>> {
                         Stores.EXPENSES,
                         { keyPath: 'id' }
                     )
-
+                    expensesStore.createIndex('time', 'time')
                     expensesStore.createIndex('bank', 'bank')
                     expensesStore.createIndex('category', 'category')
                     expensesStore.createIndex('labels', 'labels', {
                         multiEntry: true,
                     })
-                }
-
-                if (oldVersion < 2) {
-                    const expensesStore = transaction.objectStore(
-                        Stores.EXPENSES
-                    )
-                    expensesStore.createIndex('time', 'time')
 
                     const incomesStore = db.createObjectStore(Stores.INCOMES, {
                         keyPath: 'id',
                     })
-                    incomesStore.createIndex('bank', 'bank')
                     incomesStore.createIndex('time', 'time')
+                    incomesStore.createIndex('bank', 'bank')
                     incomesStore.createIndex('category', 'category')
                     incomesStore.createIndex('labels', 'labels', {
                         multiEntry: true,
