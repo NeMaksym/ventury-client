@@ -45,7 +45,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     <TableRow>
                         <TableCell>Date</TableCell>
                         <TableCell>Description</TableCell>
-                        <TableCell>Bank</TableCell>
                         <TableCell>Category</TableCell>
                         <TableCell align="right">Amount</TableCell>
                     </TableRow>
@@ -57,13 +56,10 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 {formatDate(transaction.time)}
                             </TableCell>
                             <TableCell>{transaction.description}</TableCell>
-                            <TableCell>
-                                {transaction.bank.toUpperCase()}
-                            </TableCell>
                             <TableCell>{transaction.category || '-'}</TableCell>
                             <TableCell align="right">
                                 <Tooltip
-                                    title={`USD: $${formatAmount(
+                                    title={`$${formatAmount(
                                         transaction.referenceAmount
                                     )}`}
                                 >
@@ -75,7 +71,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                             cursor: 'help',
                                         }}
                                     >
-                                        ${formatAmount(transaction.amount)}
+                                        {formatAmount(transaction.amount)}
                                     </Typography>
                                 </Tooltip>
                             </TableCell>
