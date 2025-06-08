@@ -32,7 +32,7 @@ interface Commission {
  * Represents the structure for a financial transaction from external sources.
  * @interface SourceTransaction
  * @property {string | null} originalId - Original identifier from the source system (usually transaction id from external source)
- * @property {bigint} time - Timestamp of when the transaction occurred (Unix timestamp in milliseconds)
+ * @property {Date} time - Timestamp of when the transaction occurred
  * @property {string} description - Description or details of the transaction
  * @property {bigint} amount - Transaction amount in the smallest currency unit (e.g., cents)
  * @property {number} currencyCode - Numerical currency code (ISO 4217)
@@ -46,7 +46,7 @@ interface Commission {
  */
 export interface SourceTransaction {
     originalId: string | null
-    time: bigint
+    time: Date
     description: string
     amount: bigint
     currencyCode: number

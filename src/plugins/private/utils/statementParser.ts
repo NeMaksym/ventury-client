@@ -110,7 +110,7 @@ class PrivateBankStatementRow {
         return operationCurrency
     }
 
-    private getTimestamp(): bigint {
+    private getTimestamp(): Date {
         const [datePart, timePart] = this.dateTime.split(' ')
 
         if (!datePart || !timePart) {
@@ -124,7 +124,7 @@ class PrivateBankStatementRow {
             throw new Error(`Row ${this.rowIndex} has invalid date value`)
         }
 
-        const date = new Date(
+        return new Date(
             parseInt(year),
             parseInt(month) - 1,
             parseInt(day),
@@ -132,8 +132,6 @@ class PrivateBankStatementRow {
             parseInt(minutes),
             parseInt(seconds)
         )
-
-        return BigInt(date.getTime())
     }
 
     private toSmallestUnit(val: number): bigint {
