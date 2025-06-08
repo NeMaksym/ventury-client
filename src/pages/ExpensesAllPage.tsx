@@ -51,7 +51,12 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                 <Typography variant="body1" gutterBottom>
                     Total transactions: {transactions.length}
                 </Typography>
-                <TransactionsTable transactions={transactions} />
+                <TransactionsTable
+                    transactions={transactions}
+                    onCommentChange={(id, comment) =>
+                        console.log('comment changed', id, comment)
+                    }
+                />
             </>
         )
     }
