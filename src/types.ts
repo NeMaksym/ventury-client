@@ -70,7 +70,8 @@ export interface SourceTransaction {
  * @property {string | null} category - System-assigned category for the transaction, null if uncategorized
  * @property {string[]} [labels] - Optional array of system-assigned labels or tags
  */
-export interface SystemTransaction extends SourceTransaction {
+export interface SystemTransaction
+    extends Omit<SourceTransaction, 'commission'> {
     id: string
     bank: Bank
     referenceAmount: bigint
