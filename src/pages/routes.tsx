@@ -1,9 +1,9 @@
-import { ExpensesAllPage } from './ExpensesAllPage'
+import { ExpensesPage } from './ExpensesAllPage'
 import { UploadPage } from './UploadPage'
 
 export const enum PagePath {
     UPLOAD = '/upload',
-    EXPENSES_ALL = '/expenses/all',
+    EXPENSES = '/expenses',
 }
 export interface PageRoute {
     element: React.ReactNode
@@ -21,8 +21,8 @@ export const uploadPage: PageRoute[] = [
 
 export const expensesPages: PageRoute[] = [
     {
-        element: <ExpensesAllPage />,
-        name: 'Expenses: all',
-        path: PagePath.EXPENSES_ALL,
+        element: <ExpensesPage />,
+        name: 'Expenses',
+        path: PagePath.EXPENSES,
     },
 ]

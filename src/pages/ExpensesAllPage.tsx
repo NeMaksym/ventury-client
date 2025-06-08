@@ -5,9 +5,9 @@ import { useExpenseService } from '../hooks'
 import { SystemTransaction } from '../types'
 import { TransactionsTable } from '../components'
 
-interface ExpensesAllPageProps {}
+interface ExpensesPageProps {}
 
-export const ExpensesAllPage: React.FC<ExpensesAllPageProps> = () => {
+export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
     const [transactions, setTransactions] = useState<SystemTransaction[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
@@ -59,7 +59,7 @@ export const ExpensesAllPage: React.FC<ExpensesAllPageProps> = () => {
     return (
         <Box sx={{ padding: 2 }}>
             <Typography variant="h4" gutterBottom>
-                All Expenses
+                Expenses
             </Typography>
             {renderContent()}
         </Box>
