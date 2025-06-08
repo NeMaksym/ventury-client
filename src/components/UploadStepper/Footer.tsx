@@ -3,16 +3,16 @@ import { Box, Button } from '@mui/material'
 
 interface FooterProps {
     onBack: () => void
-    isBackDisabled?: boolean
+    isBackDisabled: boolean
     onNext: () => void
-    isNextDisabled?: boolean
+    isNextDisabled: boolean
 }
 
 export const Footer: React.FC<FooterProps> = ({
     onBack,
     isBackDisabled,
     onNext,
-    isNextDisabled = false,
+    isNextDisabled,
 }) => {
     const sx = {
         display: 'flex',
