@@ -24,6 +24,7 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
 
         return {
             ...transaction,
+            id: crypto.randomUUID(),
             bank,
             referenceAmount,
             referenceCurrencyCode,
