@@ -20,6 +20,7 @@ import { Edit } from '@mui/icons-material'
 import { SystemTransaction } from '../../types'
 import { Date } from './Date'
 import { Arrow } from './Arrow'
+import { useExpandedRows } from './hooks/useExpandedRows'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -30,21 +31,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
     onCommentChange,
 }) => {
-    const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
+    const { isExpanded, toggleRow } = useExpandedRows()
     const [editingComments, setEditingComments] = useState<Set<string>>(
         new Set()
     )
     const [tempComments, setTempComments] = useState<Record<string, string>>({})
-
-    const handleRowToggle = (transactionId: string) => {
-        const newExpandedRows = new Set(expandedRows)
-        if (newExpandedRows.has(transactionId)) {
-            newExpandedRows.delete(transactionId)
-        } else {
-            newExpandedRows.add(transactionId)
-        }
-        setExpandedRows(newExpandedRows)
-    }
 
     const handleEditComment = (transactionId: string) => {
         const newEditingComments = new Set(editingComments)
@@ -117,15 +108,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                         backgroundColor: 'action.hover',
                                     },
                                 }}
-                                onClick={() => handleRowToggle(transaction.id)}
+                                onClick={() => toggleRow(transaction.id)}
                             >
                                 <Arrow
-                                    isExpanded={expandedRows.has(
-                                        transaction.id
-                                    )}
-                                    onToggle={() =>
-                                        handleRowToggle(transaction.id)
-                                    }
+                                    isExpanded={isExpanded(transaction.id)}
+                                    onToggle={() => toggleRow(transaction.id)}
                                 />
                                 <Date time={transaction.time} />
                                 <TableCell>{transaction.description}</TableCell>
@@ -157,7 +144,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                     colSpan={5}
                                 >
                                     <Collapse
-                                        in={expandedRows.has(transaction.id)}
+                                        in={isExpanded(transaction.id)}
                                         timeout="auto"
                                         unmountOnExit
                                     >
