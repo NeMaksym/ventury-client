@@ -21,6 +21,7 @@ import { SystemTransaction } from '../../types'
 import { Date } from './Date'
 import { Arrow } from './Arrow'
 import { Category } from './Category'
+import { Amount } from './Amount'
 import { useExpandedRows } from './hooks/useExpandedRows'
 
 export interface TransactionsTableProps {
@@ -118,24 +119,12 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 <Date time={transaction.time} />
                                 <TableCell>{transaction.description}</TableCell>
                                 <Category category={transaction.category} />
-                                <TableCell align="right">
-                                    <Tooltip
-                                        title={`$${formatAmount(
-                                            transaction.referenceAmount
-                                        )}`}
-                                    >
-                                        <Typography
-                                            component="span"
-                                            sx={{
-                                                color: 'error.main',
-                                                fontWeight: 'bold',
-                                                cursor: 'help',
-                                            }}
-                                        >
-                                            {formatAmount(transaction.amount)}
-                                        </Typography>
-                                    </Tooltip>
-                                </TableCell>
+                                <Amount
+                                    amount={transaction.amount}
+                                    referenceAmount={
+                                        transaction.referenceAmount
+                                    }
+                                />
                             </TableRow>
                             <TableRow>
                                 <TableCell
@@ -263,8 +252,4 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
             </Table>
         </TableContainer>
     )
-}
-
-function formatAmount(amount: bigint): string {
-    return (Number(amount) / 100).toFixed(2)
 }

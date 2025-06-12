@@ -1,4 +1,5 @@
 export * from './asyncPipe'
 export * from './currency'
 export * from './exchangeRate'
+export * from './formatAmount'
 export * from './split'
