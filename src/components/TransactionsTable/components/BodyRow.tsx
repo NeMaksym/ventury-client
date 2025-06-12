@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { TableRow, TableCell, Collapse } from '@mui/material'
-import { SystemTransaction } from '../../types'
+import { SystemTransaction } from '../../../types'
 import { Arrow } from './Arrow'
 import { Date } from './Date'
 import { Category } from './Category'

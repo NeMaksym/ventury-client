@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableCell, Typography, Tooltip } from '@mui/material'
-import { formatAmount } from '../../utils'
+import { formatAmount } from '../../../utils'
 
 interface AmountProps {
     amount: bigint

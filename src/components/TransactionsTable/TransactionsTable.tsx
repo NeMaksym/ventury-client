@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { BodyRow } from './BodyRow'
+import { BodyRow } from './components/BodyRow'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
