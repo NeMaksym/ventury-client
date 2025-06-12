@@ -1,5 +1,5 @@
 export { NavList } from './NavList'
 export { TopBar } from './AppBar'
 export { Layout } from './Layout'
-export { UploadStepper } from './UploadStepper/UploadStepper'
+export { UploadStepper } from './UploadStepper'
 export { TransactionsTable } from './TransactionsTable'

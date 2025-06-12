@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react'
 
-import { asyncPipe, CancellationError } from '../../utils/asyncPipe'
-import { Bank, SourceTransaction } from '../../types'
+import { asyncPipe, CancellationError } from '../../../utils/asyncPipe'
+import { Bank, SourceTransaction } from '../../../types'
 
-import { loadExchangeRates, toSystemTransactions, addToDB } from './pipeline'
+import { loadExchangeRates, toSystemTransactions, addToDB } from '../pipeline'
 import {
     useExpenseService,
     useIncomeService,
     useMessages,
     useTransactionService,
-} from '../../hooks'
+} from '../../../hooks'
 
 interface ResultsRendererProps {
     bank: Bank

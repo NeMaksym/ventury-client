@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { Box } from '@mui/material'
 
-import { Header } from './Header'
-import { Footer } from './Footer'
-import { BankSelector } from './BankSelector'
-import { ResultsRenderer } from './ResultsRenderer'
+import { Header, Footer, BankSelector, ResultsRenderer } from './components'
 import { Bank, SourceTransaction } from '../../types'
 import { plugins } from '../../plugins'
 
