@@ -18,6 +18,7 @@ import {
 import { KeyboardArrowDown, KeyboardArrowUp, Edit } from '@mui/icons-material'
 
 import { SystemTransaction } from '../../types'
+import { Date } from './Date'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -126,9 +127,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                         )}
                                     </IconButton>
                                 </TableCell>
-                                <TableCell>
-                                    {formatDate(transaction.time)}
-                                </TableCell>
+                                <Date time={transaction.time} />
                                 <TableCell>{transaction.description}</TableCell>
                                 <TableCell>
                                     {transaction.category || '-'}
@@ -282,14 +281,4 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
 
 function formatAmount(amount: bigint): string {
     return (Number(amount) / 100).toFixed(2)
-}
-
-function formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    })
 }
