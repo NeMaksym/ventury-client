@@ -8,16 +8,10 @@ import {
     TableRow,
     Paper,
     Typography,
-    Collapse,
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { Date } from './Date'
-import { Arrow } from './Arrow'
-import { Category } from './Category'
-import { Amount } from './Amount'
-import { Comment } from './Comment'
-import { useExpandedRows } from './hooks/useExpandedRows'
+import { BodyRow } from './BodyRow'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -28,8 +22,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
     onCommentChange,
 }) => {
-    const { isExpanded, toggleRow } = useExpandedRows()
-
     if (transactions.length === 0) {
         return <Typography>No expense transactions found.</Typography>
     }
@@ -48,49 +40,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                 </TableHead>
                 <TableBody>
                     {transactions.map((transaction) => (
-                        <React.Fragment key={transaction.id}>
-                            <TableRow
-                                sx={{
-                                    cursor: 'pointer',
-                                    '&:hover': {
-                                        backgroundColor: 'action.hover',
-                                    },
-                                }}
-                                onClick={() => toggleRow(transaction.id)}
-                            >
-                                <Arrow
-                                    isExpanded={isExpanded(transaction.id)}
-                                    onToggle={() => toggleRow(transaction.id)}
-                                />
-                                <Date time={transaction.time} />
-                                <TableCell>{transaction.description}</TableCell>
-                                <Category category={transaction.category} />
-                                <Amount
-                                    amount={transaction.amount}
-                                    referenceAmount={
-                                        transaction.referenceAmount
-                                    }
-                                />
-                            </TableRow>
-                            <TableRow>
-                                <TableCell
-                                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                                    colSpan={5}
-                                >
-                                    <Collapse
-                                        in={isExpanded(transaction.id)}
-                                        timeout="auto"
-                                        unmountOnExit
-                                    >
-                                        <Comment
-                                            transactionId={transaction.id}
-                                            comment={transaction.comment}
-                                            onCommentChange={onCommentChange}
-                                        />
-                                    </Collapse>
-                                </TableCell>
-                            </TableRow>
-                        </React.Fragment>
+                        <BodyRow
+                            key={transaction.id}
+                            transaction={transaction}
+                            onCommentChange={onCommentChange}
+                        />
                     ))}
                 </TableBody>
             </Table>
