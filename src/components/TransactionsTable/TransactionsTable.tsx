@@ -20,6 +20,7 @@ import { Edit } from '@mui/icons-material'
 import { SystemTransaction } from '../../types'
 import { Date } from './Date'
 import { Arrow } from './Arrow'
+import { Category } from './Category'
 import { useExpandedRows } from './hooks/useExpandedRows'
 
 export interface TransactionsTableProps {
@@ -116,9 +117,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 />
                                 <Date time={transaction.time} />
                                 <TableCell>{transaction.description}</TableCell>
-                                <TableCell>
-                                    {transaction.category || '-'}
-                                </TableCell>
+                                <Category category={transaction.category} />
                                 <TableCell align="right">
                                     <Tooltip
                                         title={`$${formatAmount(
