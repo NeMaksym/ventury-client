@@ -2,16 +2,24 @@ import React from 'react'
 import {
     Table,
     TableBody,
-    TableCell,
     TableContainer,
     TableHead,
     TableRow,
     Paper,
-    Typography,
+    TableCell,
+    type TableCellProps,
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { BodyRow } from './components/BodyRow'
+import { BodyRow, EmptyBodyRow } from './components'
+
+const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
+    { label: '' },
+    { label: 'Date' },
+    { label: 'Description' },
+    { label: 'Category' },
+    { label: 'Amount', cellProps: { align: 'right' } },
+]
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -22,30 +30,30 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
     onCommentChange,
 }) => {
-    if (transactions.length === 0) {
-        return <Typography>No expense transactions found.</Typography>
-    }
-
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell />
-                        <TableCell>Date</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell align="right">Amount</TableCell>
+                        {TABLE_COLUMNS.map((column, index) => (
+                            <TableCell key={index} {...column.cellProps}>
+                                {column.label}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {transactions.map((transaction) => (
-                        <BodyRow
-                            key={transaction.id}
-                            transaction={transaction}
-                            onCommentChange={onCommentChange}
-                        />
-                    ))}
+                    {transactions.length === 0 ? (
+                        <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
+                    ) : (
+                        transactions.map((transaction) => (
+                            <BodyRow
+                                key={transaction.id}
+                                transaction={transaction}
+                                onCommentChange={onCommentChange}
+                            />
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </TableContainer>
