@@ -17,9 +17,9 @@ import {
 } from '@mui/material'
 import { KeyboardArrowDown, KeyboardArrowUp, Edit } from '@mui/icons-material'
 
-import { SystemTransaction } from '../types'
+import { SystemTransaction } from '../../types'
 
-interface TransactionsTableProps {
+export interface TransactionsTableProps {
     transactions: SystemTransaction[]
     onCommentChange: (transactionId: string, comment: string) => void
 }
