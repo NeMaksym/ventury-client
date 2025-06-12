@@ -15,10 +15,11 @@ import {
     TextField,
     Button,
 } from '@mui/material'
-import { KeyboardArrowDown, KeyboardArrowUp, Edit } from '@mui/icons-material'
+import { Edit } from '@mui/icons-material'
 
 import { SystemTransaction } from '../../types'
 import { Date } from './Date'
+import { Arrow } from './Arrow'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -118,15 +119,14 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 }}
                                 onClick={() => handleRowToggle(transaction.id)}
                             >
-                                <TableCell>
-                                    <IconButton size="small">
-                                        {expandedRows.has(transaction.id) ? (
-                                            <KeyboardArrowUp />
-                                        ) : (
-                                            <KeyboardArrowDown />
-                                        )}
-                                    </IconButton>
-                                </TableCell>
+                                <Arrow
+                                    isExpanded={expandedRows.has(
+                                        transaction.id
+                                    )}
+                                    onToggle={() =>
+                                        handleRowToggle(transaction.id)
+                                    }
+                                />
                                 <Date time={transaction.time} />
                                 <TableCell>{transaction.description}</TableCell>
                                 <TableCell>
