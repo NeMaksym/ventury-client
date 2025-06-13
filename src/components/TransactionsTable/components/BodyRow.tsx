@@ -45,7 +45,9 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                 />
                 <Amount
                     amount={transaction.amount}
+                    currencyCode={transaction.currencyCode}
                     referenceAmount={transaction.referenceAmount}
+                    referenceCurrencyCode={transaction.referenceCurrencyCode}
                 />
             </TableRow>
             <TableRow>

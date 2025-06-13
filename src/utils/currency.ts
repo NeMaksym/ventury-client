@@ -1,4 +1,5 @@
 import cc, { CurrencyCodeRecord } from 'currency-codes'
+import getSymbolFromCurrency from 'currency-symbol-map'
 
 class Currency {
     private getByAlphaCode(code: string): CurrencyCodeRecord {
@@ -37,6 +38,11 @@ class Currency {
 
     get usdNumCode(): number {
         return Number(this.usd.number)
+    }
+
+    getSymbolByNumCode(code: number): string | undefined {
+        const alphaCode = this.numToAlpha(code)
+        return getSymbolFromCurrency(alphaCode)
     }
 }
 
