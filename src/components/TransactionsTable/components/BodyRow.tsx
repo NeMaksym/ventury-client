@@ -10,11 +10,13 @@ import { Comment } from './Comment'
 interface BodyRowProps {
     transaction: SystemTransaction
     onCommentChange: (transactionId: string, comment: string) => void
+    onCategoryChange: (transactionId: string, category: string | null) => void
 }
 
 export const BodyRow: React.FC<BodyRowProps> = ({
     transaction,
     onCommentChange,
+    onCategoryChange,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -36,7 +38,11 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                 <Arrow isExpanded={isExpanded} onToggle={handleToggle} />
                 <Date time={transaction.time} />
                 <TableCell>{transaction.description}</TableCell>
-                <Category category={transaction.category} />
+                <Category
+                    transactionId={transaction.id}
+                    category={transaction.category}
+                    onCategoryChange={onCategoryChange}
+                />
                 <Amount
                     amount={transaction.amount}
                     referenceAmount={transaction.referenceAmount}

@@ -24,11 +24,13 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
     onCommentChange: (transactionId: string, comment: string) => void
+    onCategoryChange: (transactionId: string, category: string | null) => void
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
     onCommentChange,
+    onCategoryChange,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -51,6 +53,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 key={transaction.id}
                                 transaction={transaction}
                                 onCommentChange={onCommentChange}
+                                onCategoryChange={onCategoryChange}
                             />
                         ))
                     )}

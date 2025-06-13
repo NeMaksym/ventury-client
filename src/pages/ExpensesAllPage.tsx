@@ -56,6 +56,9 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onCommentChange={(id, comment) =>
                         console.log('comment changed', id, comment)
                     }
+                    onCategoryChange={(id, category) =>
+                        console.log('category changed', id, category)
+                    }
                 />
             </>
         )
