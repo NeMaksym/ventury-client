@@ -38,16 +38,16 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                 <Arrow isExpanded={isExpanded} onToggle={handleToggle} />
                 <Date time={transaction.time} />
                 <TableCell>{transaction.description}</TableCell>
-                <Category
-                    transactionId={transaction.id}
-                    category={transaction.category}
-                    onCategoryChange={onCategoryChange}
-                />
                 <Amount
                     amount={transaction.amount}
                     currencyCode={transaction.currencyCode}
                     referenceAmount={transaction.referenceAmount}
                     referenceCurrencyCode={transaction.referenceCurrencyCode}
+                />
+                <Category
+                    transactionId={transaction.id}
+                    category={transaction.category}
+                    onCategoryChange={onCategoryChange}
                 />
             </TableRow>
             <TableRow>

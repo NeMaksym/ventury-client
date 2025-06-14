@@ -17,8 +17,8 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
     { label: 'Date' },
     { label: 'Description' },
-    { label: 'Category' },
     { label: 'Amount', cellProps: { align: 'right' } },
+    { label: 'Category' },
 ]
 
 export interface TransactionsTableProps {
