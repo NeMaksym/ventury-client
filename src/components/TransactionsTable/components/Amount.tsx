@@ -24,9 +24,9 @@ export const Amount: React.FC<AmountProps> = ({
                 title={`${formatAmount(referenceAmount)} ${referenceSymbol}`}
             >
                 <Typography
-                    component="span"
+                    color="error.main"
+                    noWrap
                     sx={{
-                        color: 'error.main',
                         fontWeight: 'bold',
                         cursor: 'help',
                     }}
