@@ -59,6 +59,9 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onCategoryChange={(id, category) =>
                         console.log('category changed', id, category)
                     }
+                    onLabelChange={(id, labels) =>
+                        console.log('labels changed', id, labels)
+                    }
                 />
             </>
         )

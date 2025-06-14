@@ -6,17 +6,20 @@ import { Date } from './Date'
 import { Category } from './Category'
 import { Amount } from './Amount'
 import { Comment } from './Comment'
+import { Label } from './Label'
 
 interface BodyRowProps {
     transaction: SystemTransaction
     onCommentChange: (transactionId: string, comment: string) => void
     onCategoryChange: (transactionId: string, category: string | null) => void
+    onLabelChange: (transactionId: string, labels: string[]) => void
 }
 
 export const BodyRow: React.FC<BodyRowProps> = ({
     transaction,
     onCommentChange,
     onCategoryChange,
+    onLabelChange,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -49,11 +52,17 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     category={transaction.category}
                     onCategoryChange={onCategoryChange}
                 />
+                <Label
+                    options={[]}
+                    transactionId={transaction.id}
+                    labels={transaction.labels || []}
+                    onLabelChange={onLabelChange}
+                />
             </TableRow>
             <TableRow>
                 <TableCell
                     style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={5}
+                    colSpan={6}
                 >
                     <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                         <Comment

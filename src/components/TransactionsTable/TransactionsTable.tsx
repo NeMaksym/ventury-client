@@ -19,18 +19,21 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: 'Description' },
     { label: 'Amount', cellProps: { align: 'right' } },
     { label: 'Category' },
+    { label: 'Labels' },
 ]
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
     onCommentChange: (transactionId: string, comment: string) => void
     onCategoryChange: (transactionId: string, category: string | null) => void
+    onLabelChange: (transactionId: string, labels: string[]) => void
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
     onCommentChange,
     onCategoryChange,
+    onLabelChange,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -54,6 +57,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 transaction={transaction}
                                 onCommentChange={onCommentChange}
                                 onCategoryChange={onCategoryChange}
+                                onLabelChange={onLabelChange}
                             />
                         ))
                     )}
