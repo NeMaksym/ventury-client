@@ -3,6 +3,7 @@ import { TableRow, TableCell, Collapse } from '@mui/material'
 import { SystemTransaction } from '../../../types'
 import { Arrow } from './Arrow'
 import { Date } from './Date'
+import { Description } from './Description'
 import { Category } from './Category'
 import { Amount } from './Amount'
 import { Comment } from './Comment'
@@ -40,7 +41,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
             >
                 <Arrow isExpanded={isExpanded} onToggle={handleToggle} />
                 <Date time={transaction.time} />
-                <TableCell>{transaction.description}</TableCell>
+                <Description description={transaction.description} />
                 <Amount
                     amount={transaction.amount}
                     currencyCode={transaction.currencyCode}
