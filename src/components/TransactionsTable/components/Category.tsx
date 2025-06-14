@@ -57,7 +57,7 @@ export const Category: React.FC<CategoryProps> = ({
                     onChange={handleCategoryChange}
                     onClick={handleSelectClick}
                     displayEmpty
-                    sx={{ minWidth: 120 }}
+                    fullWidth
                 >
                     <MenuItem value={EMPTY_CATEGORY}>
                         <em>Select category</em>

@@ -24,7 +24,7 @@ export const Label: React.FC<LabelProps> = ({
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>
             <Autocomplete
-                sx={{ minWidth: 158 }}
+                fullWidth
                 freeSolo
                 selectOnFocus
                 clearOnBlur

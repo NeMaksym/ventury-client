@@ -18,8 +18,8 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: 'Date', cellProps: { sx: { width: 120 } } },
     { label: 'Description' },
     { label: 'Amount', cellProps: { align: 'right' } },
-    { label: 'Category' },
-    { label: 'Labels' },
+    { label: 'Category', cellProps: { sx: { width: 190 } } },
+    { label: 'Labels', cellProps: { sx: { width: 190 } } },
 ]
 
 export interface TransactionsTableProps {
