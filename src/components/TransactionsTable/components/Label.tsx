@@ -35,7 +35,6 @@ export const Label: React.FC<LabelProps> = ({
                 limitTags={1}
                 options={options}
                 value={labels}
-                onClick={(e) => e.stopPropagation()}
                 onChange={(_, value) => {
                     if (value) {
                         onLabelChange(transactionId, value)

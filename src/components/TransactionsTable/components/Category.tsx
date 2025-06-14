@@ -1,11 +1,5 @@
-import React, { useCallback, MouseEvent } from 'react'
-import {
-    TableCell,
-    Select,
-    MenuItem,
-    FormControl,
-    type SelectChangeEvent,
-} from '@mui/material'
+import React from 'react'
+import { TableCell, Select, MenuItem, FormControl } from '@mui/material'
 
 const EMPTY_CATEGORY = ''
 
@@ -35,29 +29,21 @@ export const Category: React.FC<CategoryProps> = ({
     category,
     onCategoryChange,
 }) => {
-    const handleCategoryChange = useCallback(
-        (e: SelectChangeEvent) => {
-            onCategoryChange(
-                transactionId,
-                e.target.value === EMPTY_CATEGORY ? null : e.target.value
-            )
-        },
-        [transactionId, onCategoryChange]
-    )
-
-    const handleSelectClick = useCallback((e: MouseEvent<HTMLElement>) => {
-        e.stopPropagation()
-    }, [])
-
     return (
-        <TableCell onClick={handleSelectClick}>
+        <TableCell onClick={(e) => e.stopPropagation()}>
             <FormControl fullWidth size="small">
                 <Select
-                    value={category || EMPTY_CATEGORY}
-                    onChange={handleCategoryChange}
-                    onClick={handleSelectClick}
-                    displayEmpty
                     fullWidth
+                    displayEmpty
+                    value={category || EMPTY_CATEGORY}
+                    onChange={(e) =>
+                        onCategoryChange(
+                            transactionId,
+                            e.target.value === EMPTY_CATEGORY
+                                ? null
+                                : e.target.value
+                        )
+                    }
                 >
                     <MenuItem value={EMPTY_CATEGORY}>
                         <em>Select category</em>
