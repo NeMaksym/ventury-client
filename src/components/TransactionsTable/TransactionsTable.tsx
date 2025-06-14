@@ -37,7 +37,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
-            <Table>
+            <Table size="small">
                 <TableHead>
                     <TableRow>
                         {TABLE_COLUMNS.map((column, index) => (
