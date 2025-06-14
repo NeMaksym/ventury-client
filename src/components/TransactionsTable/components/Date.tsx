@@ -9,12 +9,27 @@ export const Date: React.FC<DateProps> = ({ time }) => (
     <TableCell>{formatDate(time)}</TableCell>
 )
 
+const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+]
+
 function formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    })
+    const day = date.getDate()
+
+    const month = monthNames[date.getMonth()]
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+
+    return `${day} ${month} ${hours}:${minutes}`
 }

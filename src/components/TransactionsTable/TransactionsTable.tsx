@@ -15,7 +15,7 @@ import { BodyRow, EmptyBodyRow } from './components'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
-    { label: 'Date' },
+    { label: 'Date', cellProps: { sx: { width: 120 } } },
     { label: 'Description' },
     { label: 'Amount', cellProps: { align: 'right' } },
     { label: 'Category' },
