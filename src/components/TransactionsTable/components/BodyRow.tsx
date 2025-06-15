@@ -17,6 +17,7 @@ interface BodyRowProps {
     onLabelChange: (transactionId: string, labels: string[]) => void
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
+    onDelete: (transactionId: string) => void
 }
 
 export const BodyRow: React.FC<BodyRowProps> = ({
@@ -26,6 +27,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
     onLabelChange,
     onHideChange,
     onCapitalizeChange,
+    onDelete,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -78,6 +80,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                                 isCapitalized={transaction.capitalized}
                                 onHideChange={onHideChange}
                                 onCapitalizeChange={onCapitalizeChange}
+                                onDelete={onDelete}
                             />
                             <Comment
                                 transactionId={transaction.id}

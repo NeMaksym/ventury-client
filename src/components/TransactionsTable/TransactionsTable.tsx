@@ -29,6 +29,7 @@ export interface TransactionsTableProps {
     onLabelChange: (transactionId: string, labels: string[]) => void
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
+    onDelete: (transactionId: string) => void
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -38,6 +39,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     onLabelChange,
     onHideChange,
     onCapitalizeChange,
+    onDelete,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -64,6 +66,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 onLabelChange={onLabelChange}
                                 onHideChange={onHideChange}
                                 onCapitalizeChange={onCapitalizeChange}
+                                onDelete={onDelete}
                             />
                         ))
                     )}

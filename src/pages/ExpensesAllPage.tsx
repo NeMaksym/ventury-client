@@ -68,6 +68,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onCapitalizeChange={(id, isCapitalized) =>
                         console.log('capitalize changed', id, isCapitalized)
                     }
+                    onDelete={(id) => console.log('delete', id)}
                 />
             </>
         )
