@@ -74,8 +74,8 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                         <Stack spacing={1} sx={{ my: 2 }}>
                             <Actions
                                 transactionId={transaction.id}
-                                isHidden={true}
-                                isCapitalized={true}
+                                isHidden={transaction.hide}
+                                isCapitalized={transaction.capitalized}
                                 onHideChange={onHideChange}
                                 onCapitalizeChange={onCapitalizeChange}
                             />

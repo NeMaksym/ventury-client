@@ -29,6 +29,8 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
             referenceAmount,
             referenceCurrencyCode,
             category: null,
+            capitalized: false,
+            hide: false,
         }
     })
 

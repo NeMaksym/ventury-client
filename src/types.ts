@@ -77,6 +77,8 @@ export interface SystemTransaction
     referenceAmount: bigint
     referenceCurrencyCode: number
     category: string | null
+    capitalized: boolean
+    hide: boolean
     labels?: string[]
 }
 
