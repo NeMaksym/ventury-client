@@ -4,6 +4,7 @@ import { Typography, Box } from '@mui/material'
 import { useExpenseService } from '../hooks'
 import { SystemTransaction } from '../types'
 import { TransactionsTable } from '../components'
+import { useComment } from './hooks'
 
 interface ExpensesPageProps {}
 
@@ -13,6 +14,11 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
     const [error, setError] = useState<string | null>(null)
 
     const { getAllTransactions } = useExpenseService()
+
+    const { handleCommentChange } = useComment({
+        setTransactions,
+        setError,
+    })
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -53,9 +59,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                 </Typography>
                 <TransactionsTable
                     transactions={transactions}
-                    onCommentChange={(id, comment) =>
-                        console.log('comment changed', id, comment)
-                    }
+                    onCommentChange={handleCommentChange}
                     onCategoryChange={(id, category) =>
                         console.log('category changed', id, category)
                     }
