@@ -62,6 +62,12 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onLabelChange={(id, labels) =>
                         console.log('labels changed', id, labels)
                     }
+                    onHideChange={(id, isHidden) =>
+                        console.log('hide changed', id, isHidden)
+                    }
+                    onCapitalizeChange={(id, isCapitalized) =>
+                        console.log('capitalize changed', id, isCapitalized)
+                    }
                 />
             </>
         )

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TableRow, TableCell, Collapse } from '@mui/material'
+import { TableRow, TableCell, Collapse, Stack } from '@mui/material'
 import { SystemTransaction } from '../../../types'
 import { Arrow } from './Arrow'
 import { Date } from './Date'
@@ -8,12 +8,15 @@ import { Category } from './Category'
 import { Amount } from './Amount'
 import { Comment } from './Comment'
 import { Label } from './Label'
+import { Actions } from './Actions'
 
 interface BodyRowProps {
     transaction: SystemTransaction
     onCommentChange: (transactionId: string, comment: string) => void
     onCategoryChange: (transactionId: string, category: string | null) => void
     onLabelChange: (transactionId: string, labels: string[]) => void
+    onHideChange: (transactionId: string, isHidden: boolean) => void
+    onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
 }
 
 export const BodyRow: React.FC<BodyRowProps> = ({
@@ -21,6 +24,8 @@ export const BodyRow: React.FC<BodyRowProps> = ({
     onCommentChange,
     onCategoryChange,
     onLabelChange,
+    onHideChange,
+    onCapitalizeChange,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -66,11 +71,20 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     colSpan={6}
                 >
                     <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                        <Comment
-                            transactionId={transaction.id}
-                            comment={transaction.comment}
-                            onCommentChange={onCommentChange}
-                        />
+                        <Stack spacing={1} sx={{ my: 2 }}>
+                            <Actions
+                                transactionId={transaction.id}
+                                isHidden={true}
+                                isCapitalized={true}
+                                onHideChange={onHideChange}
+                                onCapitalizeChange={onCapitalizeChange}
+                            />
+                            <Comment
+                                transactionId={transaction.id}
+                                comment={transaction.comment}
+                                onCommentChange={onCommentChange}
+                            />
+                        </Stack>
                     </Collapse>
                 </TableCell>
             </TableRow>

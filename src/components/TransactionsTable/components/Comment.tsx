@@ -37,16 +37,13 @@ export const Comment: React.FC<CommentProps> = ({
     }
 
     return (
-        <Box sx={{ margin: 1, py: 1 }}>
-            <Typography
-                variant="subtitle2"
-                sx={{
-                    mb: 1,
-                    color: 'text.secondary',
-                }}
-            >
-                Comment
-            </Typography>
+        <Box>
+            <Box mb={1}>
+                <Typography variant="subtitle2" color="text.secondary">
+                    Comment
+                </Typography>
+            </Box>
+
             {isEditing ? (
                 <Box
                     sx={{
