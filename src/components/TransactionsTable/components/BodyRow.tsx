@@ -8,7 +8,7 @@ import { Category } from './Category'
 import { Amount } from './Amount'
 import { Comment } from './Comment'
 import { Label } from './Label'
-import { Actions } from './Actions'
+import { ContextMenu } from './ContextMenu'
 
 interface BodyRowProps {
     transaction: SystemTransaction
@@ -66,22 +66,22 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     labels={transaction.labels || []}
                     onLabelChange={onLabelChange}
                 />
+                <ContextMenu
+                    transactionId={transaction.id}
+                    isHidden={transaction.hide}
+                    isCapitalized={transaction.capitalized}
+                    onHideChange={onHideChange}
+                    onCapitalizeChange={onCapitalizeChange}
+                    onDelete={onDelete}
+                />
             </TableRow>
             <TableRow>
                 <TableCell
                     style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={6}
+                    colSpan={7}
                 >
                     <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                         <Stack spacing={1} sx={{ my: 2 }}>
-                            <Actions
-                                transactionId={transaction.id}
-                                isHidden={transaction.hide}
-                                isCapitalized={transaction.capitalized}
-                                onHideChange={onHideChange}
-                                onCapitalizeChange={onCapitalizeChange}
-                                onDelete={onDelete}
-                            />
                             <Comment
                                 transactionId={transaction.id}
                                 comment={transaction.comment}

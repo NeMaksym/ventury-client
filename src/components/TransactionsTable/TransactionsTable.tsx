@@ -20,6 +20,7 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: 'Amount', cellProps: { align: 'right' } },
     { label: 'Category', cellProps: { sx: { width: 190 } } },
     { label: 'Labels', cellProps: { sx: { width: 190 } } },
+    { label: '' },
 ]
 
 export interface TransactionsTableProps {
