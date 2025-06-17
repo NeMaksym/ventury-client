@@ -4,7 +4,13 @@ import { Typography, Box } from '@mui/material'
 import { useExpenseService } from '../hooks'
 import { SystemTransaction } from '../types'
 import { TransactionsTable } from '../components'
-import { useComment, useCategory, useLabel, useHide } from './hooks'
+import {
+    useComment,
+    useCategory,
+    useLabel,
+    useHide,
+    useCapitalize,
+} from './hooks'
 
 interface ExpensesPageProps {}
 
@@ -31,6 +37,11 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
     })
 
     const { handleHideChange } = useHide({
+        setTransactions,
+        setError,
+    })
+
+    const { handleCapitalizeChange } = useCapitalize({
         setTransactions,
         setError,
     })
@@ -78,9 +89,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onCategoryChange={handleCategoryChange}
                     onLabelChange={handleLabelChange}
                     onHideChange={handleHideChange}
-                    onCapitalizeChange={(id, isCapitalized) =>
-                        console.log('capitalize changed', id, isCapitalized)
-                    }
+                    onCapitalizeChange={handleCapitalizeChange}
                     onDelete={(id) => console.log('delete', id)}
                 />
             </>

@@ -108,7 +108,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                     <ListItemIcon>
                         <MonetizationOnRounded />
                     </ListItemIcon>
-                    <ListItemText>Capitalize</ListItemText>
+                    <ListItemText>
+                        {isCapitalized ? 'Un-capitalize' : 'Capitalize'}
+                    </ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteClick}>
                     <ListItemIcon>
