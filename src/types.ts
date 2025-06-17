@@ -71,7 +71,20 @@ export interface SourceTransaction {
  * @property {string[]} [labels] - Optional array of system-assigned labels or tags
  */
 export interface SystemTransaction
-    extends Omit<SourceTransaction, 'commission'> {
+    extends Pick<
+        SourceTransaction,
+        | 'originalId'
+        | 'time'
+        | 'description'
+        | 'amount'
+        | 'currencyCode'
+        | 'operationAmount'
+        | 'operationCurrencyCode'
+        | 'accountId'
+        | 'comment'
+        | 'mcc'
+        | 'hold'
+    > {
     id: string
     bank: Bank
     referenceAmount: bigint
