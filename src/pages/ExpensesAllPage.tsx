@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Typography, Box } from '@mui/material'
 
-import { useExpenseService } from '../hooks'
+import { useExpenseService, useTransaction } from '../hooks'
 import { SystemTransaction } from '../types'
 import { TransactionsTable } from '../components'
-import {
-    useComment,
-    useCategory,
-    useLabel,
-    useHide,
-    useCapitalize,
-} from './hooks'
 
 interface ExpensesPageProps {}
 
@@ -21,27 +14,13 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
 
     const { getAllTransactions } = useExpenseService()
 
-    const { handleCommentChange } = useComment({
-        setTransactions,
-        setError,
-    })
-
-    const { handleCategoryChange } = useCategory({
-        setTransactions,
-        setError,
-    })
-
-    const { handleLabelChange } = useLabel({
-        setTransactions,
-        setError,
-    })
-
-    const { handleHideChange } = useHide({
-        setTransactions,
-        setError,
-    })
-
-    const { handleCapitalizeChange } = useCapitalize({
+    const {
+        handleCommentChange,
+        handleCategoryChange,
+        handleLabelChange,
+        handleHideChange,
+        handleCapitalizeChange,
+    } = useTransaction({
         setTransactions,
         setError,
     })
