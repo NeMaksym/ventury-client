@@ -20,6 +20,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
         handleLabelChange,
         handleHideChange,
         handleCapitalizeChange,
+        handleDelete,
     } = useTransaction({
         setTransactions,
         setError,
@@ -69,7 +70,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onLabelChange={handleLabelChange}
                     onHideChange={handleHideChange}
                     onCapitalizeChange={handleCapitalizeChange}
-                    onDelete={(id) => console.log('delete', id)}
+                    onDelete={handleDelete}
                 />
             </>
         )

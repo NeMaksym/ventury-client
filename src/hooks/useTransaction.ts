@@ -11,7 +11,8 @@ export const useTransaction = ({
     setTransactions,
     setError,
 }: UseTransactionParams) => {
-    const { getTransactionById, updateTransaction } = useExpenseService()
+    const { getTransactionById, updateTransaction, deleteTransaction } =
+        useExpenseService()
 
     const updateTransactionField = useCallback(
         async (
@@ -95,11 +96,31 @@ export const useTransaction = ({
         [updateTransactionField]
     )
 
+    const handleDelete = useCallback(
+        async (transactionId: string) => {
+            try {
+                await deleteTransaction(transactionId)
+
+                setTransactions((prevTransactions) =>
+                    prevTransactions.filter((t) => t.id !== transactionId)
+                )
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to delete transaction'
+                )
+            }
+        },
+        [deleteTransaction, setTransactions, setError]
+    )
+
     return {
         handleCommentChange,
         handleCategoryChange,
         handleLabelChange,
         handleHideChange,
         handleCapitalizeChange,
+        handleDelete,
     }
 }

@@ -11,6 +11,7 @@ export interface ExpenseService {
     updateTransaction: (
         transaction: SystemTransaction
     ) => Promise<SystemTransaction>
+    deleteTransaction: (id: string) => Promise<void>
 }
 
 export function useExpenseService(): ExpenseService {
@@ -89,10 +90,27 @@ export function useExpenseService(): ExpenseService {
         [getDb]
     )
 
+    const deleteTransaction = useCallback(
+        async (id: string): Promise<void> => {
+            const db = await getDb()
+            const tx = db.transaction(Stores.EXPENSES, 'readwrite')
+            const store = tx.objectStore(Stores.EXPENSES)
+
+            try {
+                await store.delete(id)
+            } catch (error) {
+                console.error('Failed to delete transaction:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
     return {
         transactionExists,
         getAllTransactions,
         getTransactionById,
         updateTransaction,
+        deleteTransaction,
     }
 }
