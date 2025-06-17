@@ -40,6 +40,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
             <TableRow
                 sx={{
                     cursor: 'pointer',
+                    opacity: transaction.hide ? 0.5 : 1,
                     '&:hover': {
                         backgroundColor: 'action.hover',
                     },
