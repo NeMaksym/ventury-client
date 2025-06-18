@@ -13,6 +13,8 @@ import {
     Button,
     TableCell,
     Typography,
+    TextField,
+    Box,
 } from '@mui/material'
 import {
     MoreVert,
@@ -20,7 +22,9 @@ import {
     Visibility,
     MonetizationOnRounded,
     DeleteOutline,
+    CallSplit,
 } from '@mui/icons-material'
+import { SubTransactionData } from '../../../hooks/useTransaction'
 
 interface ContextMenuProps {
     transactionId: string
@@ -29,6 +33,10 @@ interface ContextMenuProps {
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
     onDelete: (transactionId: string) => void
+    onSubTransactionCreate: (
+        transactionId: string,
+        data: SubTransactionData
+    ) => void
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({
@@ -38,9 +46,17 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     onHideChange,
     onCapitalizeChange,
     onDelete,
+    onSubTransactionCreate,
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [showSubTransactionDialog, setShowSubTransactionDialog] =
+        useState(false)
+    const [subTransactionForm, setSubTransactionForm] = useState({
+        description: '',
+        amount: '',
+    })
+
     const open = Boolean(anchorEl)
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,6 +91,43 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     const handleDeleteCancel = () => {
         setShowDeleteDialog(false)
     }
+
+    const handleSubTransactionClick = () => {
+        setShowSubTransactionDialog(true)
+        handleClose()
+    }
+
+    const handleSubTransactionCancel = () => {
+        setShowSubTransactionDialog(false)
+        setSubTransactionForm({
+            description: '',
+            amount: '',
+        })
+    }
+
+    const handleSubTransactionSubmit = () => {
+        const data: SubTransactionData = {
+            description: subTransactionForm.description,
+            amount: BigInt(
+                Math.round(parseFloat(subTransactionForm.amount) * 100)
+            ),
+        }
+
+        onSubTransactionCreate(transactionId, data)
+        handleSubTransactionCancel()
+    }
+
+    const handleFormChange = (field: string, value: any) => {
+        setSubTransactionForm((prev) => ({
+            ...prev,
+            [field]: value,
+        }))
+    }
+
+    const isFormValid =
+        subTransactionForm.description.trim() !== '' &&
+        subTransactionForm.amount !== '' &&
+        !isNaN(parseFloat(subTransactionForm.amount))
 
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>
@@ -112,6 +165,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                         {isCapitalized ? 'Un-capitalize' : 'Capitalize'}
                     </ListItemText>
                 </MenuItem>
+
+                <MenuItem onClick={handleSubTransactionClick}>
+                    <ListItemIcon>
+                        <CallSplit />
+                    </ListItemIcon>
+                    <ListItemText>Sub-transaction</ListItemText>
+                </MenuItem>
+
                 <MenuItem onClick={handleDeleteClick}>
                     <ListItemIcon>
                         <DeleteOutline color="error" />
@@ -121,6 +182,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                     </ListItemText>
                 </MenuItem>
             </Menu>
+
             <Dialog
                 open={showDeleteDialog}
                 onClose={handleDeleteCancel}
@@ -144,6 +206,65 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                         variant="contained"
                     >
                         Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={showSubTransactionDialog}
+                onClose={handleSubTransactionCancel}
+                aria-labelledby="sub-transaction-dialog-title"
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle id="sub-transaction-dialog-title">
+                    Create Sub-transaction
+                </DialogTitle>
+                <DialogContent>
+                    <Box
+                        sx={{
+                            pt: 1,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2,
+                        }}
+                    >
+                        <TextField
+                            label="Description"
+                            value={subTransactionForm.description}
+                            onChange={(e) =>
+                                handleFormChange('description', e.target.value)
+                            }
+                            fullWidth
+                            required
+                        />
+
+                        <TextField
+                            label="Amount"
+                            type="number"
+                            value={subTransactionForm.amount}
+                            onChange={(e) =>
+                                handleFormChange('amount', e.target.value)
+                            }
+                            fullWidth
+                            required
+                        />
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleSubTransactionCancel}
+                        color="primary"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={handleSubTransactionSubmit}
+                        color="primary"
+                        variant="contained"
+                        disabled={!isFormValid}
+                    >
+                        Create
                     </Button>
                 </DialogActions>
             </Dialog>

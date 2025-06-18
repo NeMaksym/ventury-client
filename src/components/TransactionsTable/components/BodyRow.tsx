@@ -9,6 +9,7 @@ import { Amount } from './Amount'
 import { Comment } from './Comment'
 import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
+import { SubTransactionData } from '../../../hooks/useTransaction'
 
 interface BodyRowProps {
     transaction: SystemTransaction
@@ -18,6 +19,10 @@ interface BodyRowProps {
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
     onDelete: (transactionId: string) => void
+    onSubTransactionCreate: (
+        transactionId: string,
+        data: SubTransactionData
+    ) => void
 }
 
 export const BodyRow: React.FC<BodyRowProps> = ({
@@ -28,6 +33,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
     onHideChange,
     onCapitalizeChange,
     onDelete,
+    onSubTransactionCreate,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -74,6 +80,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     onHideChange={onHideChange}
                     onCapitalizeChange={onCapitalizeChange}
                     onDelete={onDelete}
+                    onSubTransactionCreate={onSubTransactionCreate}
                 />
             </TableRow>
             <TableRow>

@@ -12,6 +12,7 @@ import {
 
 import { SystemTransaction } from '../../types'
 import { BodyRow, EmptyBodyRow } from './components'
+import { SubTransactionData } from '../../hooks/useTransaction'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
@@ -31,6 +32,10 @@ export interface TransactionsTableProps {
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
     onDelete: (transactionId: string) => void
+    onSubTransactionCreate: (
+        transactionId: string,
+        data: SubTransactionData
+    ) => void
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -41,6 +46,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     onHideChange,
     onCapitalizeChange,
     onDelete,
+    onSubTransactionCreate,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -68,6 +74,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 onHideChange={onHideChange}
                                 onCapitalizeChange={onCapitalizeChange}
                                 onDelete={onDelete}
+                                onSubTransactionCreate={onSubTransactionCreate}
                             />
                         ))
                     )}

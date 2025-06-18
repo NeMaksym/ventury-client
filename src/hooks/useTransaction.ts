@@ -1,6 +1,11 @@
 import { useCallback } from 'react'
-import { SystemTransaction } from '../types'
+import { SystemTransaction, SystemSubTransaction } from '../types'
 import { useExpenseService } from './useExpenseService'
+
+export type SubTransactionData = Pick<
+    SystemSubTransaction,
+    'description' | 'amount'
+>
 
 interface UseTransactionParams {
     setTransactions: React.Dispatch<React.SetStateAction<SystemTransaction[]>>
@@ -115,6 +120,13 @@ export const useTransaction = ({
         [deleteTransaction, setTransactions, setError]
     )
 
+    const handleSubTransactionCreate = useCallback(
+        (transactionId: string, data: SubTransactionData) => {
+            console.log(transactionId, data)
+        },
+        []
+    )
+
     return {
         handleCommentChange,
         handleCategoryChange,
@@ -122,5 +134,6 @@ export const useTransaction = ({
         handleHideChange,
         handleCapitalizeChange,
         handleDelete,
+        handleSubTransactionCreate,
     }
 }

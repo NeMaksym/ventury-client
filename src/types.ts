@@ -95,6 +95,26 @@ export interface SystemTransaction
     labels?: string[]
 }
 
+// TODO: Add more props
+/**
+ * Represents a sub-transaction of a system transaction.
+ *
+ */
+export interface SystemSubTransaction
+    extends Pick<
+        SystemTransaction,
+        | 'description'
+        | 'amount'
+        | 'referenceAmount'
+        | 'category'
+        | 'capitalized'
+        | 'hide'
+        | 'labels'
+    > {
+    id: string
+    parentId: string
+}
+
 /**
  * Props interface for uploader components.
  * @interface UploaderProps

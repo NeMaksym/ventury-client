@@ -21,6 +21,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
         handleHideChange,
         handleCapitalizeChange,
         handleDelete,
+        handleSubTransactionCreate,
     } = useTransaction({
         setTransactions,
         setError,
@@ -71,6 +72,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onHideChange={handleHideChange}
                     onCapitalizeChange={handleCapitalizeChange}
                     onDelete={handleDelete}
+                    onSubTransactionCreate={handleSubTransactionCreate}
                 />
             </>
         )
