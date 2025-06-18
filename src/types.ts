@@ -93,6 +93,7 @@ export interface SystemTransaction
     capitalized: boolean
     hide: boolean
     labels?: string[]
+    subTransactions?: SystemSubTransaction[]
 }
 
 // TODO: Add more props
@@ -112,7 +113,6 @@ export interface SystemSubTransaction
         | 'labels'
     > {
     id: string
-    parentId: string
 }
 
 /**

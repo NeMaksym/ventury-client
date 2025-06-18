@@ -121,10 +121,47 @@ export const useTransaction = ({
     )
 
     const handleSubTransactionCreate = useCallback(
-        (transactionId: string, data: SubTransactionData) => {
-            console.log(transactionId, data)
+        async (transactionId: string, data: SubTransactionData) => {
+            try {
+                const transaction = await getTransactionById(transactionId)
+                if (!transaction) {
+                    setError('Transaction not found')
+                    return
+                }
+
+                const newSubTransaction: SystemSubTransaction = {
+                    id: crypto.randomUUID(),
+                    description: data.description,
+                    amount: data.amount,
+                    referenceAmount: data.amount,
+                    category: null,
+                    capitalized: false,
+                    hide: false,
+                    labels: [],
+                }
+
+                const updatedTransaction = await updateTransaction({
+                    ...transaction,
+                    subTransactions: [
+                        ...(transaction.subTransactions ?? []),
+                        newSubTransaction,
+                    ],
+                })
+
+                setTransactions((prevTransactions) =>
+                    prevTransactions.map((t) =>
+                        t.id === transactionId ? updatedTransaction : t
+                    )
+                )
+            } catch (err) {
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'Failed to create sub-transaction'
+                )
+            }
         },
-        []
+        [getTransactionById, updateTransaction, setTransactions, setError]
     )
 
     return {
