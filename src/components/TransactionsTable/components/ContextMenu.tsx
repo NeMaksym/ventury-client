@@ -33,7 +33,7 @@ interface ContextMenuProps {
     onHideChange: (transactionId: string, isHidden: boolean) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
     onDelete: (transactionId: string) => void
-    onSubTransactionCreate: (
+    onSubTransactionCreate?: (
         transactionId: string,
         data: SubTransactionData
     ) => void
@@ -113,7 +113,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
             ),
         }
 
-        onSubTransactionCreate(transactionId, data)
+        if (onSubTransactionCreate) {
+            onSubTransactionCreate(transactionId, data)
+        }
         handleSubTransactionCancel()
     }
 
@@ -166,12 +168,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                     </ListItemText>
                 </MenuItem>
 
-                <MenuItem onClick={handleSubTransactionClick}>
-                    <ListItemIcon>
-                        <CallSplit />
-                    </ListItemIcon>
-                    <ListItemText>Sub-transaction</ListItemText>
-                </MenuItem>
+                {onSubTransactionCreate && (
+                    <MenuItem onClick={handleSubTransactionClick}>
+                        <ListItemIcon>
+                            <CallSplit />
+                        </ListItemIcon>
+                        <ListItemText>Sub-transaction</ListItemText>
+                    </MenuItem>
+                )}
 
                 <MenuItem onClick={handleDeleteClick}>
                     <ListItemIcon>

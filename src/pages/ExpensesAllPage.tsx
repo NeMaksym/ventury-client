@@ -73,6 +73,11 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onCapitalizeChange={handleCapitalizeChange}
                     onDelete={handleDelete}
                     onSubTransactionCreate={handleSubTransactionCreate}
+                    onCategoryChangeSub={() => {}}
+                    onLabelChangeSub={() => {}}
+                    onHideChangeSub={() => {}}
+                    onCapitalizeChangeSub={() => {}}
+                    onDeleteSub={() => {}}
                 />
             </>
         )

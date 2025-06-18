@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { TransactionRow, EmptyBodyRow } from './components'
+import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './components'
 import { SubTransactionData } from '../../hooks/useTransaction'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
@@ -28,10 +28,31 @@ export interface TransactionsTableProps {
     transactions: SystemTransaction[]
     onCommentChange: (transactionId: string, comment: string) => void
     onCategoryChange: (transactionId: string, category: string | null) => void
+    onCategoryChangeSub: (
+        transactionId: string,
+        subTransactionId: string,
+        category: string | null
+    ) => void
     onLabelChange: (transactionId: string, labels: string[]) => void
+    onLabelChangeSub: (
+        transactionId: string,
+        subTransactionId: string,
+        labels: string[]
+    ) => void
     onHideChange: (transactionId: string, isHidden: boolean) => void
+    onHideChangeSub: (
+        transactionId: string,
+        subTransactionId: string,
+        isHidden: boolean
+    ) => void
     onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
+    onCapitalizeChangeSub: (
+        transactionId: string,
+        subTransactionId: string,
+        isCapitalized: boolean
+    ) => void
     onDelete: (transactionId: string) => void
+    onDeleteSub: (transactionId: string, subTransactionId: string) => void
     onSubTransactionCreate: (
         transactionId: string,
         data: SubTransactionData
@@ -47,6 +68,11 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     onCapitalizeChange,
     onDelete,
     onSubTransactionCreate,
+    onCategoryChangeSub,
+    onLabelChangeSub,
+    onHideChangeSub,
+    onCapitalizeChangeSub,
+    onDeleteSub,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -65,7 +91,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
                     ) : (
                         transactions.map((transaction) => (
-                            <>
+                            <React.Fragment key={transaction.id}>
                                 <TransactionRow
                                     key={transaction.id}
                                     transaction={transaction}
@@ -81,19 +107,60 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                 />
                                 {transaction.subTransactions?.map(
                                     (subTransaction) => (
-                                        <TableRow key={subTransaction.id}>
-                                            <TableCell colSpan={2} />
-                                            <TableCell>
-                                                {subTransaction.description}
-                                            </TableCell>
-                                            <TableCell>
-                                                {subTransaction.amount}
-                                            </TableCell>
-                                            <TableCell colSpan={3} />
-                                        </TableRow>
+                                        <SubTransactionRow
+                                            key={subTransaction.id}
+                                            transaction={transaction}
+                                            subTransaction={subTransaction}
+                                            onCategoryChange={(
+                                                subTransactionId,
+                                                categories
+                                            ) =>
+                                                onCategoryChangeSub(
+                                                    transaction.id,
+                                                    subTransactionId,
+                                                    categories
+                                                )
+                                            }
+                                            onLabelChange={(
+                                                subTransactionId,
+                                                labels
+                                            ) =>
+                                                onLabelChangeSub(
+                                                    transaction.id,
+                                                    subTransactionId,
+                                                    labels
+                                                )
+                                            }
+                                            onHideChange={(
+                                                subTransactionId,
+                                                isHidden
+                                            ) =>
+                                                onHideChangeSub(
+                                                    transaction.id,
+                                                    subTransactionId,
+                                                    isHidden
+                                                )
+                                            }
+                                            onCapitalizeChange={(
+                                                subTransactionId,
+                                                isCapitalized
+                                            ) =>
+                                                onCapitalizeChangeSub(
+                                                    transaction.id,
+                                                    subTransactionId,
+                                                    isCapitalized
+                                                )
+                                            }
+                                            onDelete={(subTransactionId) =>
+                                                onDeleteSub(
+                                                    transaction.id,
+                                                    subTransactionId
+                                                )
+                                            }
+                                        />
                                     )
                                 )}
-                            </>
+                            </React.Fragment>
                         ))
                     )}
                 </TableBody>
