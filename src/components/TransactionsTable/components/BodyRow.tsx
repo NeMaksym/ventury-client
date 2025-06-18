@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import { TableRow, TableCell, Collapse, Stack } from '@mui/material'
+import React from 'react'
+import { TableRow } from '@mui/material'
 import { SystemTransaction } from '../../../types'
 import { Arrow } from './Arrow'
 import { Date } from './Date'
 import { Description } from './Description'
 import { Category } from './Category'
 import { Amount } from './Amount'
-import { Comment } from './Comment'
 import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
 import { SubTransactionData } from '../../../hooks/useTransaction'
@@ -35,12 +34,6 @@ export const BodyRow: React.FC<BodyRowProps> = ({
     onDelete,
     onSubTransactionCreate,
 }) => {
-    const [isExpanded, setIsExpanded] = useState(false)
-
-    const handleToggle = () => {
-        setIsExpanded(!isExpanded)
-    }
-
     return (
         <React.Fragment>
             <TableRow
@@ -51,11 +44,13 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                         backgroundColor: 'action.hover',
                     },
                 }}
-                onClick={handleToggle}
             >
-                <Arrow isExpanded={isExpanded} onToggle={handleToggle} />
+                <Arrow isExpanded={false} onToggle={() => {}} />
                 <Date time={transaction.time} />
-                <Description description={transaction.description} />
+                <Description
+                    description={transaction.description}
+                    comment={transaction.comment}
+                />
                 <Amount
                     amount={transaction.amount}
                     currencyCode={transaction.currencyCode}
@@ -82,22 +77,6 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     onDelete={onDelete}
                     onSubTransactionCreate={onSubTransactionCreate}
                 />
-            </TableRow>
-            <TableRow>
-                <TableCell
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                    colSpan={7}
-                >
-                    <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-                        <Stack spacing={1} sx={{ my: 2 }}>
-                            <Comment
-                                transactionId={transaction.id}
-                                comment={transaction.comment}
-                                onCommentChange={onCommentChange}
-                            />
-                        </Stack>
-                    </Collapse>
-                </TableCell>
             </TableRow>
         </React.Fragment>
     )
