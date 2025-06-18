@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { BodyRow, EmptyBodyRow } from './components'
+import { TransactionRow, EmptyBodyRow } from './components'
 import { SubTransactionData } from '../../hooks/useTransaction'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
@@ -65,17 +65,35 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
                     ) : (
                         transactions.map((transaction) => (
-                            <BodyRow
-                                key={transaction.id}
-                                transaction={transaction}
-                                onCommentChange={onCommentChange}
-                                onCategoryChange={onCategoryChange}
-                                onLabelChange={onLabelChange}
-                                onHideChange={onHideChange}
-                                onCapitalizeChange={onCapitalizeChange}
-                                onDelete={onDelete}
-                                onSubTransactionCreate={onSubTransactionCreate}
-                            />
+                            <>
+                                <TransactionRow
+                                    key={transaction.id}
+                                    transaction={transaction}
+                                    onCommentChange={onCommentChange}
+                                    onCategoryChange={onCategoryChange}
+                                    onLabelChange={onLabelChange}
+                                    onHideChange={onHideChange}
+                                    onCapitalizeChange={onCapitalizeChange}
+                                    onDelete={onDelete}
+                                    onSubTransactionCreate={
+                                        onSubTransactionCreate
+                                    }
+                                />
+                                {transaction.subTransactions?.map(
+                                    (subTransaction) => (
+                                        <TableRow key={subTransaction.id}>
+                                            <TableCell colSpan={2} />
+                                            <TableCell>
+                                                {subTransaction.description}
+                                            </TableCell>
+                                            <TableCell>
+                                                {subTransaction.amount}
+                                            </TableCell>
+                                            <TableCell colSpan={3} />
+                                        </TableRow>
+                                    )
+                                )}
+                            </>
                         ))
                     )}
                 </TableBody>

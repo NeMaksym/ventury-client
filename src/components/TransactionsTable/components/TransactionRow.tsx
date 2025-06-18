@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableRow } from '@mui/material'
-import { SystemTransaction } from '../../../types'
+
 import { Arrow } from './Arrow'
 import { Date } from './Date'
 import { Description } from './Description'
@@ -8,9 +8,11 @@ import { Category } from './Category'
 import { Amount } from './Amount'
 import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
+
+import { SystemTransaction } from '../../../types'
 import { SubTransactionData } from '../../../hooks/useTransaction'
 
-interface BodyRowProps {
+interface TransactionRowProps {
     transaction: SystemTransaction
     onCommentChange: (transactionId: string, comment: string) => void
     onCategoryChange: (transactionId: string, category: string | null) => void
@@ -24,7 +26,7 @@ interface BodyRowProps {
     ) => void
 }
 
-export const BodyRow: React.FC<BodyRowProps> = ({
+export const TransactionRow: React.FC<TransactionRowProps> = ({
     transaction,
     onCommentChange,
     onCategoryChange,
@@ -35,7 +37,7 @@ export const BodyRow: React.FC<BodyRowProps> = ({
     onSubTransactionCreate,
 }) => {
     return (
-        <React.Fragment>
+        <>
             <TableRow
                 sx={{
                     cursor: 'pointer',
@@ -78,6 +80,6 @@ export const BodyRow: React.FC<BodyRowProps> = ({
                     onSubTransactionCreate={onSubTransactionCreate}
                 />
             </TableRow>
-        </React.Fragment>
+        </>
     )
 }
