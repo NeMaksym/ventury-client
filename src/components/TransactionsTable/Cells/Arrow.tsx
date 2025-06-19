@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableCell, IconButton } from '@mui/material'
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { KeyboardArrowDown } from '@mui/icons-material'
 
 interface ArrowProps {
     isExpanded: boolean
@@ -10,7 +10,12 @@ interface ArrowProps {
 export const Arrow: React.FC<ArrowProps> = ({ isExpanded, onToggle }) => (
     <TableCell>
         <IconButton size="small" onClick={onToggle}>
-            {isExpanded ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            <KeyboardArrowDown
+                sx={{
+                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s ease-in-out',
+                }}
+            />
         </IconButton>
     </TableCell>
 )
