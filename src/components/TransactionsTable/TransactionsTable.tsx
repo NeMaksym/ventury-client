@@ -12,7 +12,7 @@ import {
 
 import { SystemTransaction } from '../../types'
 import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './components'
-import { SubTransactionData } from '../../hooks/useTransaction'
+import { SubTransactionFormData } from '../../hooks/useTransaction'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
@@ -55,7 +55,7 @@ export interface TransactionsTableProps {
     onDeleteSub: (transactionId: string, subTransactionId: string) => void
     onSubTransactionCreate: (
         transactionId: string,
-        data: SubTransactionData
+        data: SubTransactionFormData
     ) => void
 }
 

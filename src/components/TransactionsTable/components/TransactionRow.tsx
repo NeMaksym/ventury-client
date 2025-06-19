@@ -10,7 +10,7 @@ import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
 
 import { SystemTransaction } from '../../../types'
-import { SubTransactionData } from '../../../hooks/useTransaction'
+import { SubTransactionFormData } from '../../../hooks/useTransaction'
 
 interface TransactionRowProps {
     transaction: SystemTransaction
@@ -22,7 +22,7 @@ interface TransactionRowProps {
     onDelete: (transactionId: string) => void
     onSubTransactionCreate: (
         transactionId: string,
-        data: SubTransactionData
+        data: SubTransactionFormData
     ) => void
 }
 

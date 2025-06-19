@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
 import { SystemTransaction, SystemSubTransaction } from '../types'
 import { useExpenseService } from './useExpenseService'
+import { fromSmallestUnit, toSmallestUnit } from '../utils/formatAmount'
 
-export type SubTransactionData = Pick<
-    SystemSubTransaction,
-    'description' | 'amount'
->
+export interface SubTransactionFormData {
+    description: string
+    amount: number
+}
 
 interface UseTransactionParams {
     setTransactions: React.Dispatch<React.SetStateAction<SystemTransaction[]>>
@@ -121,7 +122,7 @@ export const useTransaction = ({
     )
 
     const handleSubTransactionCreate = useCallback(
-        async (transactionId: string, data: SubTransactionData) => {
+        async (transactionId: string, formData: SubTransactionFormData) => {
             try {
                 const transaction = await getTransactionById(transactionId)
                 if (!transaction) {
@@ -129,11 +130,17 @@ export const useTransaction = ({
                     return
                 }
 
+                const exchangeRate =
+                    Number(transaction.referenceAmount) /
+                    Number(transaction.amount)
+
                 const newSubTransaction: SystemSubTransaction = {
                     id: crypto.randomUUID(),
-                    description: data.description,
-                    amount: data.amount,
-                    referenceAmount: data.amount,
+                    description: formData.description,
+                    amount: -toSmallestUnit(formData.amount),
+                    referenceAmount: -toSmallestUnit(
+                        formData.amount * exchangeRate
+                    ),
                     category: null,
                     capitalized: false,
                     hide: false,

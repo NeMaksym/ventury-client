@@ -24,7 +24,7 @@ import {
     DeleteOutline,
     CallSplit,
 } from '@mui/icons-material'
-import { SubTransactionData } from '../../../hooks/useTransaction'
+import { SubTransactionFormData } from '../../../hooks/useTransaction'
 
 interface ContextMenuProps {
     transactionId: string
@@ -35,7 +35,7 @@ interface ContextMenuProps {
     onDelete: (transactionId: string) => void
     onSubTransactionCreate?: (
         transactionId: string,
-        data: SubTransactionData
+        data: SubTransactionFormData
     ) => void
 }
 
@@ -106,11 +106,9 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     }
 
     const handleSubTransactionSubmit = () => {
-        const data: SubTransactionData = {
+        const data: SubTransactionFormData = {
             description: subTransactionForm.description,
-            amount: BigInt(
-                Math.round(parseFloat(subTransactionForm.amount) * 100)
-            ),
+            amount: parseFloat(subTransactionForm.amount),
         }
 
         if (onSubTransactionCreate) {
