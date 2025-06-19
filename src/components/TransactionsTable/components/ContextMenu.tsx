@@ -24,23 +24,27 @@ import {
     DeleteOutline,
     CallSplit,
 } from '@mui/icons-material'
-import { SubTransactionFormData } from '../../../hooks/useTransaction'
+import {
+    SubTransactionData,
+    SubTransactionCreateHandler,
+    TransactionActionHandler,
+    TransactionDeleteHandler,
+} from '../TransactionsTable'
 
 interface ContextMenuProps {
     transactionId: string
+    subTransactionId?: string
     isHidden: boolean
     isCapitalized: boolean
-    onHideChange: (transactionId: string, isHidden: boolean) => void
-    onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
-    onDelete: (transactionId: string) => void
-    onSubTransactionCreate?: (
-        transactionId: string,
-        data: SubTransactionFormData
-    ) => void
+    onHideChange: TransactionActionHandler<boolean>
+    onCapitalizeChange: TransactionActionHandler<boolean>
+    onDelete: TransactionDeleteHandler
+    onSubTransactionCreate?: SubTransactionCreateHandler
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({
     transactionId,
+    subTransactionId,
     isHidden,
     isCapitalized,
     onHideChange,
@@ -69,12 +73,12 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     }
 
     const handleHideToggle = () => {
-        onHideChange(transactionId, !isHidden)
+        onHideChange(transactionId, !isHidden, subTransactionId)
         handleClose()
     }
 
     const handleCapitalizeToggle = () => {
-        onCapitalizeChange(transactionId, !isCapitalized)
+        onCapitalizeChange(transactionId, !isCapitalized, subTransactionId)
         handleClose()
     }
 
@@ -84,7 +88,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     }
 
     const handleDeleteConfirm = () => {
-        onDelete(transactionId)
+        onDelete(transactionId, subTransactionId)
         setShowDeleteDialog(false)
     }
 
@@ -106,7 +110,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     }
 
     const handleSubTransactionSubmit = () => {
-        const data: SubTransactionFormData = {
+        const data: SubTransactionData = {
             description: subTransactionForm.description,
             amount: parseFloat(subTransactionForm.amount),
         }

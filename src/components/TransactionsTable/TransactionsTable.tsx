@@ -12,7 +12,6 @@ import {
 
 import { SystemTransaction } from '../../types'
 import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './components'
-import { SubTransactionFormData } from '../../hooks/useTransaction'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
@@ -24,39 +23,36 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
 ]
 
+export type TransactionActionHandler<T> = (
+    transactionId: string,
+    value: T,
+    subTransactionId?: string
+) => void
+
+export type TransactionDeleteHandler = (
+    transactionId: string,
+    subTransactionId?: string
+) => void
+
+export interface SubTransactionData {
+    description: string
+    amount: number
+}
+
+export type SubTransactionCreateHandler = (
+    transactionId: string,
+    data: SubTransactionData
+) => void
+
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
-    onCommentChange: (transactionId: string, comment: string) => void
-    onCategoryChange: (transactionId: string, category: string | null) => void
-    onCategoryChangeSub: (
-        transactionId: string,
-        subTransactionId: string,
-        category: string | null
-    ) => void
-    onLabelChange: (transactionId: string, labels: string[]) => void
-    onLabelChangeSub: (
-        transactionId: string,
-        subTransactionId: string,
-        labels: string[]
-    ) => void
-    onHideChange: (transactionId: string, isHidden: boolean) => void
-    onHideChangeSub: (
-        transactionId: string,
-        subTransactionId: string,
-        isHidden: boolean
-    ) => void
-    onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
-    onCapitalizeChangeSub: (
-        transactionId: string,
-        subTransactionId: string,
-        isCapitalized: boolean
-    ) => void
-    onDelete: (transactionId: string) => void
-    onDeleteSub: (transactionId: string, subTransactionId: string) => void
-    onSubTransactionCreate: (
-        transactionId: string,
-        data: SubTransactionFormData
-    ) => void
+    onCommentChange: TransactionActionHandler<string>
+    onCategoryChange: TransactionActionHandler<string | null>
+    onLabelChange: TransactionActionHandler<string[]>
+    onHideChange: TransactionActionHandler<boolean>
+    onCapitalizeChange: TransactionActionHandler<boolean>
+    onDelete: TransactionDeleteHandler
+    onSubTransactionCreate: SubTransactionCreateHandler
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
@@ -68,11 +64,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     onCapitalizeChange,
     onDelete,
     onSubTransactionCreate,
-    onCategoryChangeSub,
-    onLabelChangeSub,
-    onHideChangeSub,
-    onCapitalizeChangeSub,
-    onDeleteSub,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -111,52 +102,13 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                             key={subTransaction.id}
                                             transaction={transaction}
                                             subTransaction={subTransaction}
-                                            onCategoryChange={(
-                                                subTransactionId,
-                                                categories
-                                            ) =>
-                                                onCategoryChangeSub(
-                                                    transaction.id,
-                                                    subTransactionId,
-                                                    categories
-                                                )
+                                            onCategoryChange={onCategoryChange}
+                                            onLabelChange={onLabelChange}
+                                            onHideChange={onHideChange}
+                                            onCapitalizeChange={
+                                                onCapitalizeChange
                                             }
-                                            onLabelChange={(
-                                                subTransactionId,
-                                                labels
-                                            ) =>
-                                                onLabelChangeSub(
-                                                    transaction.id,
-                                                    subTransactionId,
-                                                    labels
-                                                )
-                                            }
-                                            onHideChange={(
-                                                subTransactionId,
-                                                isHidden
-                                            ) =>
-                                                onHideChangeSub(
-                                                    transaction.id,
-                                                    subTransactionId,
-                                                    isHidden
-                                                )
-                                            }
-                                            onCapitalizeChange={(
-                                                subTransactionId,
-                                                isCapitalized
-                                            ) =>
-                                                onCapitalizeChangeSub(
-                                                    transaction.id,
-                                                    subTransactionId,
-                                                    isCapitalized
-                                                )
-                                            }
-                                            onDelete={(subTransactionId) =>
-                                                onDeleteSub(
-                                                    transaction.id,
-                                                    subTransactionId
-                                                )
-                                            }
+                                            onDelete={onDelete}
                                         />
                                     )
                                 )}

@@ -1,5 +1,12 @@
 import React from 'react'
-import { TableCell, Select, MenuItem, FormControl } from '@mui/material'
+import {
+    TableCell,
+    Select,
+    MenuItem,
+    FormControl,
+    SelectChangeEvent,
+} from '@mui/material'
+import { TransactionActionHandler } from '../TransactionsTable'
 
 const EMPTY_CATEGORY = ''
 
@@ -34,15 +41,25 @@ const CATEGORIES: CategoryItem[] = [
 
 interface CategoryProps {
     transactionId: string
+    subTransactionId?: string
     category: string | null
-    onCategoryChange: (transactionId: string, category: string | null) => void
+    onCategoryChange: TransactionActionHandler<string | null>
 }
 
 export const Category: React.FC<CategoryProps> = ({
     transactionId,
+    subTransactionId,
     category,
     onCategoryChange,
 }) => {
+    const handleChange = (e: SelectChangeEvent<string>) => {
+        onCategoryChange(
+            transactionId,
+            e.target.value === EMPTY_CATEGORY ? null : e.target.value,
+            subTransactionId
+        )
+    }
+
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>
             <FormControl fullWidth size="small">
@@ -50,14 +67,7 @@ export const Category: React.FC<CategoryProps> = ({
                     fullWidth
                     displayEmpty
                     value={category || EMPTY_CATEGORY}
-                    onChange={(e) =>
-                        onCategoryChange(
-                            transactionId,
-                            e.target.value === EMPTY_CATEGORY
-                                ? null
-                                : e.target.value
-                        )
-                    }
+                    onChange={handleChange}
                 >
                     <MenuItem value={EMPTY_CATEGORY}>
                         <em>Select category</em>

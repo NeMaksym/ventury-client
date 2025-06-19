@@ -8,15 +8,19 @@ import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
 
 import { SystemSubTransaction, SystemTransaction } from '../../../types'
+import {
+    TransactionActionHandler,
+    TransactionDeleteHandler,
+} from '../TransactionsTable'
 
 interface SubTransactionRowProps {
     transaction: SystemTransaction
     subTransaction: SystemSubTransaction
-    onCategoryChange: (transactionId: string, category: string | null) => void
-    onLabelChange: (transactionId: string, labels: string[]) => void
-    onHideChange: (transactionId: string, isHidden: boolean) => void
-    onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
-    onDelete: (transactionId: string) => void
+    onCategoryChange: TransactionActionHandler<string | null>
+    onLabelChange: TransactionActionHandler<string[]>
+    onHideChange: TransactionActionHandler<boolean>
+    onCapitalizeChange: TransactionActionHandler<boolean>
+    onDelete: TransactionDeleteHandler
 }
 
 export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
@@ -38,7 +42,7 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
         }}
     >
         <TableCell colSpan={2} />
-        <Description description={subTransaction.description} comment="" />
+        <Description description={subTransaction.description} />
         <Amount
             amount={subTransaction.amount}
             currencyCode={transaction.currencyCode}
@@ -46,18 +50,21 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             referenceCurrencyCode={transaction.referenceCurrencyCode}
         />
         <Category
-            transactionId={subTransaction.id}
+            transactionId={transaction.id}
+            subTransactionId={subTransaction.id}
             category={subTransaction.category}
             onCategoryChange={onCategoryChange}
         />
         <Label
             options={[]}
-            transactionId={subTransaction.id}
+            transactionId={transaction.id}
+            subTransactionId={subTransaction.id}
             labels={subTransaction.labels || []}
             onLabelChange={onLabelChange}
         />
         <ContextMenu
-            transactionId={subTransaction.id}
+            transactionId={transaction.id}
+            subTransactionId={subTransaction.id}
             isHidden={subTransaction.hide}
             isCapitalized={subTransaction.capitalized}
             onHideChange={onHideChange}

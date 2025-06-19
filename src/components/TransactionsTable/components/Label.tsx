@@ -5,19 +5,22 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material'
+import { TransactionActionHandler } from '../TransactionsTable'
 
 const filter = createFilterOptions<string>()
 
 interface LabelProps {
     options: string[]
     transactionId: string
+    subTransactionId?: string
     labels: string[]
-    onLabelChange: (transactionId: string, labels: string[]) => void
+    onLabelChange: TransactionActionHandler<string[]>
 }
 
 export const Label: React.FC<LabelProps> = ({
     options,
     transactionId,
+    subTransactionId,
     labels,
     onLabelChange,
 }) => {
@@ -37,7 +40,7 @@ export const Label: React.FC<LabelProps> = ({
                 value={labels}
                 onChange={(_, value) => {
                     if (value) {
-                        onLabelChange(transactionId, value)
+                        onLabelChange(transactionId, value, subTransactionId)
                     }
                 }}
                 filterOptions={(options, params) => {

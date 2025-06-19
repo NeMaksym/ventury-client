@@ -10,20 +10,21 @@ import { Label } from './Label'
 import { ContextMenu } from './ContextMenu'
 
 import { SystemTransaction } from '../../../types'
-import { SubTransactionFormData } from '../../../hooks/useTransaction'
+import {
+    SubTransactionCreateHandler,
+    TransactionActionHandler,
+    TransactionDeleteHandler,
+} from '../TransactionsTable'
 
 interface TransactionRowProps {
     transaction: SystemTransaction
-    onCommentChange: (transactionId: string, comment: string) => void
-    onCategoryChange: (transactionId: string, category: string | null) => void
-    onLabelChange: (transactionId: string, labels: string[]) => void
-    onHideChange: (transactionId: string, isHidden: boolean) => void
-    onCapitalizeChange: (transactionId: string, isCapitalized: boolean) => void
-    onDelete: (transactionId: string) => void
-    onSubTransactionCreate: (
-        transactionId: string,
-        data: SubTransactionFormData
-    ) => void
+    onCommentChange: TransactionActionHandler<string>
+    onCategoryChange: TransactionActionHandler<string | null>
+    onLabelChange: TransactionActionHandler<string[]>
+    onHideChange: TransactionActionHandler<boolean>
+    onCapitalizeChange: TransactionActionHandler<boolean>
+    onDelete: TransactionDeleteHandler
+    onSubTransactionCreate: SubTransactionCreateHandler
 }
 
 export const TransactionRow: React.FC<TransactionRowProps> = ({
