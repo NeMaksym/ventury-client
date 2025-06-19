@@ -1,17 +1,9 @@
 import React from 'react'
 import { TableRow, TableCell } from '@mui/material'
 
-import { Description } from './Description'
-import { Category } from './Category'
-import { Amount } from './Amount'
-import { Label } from './Label'
-import { ContextMenu } from './ContextMenu'
-
 import { SystemSubTransaction, SystemTransaction } from '../../../types'
-import {
-    TransactionActionHandler,
-    TransactionDeleteHandler,
-} from '../TransactionsTable'
+import { Description, Category, Amount, Label, ContextMenu } from '../Cells'
+import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 
 interface SubTransactionRowProps {
     transaction: SystemTransaction

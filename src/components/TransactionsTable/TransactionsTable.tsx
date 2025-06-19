@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './components'
+import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './Rows'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
@@ -23,26 +23,11 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
 ]
 
-export type TransactionActionHandler<T> = (
-    transactionId: string,
-    value: T,
-    subTransactionId?: string
-) => void
-
-export type TransactionDeleteHandler = (
-    transactionId: string,
-    subTransactionId?: string
-) => void
-
-export interface SubTransactionData {
-    description: string
-    amount: number
-}
-
-export type SubTransactionCreateHandler = (
-    transactionId: string,
-    data: SubTransactionData
-) => void
+import {
+    TransactionActionHandler,
+    TransactionDeleteHandler,
+    SubTransactionCreateHandler,
+} from './types'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -84,7 +69,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         transactions.map((transaction) => (
                             <React.Fragment key={transaction.id}>
                                 <TransactionRow
-                                    key={transaction.id}
                                     transaction={transaction}
                                     onCommentChange={onCommentChange}
                                     onCategoryChange={onCategoryChange}

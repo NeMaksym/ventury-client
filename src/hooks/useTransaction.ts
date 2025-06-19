@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { SystemTransaction, SystemSubTransaction } from '../types'
 import { useExpenseService } from './useExpenseService'
 import { toSmallestUnit } from '../utils/formatAmount'
-import { SubTransactionData } from '../components/TransactionsTable'
+import { SubTransactionData } from '../components/TransactionsTable/types'
 
 interface UseTransactionParams {
     setTransactions: React.Dispatch<React.SetStateAction<SystemTransaction[]>>

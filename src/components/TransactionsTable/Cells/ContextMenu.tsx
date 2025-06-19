@@ -29,7 +29,7 @@ import {
     SubTransactionCreateHandler,
     TransactionActionHandler,
     TransactionDeleteHandler,
-} from '../TransactionsTable'
+} from '../types'
 
 interface ContextMenuProps {
     transactionId: string

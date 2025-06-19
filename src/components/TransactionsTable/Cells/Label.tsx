@@ -5,7 +5,7 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material'
-import { TransactionActionHandler } from '../TransactionsTable'
+import { TransactionActionHandler } from '../types'
 
 const filter = createFilterOptions<string>()
 

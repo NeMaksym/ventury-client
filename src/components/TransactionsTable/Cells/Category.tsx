@@ -6,7 +6,7 @@ import {
     FormControl,
     SelectChangeEvent,
 } from '@mui/material'
-import { TransactionActionHandler } from '../TransactionsTable'
+import { TransactionActionHandler } from '../types'
 
 const EMPTY_CATEGORY = ''
 

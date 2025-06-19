@@ -1,20 +1,21 @@
 import React from 'react'
 import { TableRow } from '@mui/material'
 
-import { Arrow } from './Arrow'
-import { Date } from './Date'
-import { Description } from './Description'
-import { Category } from './Category'
-import { Amount } from './Amount'
-import { Label } from './Label'
-import { ContextMenu } from './ContextMenu'
-
-import { SystemTransaction } from '../../../types'
+import {
+    Arrow,
+    Date,
+    Description,
+    Category,
+    Amount,
+    Label,
+    ContextMenu,
+} from '../Cells'
 import {
     SubTransactionCreateHandler,
     TransactionActionHandler,
     TransactionDeleteHandler,
-} from '../TransactionsTable'
+} from '../types'
+import { SystemTransaction } from '../../../types'
 
 interface TransactionRowProps {
     transaction: SystemTransaction
