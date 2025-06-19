@@ -80,7 +80,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                                         onSubTransactionCreate
                                     }
                                 />
-                                {transaction.subTransactions?.map(
+                                {transaction.subTransactions.map(
                                     (subTransaction) => (
                                         <SubTransactionRow
                                             key={subTransaction.id}

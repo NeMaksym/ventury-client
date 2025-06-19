@@ -51,7 +51,7 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             options={[]}
             transactionId={transaction.id}
             subTransactionId={subTransaction.id}
-            labels={subTransaction.labels || []}
+            labels={subTransaction.labels}
             onLabelChange={onLabelChange}
         />
         <ContextMenu

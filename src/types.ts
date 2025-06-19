@@ -68,7 +68,8 @@ export interface SourceTransaction {
  * @property {bigint} referenceAmount - Reference amount in the smallest currency unit for comparison
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
  * @property {string | null} category - System-assigned category for the transaction, null if uncategorized
- * @property {string[]} [labels] - Optional array of system-assigned labels or tags
+ * @property {string[]} labels - Array of system-assigned labels or tags
+ * @property {SystemSubTransaction[]} subTransactions - Array of sub-transactions
  */
 export interface SystemTransaction
     extends Pick<
@@ -92,8 +93,8 @@ export interface SystemTransaction
     category: string | null
     capitalized: boolean
     hide: boolean
-    labels?: string[]
-    subTransactions?: SystemSubTransaction[]
+    labels: string[]
+    subTransactions: SystemSubTransaction[]
 }
 
 // TODO: Add more props

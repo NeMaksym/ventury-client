@@ -31,6 +31,8 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
             category: null,
             capitalized: false,
             hide: false,
+            labels: [],
+            subTransactions: [],
         }
     })
 

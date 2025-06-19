@@ -69,7 +69,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 <Label
                     options={[]}
                     transactionId={transaction.id}
-                    labels={transaction.labels || []}
+                    labels={transaction.labels}
                     onLabelChange={onLabelChange}
                 />
                 <ContextMenu

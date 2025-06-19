@@ -27,21 +27,20 @@ export const useTransaction = ({
                 const transaction = await getTransactionById(transactionId)
                 if (!transaction) return
 
-                const payload =
-                    subTransactionId && transaction.subTransactions
-                        ? {
-                              ...transaction,
-                              subTransactions: transaction.subTransactions.map(
-                                  (st) =>
-                                      st.id === subTransactionId
-                                          ? { ...st, ...updates }
-                                          : st
-                              ),
-                          }
-                        : {
-                              ...transaction,
-                              ...updates,
-                          }
+                const payload = subTransactionId
+                    ? {
+                          ...transaction,
+                          subTransactions: transaction.subTransactions.map(
+                              (st) =>
+                                  st.id === subTransactionId
+                                      ? { ...st, ...updates }
+                                      : st
+                          ),
+                      }
+                    : {
+                          ...transaction,
+                          ...updates,
+                      }
 
                 const updatedTransaction = await updateTransaction(payload)
 
@@ -135,7 +134,7 @@ export const useTransaction = ({
                 const transaction = await getTransactionById(transactionId)
                 if (!transaction) return
 
-                if (subTransactionId && transaction.subTransactions) {
+                if (subTransactionId) {
                     const updatedTransaction = await updateTransaction({
                         ...transaction,
                         subTransactions: transaction.subTransactions.filter(
@@ -195,7 +194,7 @@ export const useTransaction = ({
                 const updatedTransaction = await updateTransaction({
                     ...transaction,
                     subTransactions: [
-                        ...(transaction.subTransactions ?? []),
+                        ...transaction.subTransactions,
                         newSubTransaction,
                     ],
                 })
