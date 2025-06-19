@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 
 import { SystemTransaction } from '../../types'
-import { TransactionRow, SubTransactionRow, EmptyBodyRow } from './Rows'
+import { EmptyBodyRow, TransactionGroup } from './Rows'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
@@ -67,36 +67,17 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
                     ) : (
                         transactions.map((transaction) => (
-                            <React.Fragment key={transaction.id}>
-                                <TransactionRow
-                                    transaction={transaction}
-                                    onCommentChange={onCommentChange}
-                                    onCategoryChange={onCategoryChange}
-                                    onLabelChange={onLabelChange}
-                                    onHideChange={onHideChange}
-                                    onCapitalizeChange={onCapitalizeChange}
-                                    onDelete={onDelete}
-                                    onSubTransactionCreate={
-                                        onSubTransactionCreate
-                                    }
-                                />
-                                {transaction.subTransactions.map(
-                                    (subTransaction) => (
-                                        <SubTransactionRow
-                                            key={subTransaction.id}
-                                            transaction={transaction}
-                                            subTransaction={subTransaction}
-                                            onCategoryChange={onCategoryChange}
-                                            onLabelChange={onLabelChange}
-                                            onHideChange={onHideChange}
-                                            onCapitalizeChange={
-                                                onCapitalizeChange
-                                            }
-                                            onDelete={onDelete}
-                                        />
-                                    )
-                                )}
-                            </React.Fragment>
+                            <TransactionGroup
+                                key={transaction.id}
+                                transaction={transaction}
+                                onCommentChange={onCommentChange}
+                                onCategoryChange={onCategoryChange}
+                                onLabelChange={onLabelChange}
+                                onHideChange={onHideChange}
+                                onCapitalizeChange={onCapitalizeChange}
+                                onDelete={onDelete}
+                                onSubTransactionCreate={onSubTransactionCreate}
+                            />
                         ))
                     )}
                 </TableBody>

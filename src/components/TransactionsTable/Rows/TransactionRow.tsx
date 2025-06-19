@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableRow } from '@mui/material'
+import { TableCell, TableRow } from '@mui/material'
 
 import {
     Arrow,
@@ -26,6 +26,8 @@ interface TransactionRowProps {
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
     onSubTransactionCreate: SubTransactionCreateHandler
+    isExpanded: boolean
+    onClick: () => void
 }
 
 export const TransactionRow: React.FC<TransactionRowProps> = ({
@@ -37,19 +39,28 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
     onCapitalizeChange,
     onDelete,
     onSubTransactionCreate,
+    isExpanded,
+    onClick,
 }) => {
+    const hasSubTransactions = transaction.subTransactions.length > 0
+
     return (
         <>
             <TableRow
                 sx={{
-                    cursor: 'pointer',
+                    cursor: hasSubTransactions ? 'pointer' : 'default',
                     opacity: transaction.hide ? 0.5 : 1,
                     '&:hover': {
                         backgroundColor: 'action.hover',
                     },
                 }}
+                onClick={onClick}
             >
-                <Arrow isExpanded={false} onToggle={() => {}} />
+                {hasSubTransactions ? (
+                    <Arrow isExpanded={isExpanded} onToggle={onClick} />
+                ) : (
+                    <TableCell />
+                )}
                 <Date time={transaction.time} />
                 <Description
                     description={transaction.description}
