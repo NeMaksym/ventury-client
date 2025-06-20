@@ -12,6 +12,7 @@ import {
 } from '../Cells'
 import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 import { SystemTransaction } from '../../../types'
+import { fromSmallestUnit } from '../../../utils'
 
 interface TransactionRowProps {
     transaction: SystemTransaction
@@ -39,6 +40,13 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
     onClick,
 }) => {
     const hasSubTransactions = transaction.subTransactions.length > 0
+    const subTransactionsSum = transaction.subTransactions.reduce(
+        (sum, sub) => sum + fromSmallestUnit(sub.amount),
+        0
+    )
+    const maxSubTransactionAmount = -(
+        fromSmallestUnit(transaction.amount) - subTransactionsSum
+    )
 
     return (
         <>
@@ -82,6 +90,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     comment={transaction.comment}
                     isHidden={transaction.hide}
                     isCapitalized={transaction.capitalized}
+                    maxSubTransactionAmount={maxSubTransactionAmount}
                     onCommentChange={onCommentChange}
                     onHideChange={onHideChange}
                     onCapitalizeChange={onCapitalizeChange}

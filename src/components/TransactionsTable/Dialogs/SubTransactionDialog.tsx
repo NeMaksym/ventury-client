@@ -11,12 +11,14 @@ import {
 
 interface SubTransactionDialogProps {
     open: boolean
+    maxAmount: number
     onSubmit: (amount: number) => void
     onCancel: () => void
 }
 
 export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
     open,
+    maxAmount,
     onSubmit,
     onCancel,
 }) => {
@@ -34,7 +36,10 @@ export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
         onCancel()
     }
 
-    const isFormValid = amount !== '' && !isNaN(parseFloat(amount))
+    const isFormValid =
+        amount !== '' &&
+        !isNaN(parseFloat(amount)) &&
+        parseFloat(amount) <= maxAmount
 
     return (
         <Dialog
@@ -63,6 +68,7 @@ export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
                         onChange={(e) =>
                             handleFormChange('amount', e.target.value)
                         }
+                        helperText={`Maximum: ${maxAmount}`}
                         fullWidth
                         required
                     />

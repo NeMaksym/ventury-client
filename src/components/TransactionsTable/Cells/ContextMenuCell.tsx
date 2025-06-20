@@ -15,6 +15,7 @@ interface ContextMenuCellProps {
     comment: string | undefined
     isHidden: boolean
     isCapitalized: boolean
+    maxSubTransactionAmount?: number
     onCommentChange: TransactionActionHandler<string>
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
@@ -28,6 +29,7 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
     comment,
     isHidden,
     isCapitalized,
+    maxSubTransactionAmount = 0,
     onCommentChange,
     onHideChange,
     onCapitalizeChange,
@@ -115,6 +117,7 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
             {onSubTransactionCreate && (
                 <SubTransactionDialog
                     open={subTransactionDialogOpen}
+                    maxAmount={maxSubTransactionAmount}
                     onSubmit={(amount: number) => {
                         onSubTransactionCreate(transactionId, amount)
                         setSubTransactionDialogOpen(false)
