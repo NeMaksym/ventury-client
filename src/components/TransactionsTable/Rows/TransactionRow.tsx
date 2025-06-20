@@ -46,10 +46,8 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 sx={{
                     cursor: hasSubTransactions ? 'pointer' : 'default',
                     opacity: transaction.hide ? 0.5 : 1,
-                    '&:hover': {
-                        backgroundColor: 'action.hover',
-                    },
                 }}
+                hover
                 onClick={onClick}
             >
                 {hasSubTransactions ? (
