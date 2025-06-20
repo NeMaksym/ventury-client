@@ -24,6 +24,17 @@ export const CommentDialog: React.FC<CommentDialogProps> = ({
 }) => {
     const [value, setValue] = useState(comment || '')
 
+    const handleSubmit = () => {
+        onSubmit(value)
+        onClose()
+    }
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleSubmit()
+        }
+    }
+
     return (
         <Dialog
             open={open}
@@ -45,9 +56,8 @@ export const CommentDialog: React.FC<CommentDialogProps> = ({
                     <TextField
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
+                        onKeyUp={handleKeyPress}
                         fullWidth
-                        multiline
-                        rows={4}
                         placeholder="Add your comment here..."
                         variant="outlined"
                         autoFocus
@@ -59,7 +69,7 @@ export const CommentDialog: React.FC<CommentDialogProps> = ({
                     Cancel
                 </Button>
                 <Button
-                    onClick={() => onSubmit(value)}
+                    onClick={handleSubmit}
                     color="primary"
                     variant="contained"
                 >

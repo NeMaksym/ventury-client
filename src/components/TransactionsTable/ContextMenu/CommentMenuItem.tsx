@@ -18,11 +18,6 @@ export const CommentMenuItem: React.FC<CommentMenuItemProps> = ({
         setDialogOpen(true)
     }
 
-    const handleDialogSubmit = (comment: string) => {
-        onCommentSave(comment)
-        setDialogOpen(false)
-    }
-
     return (
         <>
             <MenuItem onClick={handleClick}>
@@ -35,7 +30,9 @@ export const CommentMenuItem: React.FC<CommentMenuItemProps> = ({
             <CommentDialog
                 open={dialogOpen}
                 comment={comment}
-                onSubmit={handleDialogSubmit}
+                onSubmit={(comment: string) => {
+                    onCommentSave(comment)
+                }}
                 onClose={() => setDialogOpen(false)}
             />
         </>
