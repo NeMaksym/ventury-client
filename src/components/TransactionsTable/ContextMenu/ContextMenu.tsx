@@ -15,7 +15,7 @@ interface ContextMenuProps {
     onHideClick: () => void
     onCapitalizeClick: () => void
     onDeleteClick: () => void
-    onSubTransactionCreate: ((data: SubTransactionData) => void) | undefined
+    onSubTransactionCreate?: (data: SubTransactionData) => void
 }
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({

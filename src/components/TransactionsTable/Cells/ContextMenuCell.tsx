@@ -73,13 +73,11 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                     onDelete(transactionId, subTransactionId)
                     handleClose()
                 }}
-                onSubTransactionCreate={
-                    onSubTransactionCreate
-                        ? (data: SubTransactionData) => {
-                              onSubTransactionCreate(transactionId, data)
-                          }
-                        : undefined
-                }
+                {...(onSubTransactionCreate && {
+                    onSubTransactionCreate: (data: SubTransactionData) => {
+                        onSubTransactionCreate(transactionId, data)
+                    },
+                })}
             />
         </TableCell>
     )
