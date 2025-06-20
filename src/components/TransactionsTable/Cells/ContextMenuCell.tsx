@@ -8,6 +8,11 @@ import {
     TransactionDeleteHandler,
 } from '../types'
 import { ContextMenu } from '../ContextMenu'
+import {
+    CommentDialog,
+    DeleteConfirmationDialog,
+    SubTransactionDialog,
+} from '../Dialogs'
 
 interface ContextMenuCellProps {
     transactionId: string
@@ -35,13 +40,17 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
     onSubTransactionCreate,
 }) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const [commentDialogOpen, setCommentDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [subTransactionDialogOpen, setSubTransactionDialogOpen] =
+        useState(false)
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation()
         setAnchorEl(event.currentTarget)
     }
 
-    const handleClose = () => {
+    const closeContextMenu = () => {
         setAnchorEl(null)
     }
 
@@ -58,13 +67,12 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
             <ContextMenu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
-                comment={comment}
+                onClose={closeContextMenu}
                 isHidden={isHidden}
                 isCapitalized={isCapitalized}
                 onHideClick={() => {
                     onHideChange(transactionId, !isHidden, subTransactionId)
-                    handleClose()
+                    closeContextMenu()
                 }}
                 onCapitalizeClick={() => {
                     onCapitalizeChange(
@@ -72,21 +80,53 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                         !isCapitalized,
                         subTransactionId
                     )
-                    handleClose()
+                    closeContextMenu()
                 }}
-                onCommentSave={(comment: string) => {
-                    onCommentChange(transactionId, comment, subTransactionId)
+                onCommentClick={() => {
+                    setCommentDialogOpen(true)
+                    closeContextMenu()
                 }}
                 onDeleteClick={() => {
-                    onDelete(transactionId, subTransactionId)
-                    handleClose()
+                    setDeleteDialogOpen(true)
+                    closeContextMenu()
                 }}
                 {...(onSubTransactionCreate && {
-                    onSubTransactionCreate: (data: SubTransactionData) => {
-                        onSubTransactionCreate(transactionId, data)
+                    onSubTransactionClick: () => {
+                        setSubTransactionDialogOpen(true)
+                        closeContextMenu()
                     },
                 })}
             />
+
+            <CommentDialog
+                open={commentDialogOpen}
+                comment={comment}
+                onSubmit={(comment: string) => {
+                    onCommentChange(transactionId, comment, subTransactionId)
+                    setCommentDialogOpen(false)
+                }}
+                onClose={() => setCommentDialogOpen(false)}
+            />
+
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onConfirm={() => {
+                    onDelete(transactionId, subTransactionId)
+                    setDeleteDialogOpen(false)
+                }}
+                onCancel={() => setDeleteDialogOpen(false)}
+            />
+
+            {onSubTransactionCreate && (
+                <SubTransactionDialog
+                    open={subTransactionDialogOpen}
+                    onSubmit={(data: SubTransactionData) => {
+                        onSubTransactionCreate(transactionId, data)
+                        setSubTransactionDialogOpen(false)
+                    }}
+                    onCancel={() => setSubTransactionDialogOpen(false)}
+                />
+            )}
         </TableCell>
     )
 }
