@@ -35,7 +35,6 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
     return (
         <TableRow
             sx={{
-                cursor: 'pointer',
                 opacity: subTransaction.hide ? 0.5 : 1,
             }}
             hover
