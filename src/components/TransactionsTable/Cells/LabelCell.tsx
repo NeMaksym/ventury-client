@@ -9,7 +9,7 @@ import { TransactionActionHandler } from '../types'
 
 const filter = createFilterOptions<string>()
 
-interface LabelProps {
+interface LabelCellProps {
     options: string[]
     transactionId: string
     subTransactionId?: string
@@ -17,7 +17,7 @@ interface LabelProps {
     onLabelChange: TransactionActionHandler<string[]>
 }
 
-export const Label: React.FC<LabelProps> = ({
+export const LabelCell: React.FC<LabelCellProps> = ({
     options,
     transactionId,
     subTransactionId,

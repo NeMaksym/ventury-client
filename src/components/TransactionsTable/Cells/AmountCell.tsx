@@ -2,14 +2,14 @@ import React from 'react'
 import { TableCell, Typography, Tooltip } from '@mui/material'
 import { currency, fromSmallestUnit } from '../../../utils'
 
-interface AmountProps {
+interface AmountCellProps {
     amount: bigint
     currencyCode: number
     referenceAmount: bigint
     referenceCurrencyCode: number
 }
 
-export const Amount: React.FC<AmountProps> = ({
+export const AmountCell: React.FC<AmountCellProps> = ({
     amount,
     currencyCode,
     referenceAmount,

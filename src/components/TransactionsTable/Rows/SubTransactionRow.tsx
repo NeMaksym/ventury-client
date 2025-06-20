@@ -1,8 +1,14 @@
 import React from 'react'
-import { TableRow, TableCell } from '@mui/material'
+import { TableCell, TableRow } from '@mui/material'
 
 import { SystemSubTransaction, SystemTransaction } from '../../../types'
-import { Description, Category, Amount, Label, ContextMenuCell } from '../Cells'
+import {
+    DescriptionCell,
+    CategoryCell,
+    AmountCell,
+    LabelCell,
+    ContextMenuCell,
+} from '../Cells'
 import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 
 interface SubTransactionRowProps {
@@ -23,45 +29,48 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
     onHideChange,
     onCapitalizeChange,
     onDelete,
-}) => (
-    <TableRow
-        sx={{
-            cursor: 'pointer',
-            opacity: subTransaction.hide ? 0.5 : 1,
-            '&:hover': {
-                backgroundColor: 'action.hover',
-            },
-        }}
-    >
-        <TableCell colSpan={2} />
-        <Description description={subTransaction.description} />
-        <Amount
-            amount={subTransaction.amount}
-            currencyCode={transaction.currencyCode}
-            referenceAmount={subTransaction.referenceAmount}
-            referenceCurrencyCode={transaction.referenceCurrencyCode}
-        />
-        <Category
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            category={subTransaction.category}
-            onCategoryChange={onCategoryChange}
-        />
-        <Label
-            options={[]}
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            labels={subTransaction.labels}
-            onLabelChange={onLabelChange}
-        />
-        <ContextMenuCell
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            isHidden={subTransaction.hide}
-            isCapitalized={subTransaction.capitalized}
-            onHideChange={onHideChange}
-            onCapitalizeChange={onCapitalizeChange}
-            onDelete={onDelete}
-        />
-    </TableRow>
-)
+}) => {
+    return (
+        <TableRow
+            sx={{
+                cursor: 'pointer',
+                opacity: subTransaction.hide ? 0.5 : 1,
+                '&:hover': {
+                    backgroundColor: 'action.hover',
+                },
+            }}
+        >
+            <TableCell />
+            <TableCell />
+            <DescriptionCell description={subTransaction.description} />
+            <AmountCell
+                amount={subTransaction.amount}
+                currencyCode={transaction.currencyCode}
+                referenceAmount={subTransaction.referenceAmount}
+                referenceCurrencyCode={transaction.referenceCurrencyCode}
+            />
+            <CategoryCell
+                transactionId={transaction.id}
+                subTransactionId={subTransaction.id}
+                category={subTransaction.category}
+                onCategoryChange={onCategoryChange}
+            />
+            <LabelCell
+                options={[]}
+                transactionId={transaction.id}
+                subTransactionId={subTransaction.id}
+                labels={subTransaction.labels}
+                onLabelChange={onLabelChange}
+            />
+            <ContextMenuCell
+                transactionId={transaction.id}
+                subTransactionId={subTransaction.id}
+                isHidden={subTransaction.hide}
+                isCapitalized={subTransaction.capitalized}
+                onHideChange={onHideChange}
+                onCapitalizeChange={onCapitalizeChange}
+                onDelete={onDelete}
+            />
+        </TableRow>
+    )
+}

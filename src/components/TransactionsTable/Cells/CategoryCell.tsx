@@ -39,14 +39,14 @@ const CATEGORIES: CategoryItem[] = [
     { id: 'l2m3n4o5-p6q7-8901-5678-234567890123', label: '🚗 Transportation' },
 ]
 
-interface CategoryProps {
+interface CategoryCellProps {
     transactionId: string
     subTransactionId?: string
     category: string | null
     onCategoryChange: TransactionActionHandler<string | null>
 }
 
-export const Category: React.FC<CategoryProps> = ({
+export const CategoryCell: React.FC<CategoryCellProps> = ({
     transactionId,
     subTransactionId,
     category,

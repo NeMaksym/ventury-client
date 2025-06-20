@@ -2,12 +2,12 @@ import React from 'react'
 import { TableCell, TableRow } from '@mui/material'
 
 import {
-    Arrow,
-    Date,
-    Description,
-    Category,
-    Amount,
-    Label,
+    ArrowCell,
+    DateCell,
+    DescriptionCell,
+    CategoryCell,
+    AmountCell,
+    LabelCell,
     ContextMenuCell,
 } from '../Cells'
 import {
@@ -57,27 +57,27 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 onClick={onClick}
             >
                 {hasSubTransactions ? (
-                    <Arrow isExpanded={isExpanded} onToggle={onClick} />
+                    <ArrowCell isExpanded={isExpanded} onToggle={onClick} />
                 ) : (
                     <TableCell />
                 )}
-                <Date time={transaction.time} />
-                <Description
+                <DateCell time={transaction.time} />
+                <DescriptionCell
                     description={transaction.description}
                     comment={transaction.comment}
                 />
-                <Amount
+                <AmountCell
                     amount={transaction.amount}
                     currencyCode={transaction.currencyCode}
                     referenceAmount={transaction.referenceAmount}
                     referenceCurrencyCode={transaction.referenceCurrencyCode}
                 />
-                <Category
+                <CategoryCell
                     transactionId={transaction.id}
                     category={transaction.category}
                     onCategoryChange={onCategoryChange}
                 />
-                <Label
+                <LabelCell
                     options={[]}
                     transactionId={transaction.id}
                     labels={transaction.labels}

@@ -1,12 +1,12 @@
 import React from 'react'
 import { TableCell, Tooltip } from '@mui/material'
 
-interface DescriptionProps {
+interface DescriptionCellProps {
     description: string
     comment?: string | undefined
 }
 
-export const Description: React.FC<DescriptionProps> = ({
+export const DescriptionCell: React.FC<DescriptionCellProps> = ({
     description,
     comment = '',
 }) => {

@@ -2,12 +2,15 @@ import React from 'react'
 import { TableCell, IconButton } from '@mui/material'
 import { KeyboardArrowDown } from '@mui/icons-material'
 
-interface ArrowProps {
+interface ArrowCellProps {
     isExpanded: boolean
     onToggle: () => void
 }
 
-export const Arrow: React.FC<ArrowProps> = ({ isExpanded, onToggle }) => (
+export const ArrowCell: React.FC<ArrowCellProps> = ({
+    isExpanded,
+    onToggle,
+}) => (
     <TableCell>
         <IconButton size="small" onClick={onToggle}>
             <KeyboardArrowDown

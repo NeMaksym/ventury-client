@@ -1,11 +1,11 @@
 import React from 'react'
 import { TableCell } from '@mui/material'
 
-interface DateProps {
+interface DateCellProps {
     time: Date
 }
 
-export const Date: React.FC<DateProps> = ({ time }) => (
+export const DateCell: React.FC<DateCellProps> = ({ time }) => (
     <TableCell>{formatDate(time)}</TableCell>
 )
 
