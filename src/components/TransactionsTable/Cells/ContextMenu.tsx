@@ -5,16 +5,8 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Button,
     TableCell,
     Typography,
-    TextField,
-    Box,
 } from '@mui/material'
 import {
     MoreVert,
@@ -30,6 +22,7 @@ import {
     TransactionActionHandler,
     TransactionDeleteHandler,
 } from '../types'
+import { DeleteConfirmationDialog, SubTransactionDialog } from '../Dialogs'
 
 interface ContextMenuProps {
     transactionId: string
@@ -56,10 +49,6 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [showSubTransactionDialog, setShowSubTransactionDialog] =
         useState(false)
-    const [subTransactionForm, setSubTransactionForm] = useState({
-        description: '',
-        amount: '',
-    })
 
     const open = Boolean(anchorEl)
 
@@ -103,35 +92,14 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
 
     const handleSubTransactionCancel = () => {
         setShowSubTransactionDialog(false)
-        setSubTransactionForm({
-            description: '',
-            amount: '',
-        })
     }
 
-    const handleSubTransactionSubmit = () => {
-        const data: SubTransactionData = {
-            description: subTransactionForm.description,
-            amount: parseFloat(subTransactionForm.amount),
-        }
-
+    const handleSubTransactionSubmit = (data: SubTransactionData) => {
         if (onSubTransactionCreate) {
             onSubTransactionCreate(transactionId, data)
         }
-        handleSubTransactionCancel()
+        setShowSubTransactionDialog(false)
     }
-
-    const handleFormChange = (field: string, value: any) => {
-        setSubTransactionForm((prev) => ({
-            ...prev,
-            [field]: value,
-        }))
-    }
-
-    const isFormValid =
-        subTransactionForm.description.trim() !== '' &&
-        subTransactionForm.amount !== '' &&
-        !isNaN(parseFloat(subTransactionForm.amount))
 
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>
@@ -189,91 +157,17 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                 </MenuItem>
             </Menu>
 
-            <Dialog
+            <DeleteConfirmationDialog
                 open={showDeleteDialog}
-                onClose={handleDeleteCancel}
-                aria-labelledby="delete-dialog-title"
-                aria-describedby="delete-dialog-description"
-            >
-                <DialogTitle id="delete-dialog-title">Delete</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="delete-dialog-description">
-                        Are you sure you want to delete this transaction? This
-                        action cannot be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleDeleteCancel} color="primary">
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleDeleteConfirm}
-                        color="error"
-                        variant="contained"
-                    >
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleDeleteCancel}
+            />
 
-            <Dialog
+            <SubTransactionDialog
                 open={showSubTransactionDialog}
-                onClose={handleSubTransactionCancel}
-                aria-labelledby="sub-transaction-dialog-title"
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle id="sub-transaction-dialog-title">
-                    Create Sub-transaction
-                </DialogTitle>
-                <DialogContent>
-                    <Box
-                        sx={{
-                            pt: 1,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
-                        }}
-                    >
-                        <TextField
-                            label="Description"
-                            value={subTransactionForm.description}
-                            onChange={(e) =>
-                                handleFormChange('description', e.target.value)
-                            }
-                            fullWidth
-                            required
-                        />
-
-                        <TextField
-                            label="Amount"
-                            type="number"
-                            value={subTransactionForm.amount}
-                            onChange={(e) =>
-                                handleFormChange('amount', e.target.value)
-                            }
-                            fullWidth
-                            required
-                        />
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        onClick={handleSubTransactionCancel}
-                        color="primary"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        onClick={handleSubTransactionSubmit}
-                        color="primary"
-                        variant="contained"
-                        disabled={!isFormValid}
-                    >
-                        Create
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                onSubmit={handleSubTransactionSubmit}
+                onCancel={handleSubTransactionCancel}
+            />
         </TableCell>
     )
 }
