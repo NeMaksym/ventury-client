@@ -104,7 +104,6 @@ export interface SystemTransaction
 export interface SystemSubTransaction
     extends Pick<
         SystemTransaction,
-        | 'description'
         | 'amount'
         | 'referenceAmount'
         | 'category'

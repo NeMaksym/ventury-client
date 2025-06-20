@@ -10,11 +10,7 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import {
-    SubTransactionCreateHandler,
-    TransactionActionHandler,
-    TransactionDeleteHandler,
-} from '../types'
+import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 import { SystemTransaction } from '../../../types'
 
 interface TransactionRowProps {
@@ -25,7 +21,7 @@ interface TransactionRowProps {
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: SubTransactionCreateHandler
+    onSubTransactionCreate: TransactionActionHandler<number>
     isExpanded: boolean
     onClick: () => void
 }

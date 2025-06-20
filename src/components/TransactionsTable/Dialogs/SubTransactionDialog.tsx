@@ -8,11 +8,10 @@ import {
     TextField,
     Box,
 } from '@mui/material'
-import { SubTransactionData } from '../types'
 
 interface SubTransactionDialogProps {
     open: boolean
-    onSubmit: (data: SubTransactionData) => void
+    onSubmit: (amount: number) => void
     onCancel: () => void
 }
 
@@ -21,39 +20,21 @@ export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
     onSubmit,
     onCancel,
 }) => {
-    const [subTransactionForm, setSubTransactionForm] = useState({
-        description: '',
-        amount: '',
-    })
+    const [amount, setAmount] = useState<string>('')
 
-    const handleFormChange = (field: string, value: string) => {
-        setSubTransactionForm((prev) => ({
-            ...prev,
-            [field]: value,
-        }))
-    }
+    const handleFormChange = (field: string, value: string) => setAmount(value)
 
     const handleSubmit = () => {
-        const data: SubTransactionData = {
-            description: subTransactionForm.description,
-            amount: parseFloat(subTransactionForm.amount),
-        }
-        onSubmit(data)
+        onSubmit(parseFloat(amount))
         handleCancel()
     }
 
     const handleCancel = () => {
-        setSubTransactionForm({
-            description: '',
-            amount: '',
-        })
+        setAmount('')
         onCancel()
     }
 
-    const isFormValid =
-        subTransactionForm.description.trim() !== '' &&
-        subTransactionForm.amount !== '' &&
-        !isNaN(parseFloat(subTransactionForm.amount))
+    const isFormValid = amount !== '' && !isNaN(parseFloat(amount))
 
     return (
         <Dialog
@@ -76,19 +57,9 @@ export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
                     }}
                 >
                     <TextField
-                        label="Description"
-                        value={subTransactionForm.description}
-                        onChange={(e) =>
-                            handleFormChange('description', e.target.value)
-                        }
-                        fullWidth
-                        required
-                    />
-
-                    <TextField
                         label="Amount"
                         type="number"
-                        value={subTransactionForm.amount}
+                        value={amount}
                         onChange={(e) =>
                             handleFormChange('amount', e.target.value)
                         }

@@ -1,12 +1,7 @@
 import React, { useState } from 'react'
 import { IconButton, TableCell } from '@mui/material'
 import { MoreVert } from '@mui/icons-material'
-import {
-    SubTransactionCreateHandler,
-    SubTransactionData,
-    TransactionActionHandler,
-    TransactionDeleteHandler,
-} from '../types'
+import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 import { ContextMenu } from '../ContextMenu'
 import {
     CommentDialog,
@@ -24,7 +19,7 @@ interface ContextMenuCellProps {
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
-    onSubTransactionCreate?: SubTransactionCreateHandler
+    onSubTransactionCreate?: TransactionActionHandler<number>
 }
 
 export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
@@ -120,8 +115,8 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
             {onSubTransactionCreate && (
                 <SubTransactionDialog
                     open={subTransactionDialogOpen}
-                    onSubmit={(data: SubTransactionData) => {
-                        onSubTransactionCreate(transactionId, data)
+                    onSubmit={(amount: number) => {
+                        onSubTransactionCreate(transactionId, amount)
                         setSubTransactionDialogOpen(false)
                     }}
                     onCancel={() => setSubTransactionDialogOpen(false)}

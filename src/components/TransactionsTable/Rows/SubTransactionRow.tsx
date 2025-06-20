@@ -45,7 +45,7 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             <TableCell />
             <TableCell />
             <DescriptionCell
-                description={subTransaction.description}
+                description={transaction.description}
                 comment={subTransaction.comment}
             />
             <AmountCell

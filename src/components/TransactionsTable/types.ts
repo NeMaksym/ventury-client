@@ -9,12 +9,7 @@ export type TransactionDeleteHandler = (
     subTransactionId?: string
 ) => void
 
-export interface SubTransactionData {
-    description: string
-    amount: number
-}
-
 export type SubTransactionCreateHandler = (
     transactionId: string,
-    data: SubTransactionData
+    amount: number
 ) => void

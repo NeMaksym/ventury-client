@@ -17,7 +17,7 @@ interface TransactionGroupProps {
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: SubTransactionCreateHandler
+    onSubTransactionCreate: TransactionActionHandler<number>
 }
 
 export const TransactionGroup: React.FC<TransactionGroupProps> = ({

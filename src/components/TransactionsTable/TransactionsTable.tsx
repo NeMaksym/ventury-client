@@ -23,11 +23,7 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
 ]
 
-import {
-    TransactionActionHandler,
-    TransactionDeleteHandler,
-    SubTransactionCreateHandler,
-} from './types'
+import { TransactionActionHandler, TransactionDeleteHandler } from './types'
 
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
@@ -37,7 +33,7 @@ export interface TransactionsTableProps {
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: SubTransactionCreateHandler
+    onSubTransactionCreate: TransactionActionHandler<number>
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
