@@ -2,7 +2,7 @@ import React from 'react'
 import { TableRow, TableCell } from '@mui/material'
 
 import { SystemSubTransaction, SystemTransaction } from '../../../types'
-import { Description, Category, Amount, Label, ContextMenu } from '../Cells'
+import { Description, Category, Amount, Label, ContextMenuCell } from '../Cells'
 import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 
 interface SubTransactionRowProps {
@@ -54,7 +54,7 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             labels={subTransaction.labels}
             onLabelChange={onLabelChange}
         />
-        <ContextMenu
+        <ContextMenuCell
             transactionId={transaction.id}
             subTransactionId={subTransaction.id}
             isHidden={subTransaction.hide}

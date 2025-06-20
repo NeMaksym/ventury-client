@@ -8,7 +8,7 @@ import {
     Category,
     Amount,
     Label,
-    ContextMenu,
+    ContextMenuCell,
 } from '../Cells'
 import {
     SubTransactionCreateHandler,
@@ -83,7 +83,7 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     labels={transaction.labels}
                     onLabelChange={onLabelChange}
                 />
-                <ContextMenu
+                <ContextMenuCell
                     transactionId={transaction.id}
                     isHidden={transaction.hide}
                     isCapitalized={transaction.capitalized}
