@@ -97,7 +97,6 @@ export interface SystemTransaction
     subTransactions: SystemSubTransaction[]
 }
 
-// TODO: Add more props
 /**
  * Represents a sub-transaction of a system transaction.
  *
@@ -112,6 +111,7 @@ export interface SystemSubTransaction
         | 'capitalized'
         | 'hide'
         | 'labels'
+        | 'comment'
     > {
     id: string
 }

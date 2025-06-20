@@ -12,8 +12,10 @@ import { ContextMenu } from '../ContextMenu'
 interface ContextMenuCellProps {
     transactionId: string
     subTransactionId?: string
+    comment: string | undefined
     isHidden: boolean
     isCapitalized: boolean
+    onCommentChange: TransactionActionHandler<string>
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
     onDelete: TransactionDeleteHandler
@@ -23,8 +25,10 @@ interface ContextMenuCellProps {
 export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
     transactionId,
     subTransactionId,
+    comment,
     isHidden,
     isCapitalized,
+    onCommentChange,
     onHideChange,
     onCapitalizeChange,
     onDelete,
@@ -55,6 +59,7 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                comment={comment}
                 isHidden={isHidden}
                 isCapitalized={isCapitalized}
                 onHideClick={() => {
@@ -68,6 +73,9 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                         subTransactionId
                     )
                     handleClose()
+                }}
+                onCommentSave={(comment: string) => {
+                    onCommentChange(transactionId, comment, subTransactionId)
                 }}
                 onDeleteClick={() => {
                     onDelete(transactionId, subTransactionId)

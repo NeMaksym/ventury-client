@@ -14,6 +14,7 @@ import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 interface SubTransactionRowProps {
     transaction: SystemTransaction
     subTransaction: SystemSubTransaction
+    onCommentChange: TransactionActionHandler<string>
     onCategoryChange: TransactionActionHandler<string | null>
     onLabelChange: TransactionActionHandler<string[]>
     onHideChange: TransactionActionHandler<boolean>
@@ -24,6 +25,7 @@ interface SubTransactionRowProps {
 export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
     transaction,
     subTransaction,
+    onCommentChange,
     onCategoryChange,
     onLabelChange,
     onHideChange,
@@ -42,7 +44,10 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
         >
             <TableCell />
             <TableCell />
-            <DescriptionCell description={subTransaction.description} />
+            <DescriptionCell
+                description={subTransaction.description}
+                comment={subTransaction.comment}
+            />
             <AmountCell
                 amount={subTransaction.amount}
                 currencyCode={transaction.currencyCode}
@@ -65,8 +70,10 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             <ContextMenuCell
                 transactionId={transaction.id}
                 subTransactionId={subTransaction.id}
+                comment={subTransaction.comment}
                 isHidden={subTransaction.hide}
                 isCapitalized={subTransaction.capitalized}
+                onCommentChange={onCommentChange}
                 onHideChange={onHideChange}
                 onCapitalizeChange={onCapitalizeChange}
                 onDelete={onDelete}

@@ -56,6 +56,7 @@ export const TransactionGroup: React.FC<TransactionGroupProps> = ({
                         key={subTransaction.id}
                         transaction={transaction}
                         subTransaction={subTransaction}
+                        onCommentChange={onCommentChange}
                         onCategoryChange={onCategoryChange}
                         onLabelChange={onLabelChange}
                         onHideChange={onHideChange}

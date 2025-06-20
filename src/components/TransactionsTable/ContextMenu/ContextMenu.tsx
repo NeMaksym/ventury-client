@@ -5,15 +5,18 @@ import { VisibilityMenuItem } from './VisibilityMenuItem'
 import { CapitalizeMenuItem } from './CapitalizeMenuItem'
 import { SubTransactionMenuItem } from './SubTransactionMenuItem'
 import { DeleteMenuItem } from './DeleteMenuItem'
+import { CommentMenuItem } from './CommentMenuItem'
 
 interface ContextMenuProps {
     anchorEl: HTMLElement | null
     open: boolean
     onClose: () => void
+    comment: string | undefined
     isHidden: boolean
     isCapitalized: boolean
     onHideClick: () => void
     onCapitalizeClick: () => void
+    onCommentSave: (comment: string) => void
     onDeleteClick: () => void
     onSubTransactionCreate?: (data: SubTransactionData) => void
 }
@@ -22,10 +25,12 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
     anchorEl,
     open,
     onClose,
+    comment,
     isHidden,
     isCapitalized,
     onHideClick,
     onCapitalizeClick,
+    onCommentSave,
     onDeleteClick,
     onSubTransactionCreate,
 }) => {
@@ -48,6 +53,7 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({
                 isCapitalized={isCapitalized}
                 onClick={onCapitalizeClick}
             />
+            <CommentMenuItem comment={comment} onCommentSave={onCommentSave} />
             {onSubTransactionCreate && (
                 <SubTransactionMenuItem
                     onSubTransactionCreate={onSubTransactionCreate}

@@ -85,8 +85,10 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 />
                 <ContextMenuCell
                     transactionId={transaction.id}
+                    comment={transaction.comment}
                     isHidden={transaction.hide}
                     isCapitalized={transaction.capitalized}
+                    onCommentChange={onCommentChange}
                     onHideChange={onHideChange}
                     onCapitalizeChange={onCapitalizeChange}
                     onDelete={onDelete}
