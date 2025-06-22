@@ -175,12 +175,12 @@ export const useTransaction = ({
 
                 const exchangeRate =
                     Number(transaction.referenceAmount) /
-                    Number(transaction.amount)
+                    Number(-transaction.amount)
 
                 const newSubTransaction: SystemSubTransaction = {
                     id: crypto.randomUUID(),
                     amount: -toSmallestUnit(amount),
-                    referenceAmount: -toSmallestUnit(amount * exchangeRate),
+                    referenceAmount: toSmallestUnit(amount * exchangeRate),
                     category: null,
                     capitalized: false,
                     hide: false,
