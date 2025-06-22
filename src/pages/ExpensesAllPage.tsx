@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { Typography, Box } from '@mui/material'
+import { Typography, Box, Stack } from '@mui/material'
 
-import { useExpenseService, useTransaction } from '../hooks'
+import {
+    useExpenseService,
+    useTransaction,
+    useFilterValues,
+    useFilterOptions,
+} from '../hooks'
 import { SystemTransaction } from '../types'
-import { TransactionsTable } from '../components'
+import { TransactionsTable, TransactionsFilter } from '../components'
 
-interface ExpensesPageProps {}
-
-export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
+export const ExpensesPage: React.FC = () => {
     const [transactions, setTransactions] = useState<SystemTransaction[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+
+    const { values, handlers } = useFilterValues()
+    const options = useFilterOptions()
+
+    useEffect(() => {
+        console.log('values', values)
+    }, [values])
 
     const { getAllTransactions } = useExpenseService()
 
@@ -60,10 +70,15 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
         }
 
         return (
-            <>
+            <Stack spacing={4}>
                 <Typography variant="body1" gutterBottom>
                     Total transactions: {transactions.length}
                 </Typography>
+                <TransactionsFilter
+                    options={options}
+                    values={values}
+                    handlers={handlers}
+                />
                 <TransactionsTable
                     transactions={transactions}
                     onCommentChange={handleCommentChange}
@@ -74,7 +89,7 @@ export const ExpensesPage: React.FC<ExpensesPageProps> = () => {
                     onDelete={handleDelete}
                     onSubTransactionCreate={handleSubTransactionCreate}
                 />
-            </>
+            </Stack>
         )
     }
 
