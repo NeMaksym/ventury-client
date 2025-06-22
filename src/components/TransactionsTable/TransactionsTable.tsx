@@ -13,6 +13,8 @@ import {
 import { SystemTransaction } from '../../types'
 import { EmptyBodyRow, TransactionGroup } from './Rows'
 
+import { TransactionActionHandler, TransactionDeleteHandler } from './types'
+
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
     { label: 'Date', cellProps: { sx: { width: 120 } } },
@@ -23,28 +25,22 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: '' },
 ]
 
-import { TransactionActionHandler, TransactionDeleteHandler } from './types'
-
 export interface TransactionsTableProps {
     transactions: SystemTransaction[]
-    onCommentChange: TransactionActionHandler<string>
-    onCategoryChange: TransactionActionHandler<string | null>
-    onLabelChange: TransactionActionHandler<string[]>
-    onHideChange: TransactionActionHandler<boolean>
-    onCapitalizeChange: TransactionActionHandler<boolean>
-    onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: TransactionActionHandler<number>
+    handlers: {
+        onCommentChange: TransactionActionHandler<string>
+        onCategoryChange: TransactionActionHandler<string | null>
+        onLabelChange: TransactionActionHandler<string[]>
+        onHideChange: TransactionActionHandler<boolean>
+        onCapitalizeChange: TransactionActionHandler<boolean>
+        onDelete: TransactionDeleteHandler
+        onSubTransactionCreate: TransactionActionHandler<number>
+    }
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     transactions,
-    onCommentChange,
-    onCategoryChange,
-    onLabelChange,
-    onHideChange,
-    onCapitalizeChange,
-    onDelete,
-    onSubTransactionCreate,
+    handlers,
 }) => {
     return (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
@@ -66,13 +62,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                             <TransactionGroup
                                 key={transaction.id}
                                 transaction={transaction}
-                                onCommentChange={onCommentChange}
-                                onCategoryChange={onCategoryChange}
-                                onLabelChange={onLabelChange}
-                                onHideChange={onHideChange}
-                                onCapitalizeChange={onCapitalizeChange}
-                                onDelete={onDelete}
-                                onSubTransactionCreate={onSubTransactionCreate}
+                                handlers={handlers}
                             />
                         ))
                     )}

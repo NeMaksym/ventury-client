@@ -2,33 +2,17 @@ import React, { useState } from 'react'
 
 import { TransactionRow } from './TransactionRow'
 import { SubTransactionRow } from './SubTransactionRow'
-import {
-    TransactionActionHandler,
-    TransactionDeleteHandler,
-    SubTransactionCreateHandler,
-} from '../types'
 import { SystemTransaction } from '../../../types'
+import { TransactionsTableProps } from '../TransactionsTable'
 
-interface TransactionGroupProps {
+interface TransactionGroupProps
+    extends Pick<TransactionsTableProps, 'handlers'> {
     transaction: SystemTransaction
-    onCommentChange: TransactionActionHandler<string>
-    onCategoryChange: TransactionActionHandler<string | null>
-    onLabelChange: TransactionActionHandler<string[]>
-    onHideChange: TransactionActionHandler<boolean>
-    onCapitalizeChange: TransactionActionHandler<boolean>
-    onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: TransactionActionHandler<number>
 }
 
 export const TransactionGroup: React.FC<TransactionGroupProps> = ({
     transaction,
-    onCommentChange,
-    onCategoryChange,
-    onLabelChange,
-    onHideChange,
-    onCapitalizeChange,
-    onDelete,
-    onSubTransactionCreate,
+    handlers,
 }) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
@@ -40,13 +24,7 @@ export const TransactionGroup: React.FC<TransactionGroupProps> = ({
         <React.Fragment>
             <TransactionRow
                 transaction={transaction}
-                onCommentChange={onCommentChange}
-                onCategoryChange={onCategoryChange}
-                onLabelChange={onLabelChange}
-                onHideChange={onHideChange}
-                onCapitalizeChange={onCapitalizeChange}
-                onDelete={onDelete}
-                onSubTransactionCreate={onSubTransactionCreate}
+                handlers={handlers}
                 isExpanded={isExpanded}
                 onClick={toggleExpanded}
             />
@@ -56,12 +34,7 @@ export const TransactionGroup: React.FC<TransactionGroupProps> = ({
                         key={subTransaction.id}
                         transaction={transaction}
                         subTransaction={subTransaction}
-                        onCommentChange={onCommentChange}
-                        onCategoryChange={onCategoryChange}
-                        onLabelChange={onLabelChange}
-                        onHideChange={onHideChange}
-                        onCapitalizeChange={onCapitalizeChange}
-                        onDelete={onDelete}
+                        handlers={handlers}
                     />
                 ))}
         </React.Fragment>

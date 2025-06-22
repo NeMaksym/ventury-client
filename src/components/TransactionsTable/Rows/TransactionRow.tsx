@@ -10,32 +10,19 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 import { SystemTransaction } from '../../../types'
 import { fromSmallestUnit } from '../../../utils'
+import { TransactionsTableProps } from '../TransactionsTable'
 
-interface TransactionRowProps {
+interface TransactionRowProps extends Pick<TransactionsTableProps, 'handlers'> {
     transaction: SystemTransaction
-    onCommentChange: TransactionActionHandler<string>
-    onCategoryChange: TransactionActionHandler<string | null>
-    onLabelChange: TransactionActionHandler<string[]>
-    onHideChange: TransactionActionHandler<boolean>
-    onCapitalizeChange: TransactionActionHandler<boolean>
-    onDelete: TransactionDeleteHandler
-    onSubTransactionCreate: TransactionActionHandler<number>
     isExpanded: boolean
     onClick: () => void
 }
 
 export const TransactionRow: React.FC<TransactionRowProps> = ({
     transaction,
-    onCommentChange,
-    onCategoryChange,
-    onLabelChange,
-    onHideChange,
-    onCapitalizeChange,
-    onDelete,
-    onSubTransactionCreate,
+    handlers,
     isExpanded,
     onClick,
 }) => {
@@ -90,13 +77,13 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 <CategoryCell
                     transactionId={transaction.id}
                     category={transaction.category}
-                    onCategoryChange={onCategoryChange}
+                    onCategoryChange={handlers.onCategoryChange}
                 />
                 <LabelCell
                     options={[]}
                     transactionId={transaction.id}
                     labels={transaction.labels}
-                    onLabelChange={onLabelChange}
+                    onLabelChange={handlers.onLabelChange}
                 />
                 <ContextMenuCell
                     transactionId={transaction.id}
@@ -106,11 +93,11 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     maxSubTransactionAmount={
                         -fromSmallestUnit(transactionAmount)
                     }
-                    onCommentChange={onCommentChange}
-                    onHideChange={onHideChange}
-                    onCapitalizeChange={onCapitalizeChange}
-                    onDelete={onDelete}
-                    onSubTransactionCreate={onSubTransactionCreate}
+                    onCommentChange={handlers.onCommentChange}
+                    onHideChange={handlers.onHideChange}
+                    onCapitalizeChange={handlers.onCapitalizeChange}
+                    onDelete={handlers.onDelete}
+                    onSubTransactionCreate={handlers.onSubTransactionCreate}
                 />
             </TableRow>
         </>

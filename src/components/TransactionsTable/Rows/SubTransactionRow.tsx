@@ -9,29 +9,19 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
 import { fromSmallestUnit } from '../../../utils'
+import { TransactionsTableProps } from '../TransactionsTable'
 
-interface SubTransactionRowProps {
+interface SubTransactionRowProps
+    extends Pick<TransactionsTableProps, 'handlers'> {
     transaction: SystemTransaction
     subTransaction: SystemSubTransaction
-    onCommentChange: TransactionActionHandler<string>
-    onCategoryChange: TransactionActionHandler<string | null>
-    onLabelChange: TransactionActionHandler<string[]>
-    onHideChange: TransactionActionHandler<boolean>
-    onCapitalizeChange: TransactionActionHandler<boolean>
-    onDelete: TransactionDeleteHandler
 }
 
 export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
     transaction,
     subTransaction,
-    onCommentChange,
-    onCategoryChange,
-    onLabelChange,
-    onHideChange,
-    onCapitalizeChange,
-    onDelete,
+    handlers,
 }) => {
     return (
         <TableRow
@@ -67,14 +57,14 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
                 transactionId={transaction.id}
                 subTransactionId={subTransaction.id}
                 category={subTransaction.category}
-                onCategoryChange={onCategoryChange}
+                onCategoryChange={handlers.onCategoryChange}
             />
             <LabelCell
                 options={[]}
                 transactionId={transaction.id}
                 subTransactionId={subTransaction.id}
                 labels={subTransaction.labels}
-                onLabelChange={onLabelChange}
+                onLabelChange={handlers.onLabelChange}
             />
             <ContextMenuCell
                 transactionId={transaction.id}
@@ -82,10 +72,10 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
                 comment={subTransaction.comment}
                 isHidden={subTransaction.hide}
                 isCapitalized={subTransaction.capitalized}
-                onCommentChange={onCommentChange}
-                onHideChange={onHideChange}
-                onCapitalizeChange={onCapitalizeChange}
-                onDelete={onDelete}
+                onCommentChange={handlers.onCommentChange}
+                onHideChange={handlers.onHideChange}
+                onCapitalizeChange={handlers.onCapitalizeChange}
+                onDelete={handlers.onDelete}
             />
         </TableRow>
     )
