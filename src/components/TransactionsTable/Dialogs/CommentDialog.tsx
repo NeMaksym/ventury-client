@@ -7,6 +7,7 @@ import {
     Button,
     TextField,
     Box,
+    Typography,
 } from '@mui/material'
 
 interface CommentDialogProps {
@@ -62,6 +63,10 @@ export const CommentDialog: React.FC<CommentDialogProps> = ({
                         variant="outlined"
                         autoFocus
                     />
+                    <Typography variant="caption" color="text.secondary">
+                        Tip: Hover over the transaction description to see your
+                        comment
+                    </Typography>
                 </Box>
             </DialogContent>
             <DialogActions>
