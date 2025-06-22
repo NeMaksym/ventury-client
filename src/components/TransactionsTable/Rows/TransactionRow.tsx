@@ -40,13 +40,18 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
     onClick,
 }) => {
     const hasSubTransactions = transaction.subTransactions.length > 0
+
     const subTransactionsSum = transaction.subTransactions.reduce(
-        (sum, sub) => sum + fromSmallestUnit(sub.amount),
-        0
+        (sum, sub) => sum + sub.amount,
+        0n
     )
-    const maxSubTransactionAmount = -(
-        fromSmallestUnit(transaction.amount) - subTransactionsSum
+    const subTransactionsRefSum = transaction.subTransactions.reduce(
+        (sum, sub) => sum + sub.referenceAmount,
+        0n
     )
+    const transactionAmount = transaction.amount - subTransactionsSum
+    const transactionRefAmount =
+        transaction.referenceAmount - subTransactionsRefSum
 
     return (
         <>
@@ -69,9 +74,9 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     comment={transaction.comment}
                 />
                 <AmountCell
-                    amount={transaction.amount}
+                    amount={-fromSmallestUnit(transactionAmount)}
                     currencyCode={transaction.currencyCode}
-                    referenceAmount={transaction.referenceAmount}
+                    referenceAmount={fromSmallestUnit(transactionRefAmount)}
                     referenceCurrencyCode={transaction.referenceCurrencyCode}
                 />
                 <CategoryCell
@@ -90,7 +95,9 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     comment={transaction.comment}
                     isHidden={transaction.hide}
                     isCapitalized={transaction.capitalized}
-                    maxSubTransactionAmount={maxSubTransactionAmount}
+                    maxSubTransactionAmount={
+                        -fromSmallestUnit(transactionAmount)
+                    }
                     onCommentChange={onCommentChange}
                     onHideChange={onHideChange}
                     onCapitalizeChange={onCapitalizeChange}
