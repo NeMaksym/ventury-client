@@ -5,8 +5,8 @@ import { useExpenses, useFilterValues, useFilterOptions } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
 
 export const ExpensesPage: React.FC = () => {
+    const filterOptions = useFilterOptions()
     const { values: filterValues, handlers: filterHandlers } = useFilterValues()
-    const options = useFilterOptions()
 
     const {
         loading,
@@ -30,7 +30,7 @@ export const ExpensesPage: React.FC = () => {
                     Total transactions: {transactions.length}
                 </Typography>
                 <TransactionsFilter
-                    options={options}
+                    options={filterOptions}
                     values={filterValues}
                     handlers={filterHandlers}
                 />
