@@ -10,13 +10,12 @@ import {
     type TableCellProps,
 } from '@mui/material'
 
-import { SystemTransaction } from '../../types'
 import { EmptyBodyRow, TransactionGroup } from './Rows'
-
+import { SystemTransaction } from '../../types'
 import { TransactionActionHandler, TransactionDeleteHandler } from './types'
+import { TransactionHandlersProvider } from './context'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
-    { label: '' },
     { label: 'Date', cellProps: { sx: { width: 120 } } },
     { label: 'Description' },
     { label: 'Amount', cellProps: { align: 'right' } },
@@ -43,31 +42,32 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     handlers,
 }) => {
     return (
-        <TableContainer component={Paper} sx={{ mt: 2 }}>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        {TABLE_COLUMNS.map((column, index) => (
-                            <TableCell key={index} {...column.cellProps}>
-                                {column.label}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {transactions.length === 0 ? (
-                        <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
-                    ) : (
-                        transactions.map((transaction) => (
-                            <TransactionGroup
-                                key={transaction.id}
-                                transaction={transaction}
-                                handlers={handlers}
-                            />
-                        ))
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <TransactionHandlersProvider handlers={handlers}>
+            <TableContainer component={Paper} sx={{ mt: 2 }}>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            {TABLE_COLUMNS.map((column, index) => (
+                                <TableCell key={index} {...column.cellProps}>
+                                    {column.label}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {transactions.length === 0 ? (
+                            <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
+                        ) : (
+                            transactions.map((transaction) => (
+                                <TransactionGroup
+                                    key={transaction.id}
+                                    transaction={transaction}
+                                />
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </TransactionHandlersProvider>
     )
 }

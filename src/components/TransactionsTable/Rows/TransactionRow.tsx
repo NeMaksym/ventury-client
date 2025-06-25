@@ -1,8 +1,7 @@
 import React from 'react'
-import { TableCell, TableRow } from '@mui/material'
+import { TableRow } from '@mui/material'
 
 import {
-    ArrowCell,
     DateCell,
     DescriptionCell,
     CategoryCell,
@@ -10,21 +9,15 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import { SystemTransaction } from '../../../types'
 import { fromSmallestUnit } from '../../../utils'
-import { TransactionsTableProps } from '../TransactionsTable'
+import { SystemTransaction } from '../../../types'
 
-interface TransactionRowProps extends Pick<TransactionsTableProps, 'handlers'> {
+interface TransactionRowProps {
     transaction: SystemTransaction
-    isExpanded: boolean
-    onClick: () => void
 }
 
 export const TransactionRow: React.FC<TransactionRowProps> = ({
     transaction,
-    handlers,
-    isExpanded,
-    onClick,
 }) => {
     const hasSubTransactions = transaction.subTransactions.length > 0
 
@@ -46,23 +39,8 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 sx={{
                     cursor: hasSubTransactions ? 'pointer' : 'default',
                     opacity: transaction.hide ? 0.5 : 1,
-                    borderLeft: hasSubTransactions
-                        ? (theme) =>
-                              `3px solid ${
-                                  isExpanded
-                                      ? theme.palette.primary.main
-                                      : theme.palette.divider
-                              }`
-                        : 'none',
                 }}
-                hover={hasSubTransactions}
-                onClick={onClick}
             >
-                {hasSubTransactions ? (
-                    <ArrowCell isExpanded={isExpanded} onToggle={onClick} />
-                ) : (
-                    <TableCell />
-                )}
                 <DateCell time={transaction.time} />
                 <DescriptionCell
                     description={transaction.description}
@@ -77,13 +55,11 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                 <CategoryCell
                     transactionId={transaction.id}
                     category={transaction.category}
-                    onCategoryChange={handlers.onCategoryChange}
                 />
                 <LabelCell
                     options={[]}
                     transactionId={transaction.id}
                     labels={transaction.labels}
-                    onLabelChange={handlers.onLabelChange}
                 />
                 <ContextMenuCell
                     transactionId={transaction.id}
@@ -93,11 +69,6 @@ export const TransactionRow: React.FC<TransactionRowProps> = ({
                     maxSubTransactionAmount={
                         -fromSmallestUnit(transactionAmount)
                     }
-                    onCommentChange={handlers.onCommentChange}
-                    onHideChange={handlers.onHideChange}
-                    onCapitalizeChange={handlers.onCapitalizeChange}
-                    onDelete={handlers.onDelete}
-                    onSubTransactionCreate={handlers.onSubTransactionCreate}
                 />
             </TableRow>
         </>

@@ -1,4 +1,3 @@
-export * from './ArrowCell'
 export * from './DateCell'
 export * from './DescriptionCell'
 export * from './CategoryCell'

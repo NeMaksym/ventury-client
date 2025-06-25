@@ -1,42 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { TransactionRow } from './TransactionRow'
 import { SubTransactionRow } from './SubTransactionRow'
 import { SystemTransaction } from '../../../types'
-import { TransactionsTableProps } from '../TransactionsTable'
 
-interface TransactionGroupProps
-    extends Pick<TransactionsTableProps, 'handlers'> {
+interface TransactionGroupProps {
     transaction: SystemTransaction
 }
 
 export const TransactionGroup: React.FC<TransactionGroupProps> = ({
     transaction,
-    handlers,
-}) => {
-    const [isExpanded, setIsExpanded] = useState<boolean>(false)
-
-    const toggleExpanded = () => {
-        setIsExpanded(!isExpanded)
-    }
-
-    return (
-        <React.Fragment>
-            <TransactionRow
+}) => (
+    <React.Fragment>
+        <TransactionRow transaction={transaction} />
+        {transaction.subTransactions.map((subTransaction) => (
+            <SubTransactionRow
+                key={subTransaction.id}
                 transaction={transaction}
-                handlers={handlers}
-                isExpanded={isExpanded}
-                onClick={toggleExpanded}
+                subTransaction={subTransaction}
             />
-            {isExpanded &&
-                transaction.subTransactions.map((subTransaction) => (
-                    <SubTransactionRow
-                        key={subTransaction.id}
-                        transaction={transaction}
-                        subTransaction={subTransaction}
-                        handlers={handlers}
-                    />
-                ))}
-        </React.Fragment>
-    )
-}
+        ))}
+    </React.Fragment>
+)

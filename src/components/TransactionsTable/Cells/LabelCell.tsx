@@ -5,7 +5,8 @@ import {
     TextField,
     createFilterOptions,
 } from '@mui/material'
-import { TransactionActionHandler } from '../types'
+
+import { useTransactionHandlers } from '../context'
 
 const filter = createFilterOptions<string>()
 
@@ -14,7 +15,6 @@ interface LabelCellProps {
     transactionId: string
     subTransactionId?: string
     labels: string[]
-    onLabelChange: TransactionActionHandler<string[]>
 }
 
 export const LabelCell: React.FC<LabelCellProps> = ({
@@ -22,8 +22,9 @@ export const LabelCell: React.FC<LabelCellProps> = ({
     transactionId,
     subTransactionId,
     labels,
-    onLabelChange,
 }) => {
+    const { onLabelChange } = useTransactionHandlers()
+
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>
             <Autocomplete

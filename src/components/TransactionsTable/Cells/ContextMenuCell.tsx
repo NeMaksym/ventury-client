@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IconButton, TableCell } from '@mui/material'
 import { MoreVert } from '@mui/icons-material'
-import { TransactionActionHandler, TransactionDeleteHandler } from '../types'
+import { useTransactionHandlers } from '../context'
 import { ContextMenu } from '../ContextMenu'
 import {
     CommentDialog,
@@ -16,11 +16,6 @@ interface ContextMenuCellProps {
     isHidden: boolean
     isCapitalized: boolean
     maxSubTransactionAmount?: number
-    onCommentChange: TransactionActionHandler<string>
-    onHideChange: TransactionActionHandler<boolean>
-    onCapitalizeChange: TransactionActionHandler<boolean>
-    onDelete: TransactionDeleteHandler
-    onSubTransactionCreate?: TransactionActionHandler<number>
 }
 
 export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
@@ -29,13 +24,16 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
     comment,
     isHidden,
     isCapitalized,
-    maxSubTransactionAmount = 0,
-    onCommentChange,
-    onHideChange,
-    onCapitalizeChange,
-    onDelete,
-    onSubTransactionCreate,
+    maxSubTransactionAmount,
 }) => {
+    const {
+        onCommentChange,
+        onHideChange,
+        onCapitalizeChange,
+        onDelete,
+        onSubTransactionCreate,
+    } = useTransactionHandlers()
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [commentDialogOpen, setCommentDialogOpen] = useState(false)
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -87,7 +85,7 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                     setDeleteDialogOpen(true)
                     closeContextMenu()
                 }}
-                {...(onSubTransactionCreate && {
+                {...(maxSubTransactionAmount && {
                     onSubTransactionClick: () => {
                         setSubTransactionDialogOpen(true)
                         closeContextMenu()
@@ -114,7 +112,7 @@ export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
                 onCancel={() => setDeleteDialogOpen(false)}
             />
 
-            {onSubTransactionCreate && (
+            {maxSubTransactionAmount && (
                 <SubTransactionDialog
                     open={subTransactionDialogOpen}
                     maxAmount={maxSubTransactionAmount}

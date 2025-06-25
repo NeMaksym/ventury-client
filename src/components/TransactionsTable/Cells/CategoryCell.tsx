@@ -6,7 +6,7 @@ import {
     FormControl,
     SelectChangeEvent,
 } from '@mui/material'
-import { TransactionActionHandler } from '../types'
+import { useTransactionHandlers } from '../context'
 
 const EMPTY_CATEGORY = ''
 
@@ -43,15 +43,15 @@ interface CategoryCellProps {
     transactionId: string
     subTransactionId?: string
     category: string | null
-    onCategoryChange: TransactionActionHandler<string | null>
 }
 
 export const CategoryCell: React.FC<CategoryCellProps> = ({
     transactionId,
     subTransactionId,
     category,
-    onCategoryChange,
 }) => {
+    const { onCategoryChange } = useTransactionHandlers()
+
     const handleChange = (e: SelectChangeEvent<string>) => {
         onCategoryChange(
             transactionId,
