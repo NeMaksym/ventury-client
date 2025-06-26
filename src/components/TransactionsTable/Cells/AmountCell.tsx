@@ -18,20 +18,29 @@ export const AmountCell: React.FC<AmountCellProps> = ({
     const currencySymbol = currency.getSymbolByNumCode(currencyCode)
     const referenceSymbol = currency.getSymbolByNumCode(referenceCurrencyCode)
 
+    const typographyContent = (
+        <Typography
+            color="error.main"
+            noWrap
+            sx={{
+                fontWeight: 'bold',
+                cursor:
+                    currencyCode !== referenceCurrencyCode ? 'help' : 'default',
+            }}
+        >
+            {amount} {currencySymbol}
+        </Typography>
+    )
+
     return (
         <TableCell align="right">
-            <Tooltip title={`${referenceAmount} ${referenceSymbol}`}>
-                <Typography
-                    color="error.main"
-                    noWrap
-                    sx={{
-                        fontWeight: 'bold',
-                        cursor: 'help',
-                    }}
-                >
-                    {amount} {currencySymbol}
-                </Typography>
-            </Tooltip>
+            {currencyCode !== referenceCurrencyCode ? (
+                <Tooltip title={`${referenceAmount} ${referenceSymbol}`}>
+                    {typographyContent}
+                </Tooltip>
+            ) : (
+                typographyContent
+            )}
         </TableCell>
     )
 }
