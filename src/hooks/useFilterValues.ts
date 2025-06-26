@@ -1,5 +1,10 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { SystemSubTransaction, SystemTransaction } from '../types'
+
+const STORAGE_KEYS = {
+    START_DATE: 'filter-start-date',
+    END_DATE: 'filter-end-date',
+} as const
 
 export interface Filters {
     startDate: string
@@ -30,14 +35,50 @@ const startOfMonth = (): string => {
     return `${year}-${month}-${day}`
 }
 
+const getInitialStartDate = (): string => {
+    try {
+        const savedStartDate = localStorage.getItem(STORAGE_KEYS.START_DATE)
+        return savedStartDate || startOfMonth()
+    } catch (error) {
+        return startOfMonth()
+    }
+}
+
+const getInitialEndDate = (): string => {
+    try {
+        const savedEndDate = localStorage.getItem(STORAGE_KEYS.END_DATE)
+        return savedEndDate || today()
+    } catch (error) {
+        return today()
+    }
+}
+
 export const useFilterValues = () => {
-    const [values, setValues] = useState<Filters>({
-        startDate: startOfMonth(),
-        endDate: today(),
-        banks: [],
-        categories: [],
-        labels: [],
+    const [values, setValues] = useState<Filters>(() => {
+        return {
+            startDate: getInitialStartDate(),
+            endDate: getInitialEndDate(),
+            banks: [],
+            categories: [],
+            labels: [],
+        }
     })
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_KEYS.START_DATE, values.startDate)
+        } catch (error) {
+            console.error('Failed to save start date to localStorage:', error)
+        }
+    }, [values.startDate])
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_KEYS.END_DATE, values.endDate)
+        } catch (error) {
+            console.error('Failed to save end date to localStorage:', error)
+        }
+    }, [values.endDate])
 
     const handlers = useMemo(
         () => ({
