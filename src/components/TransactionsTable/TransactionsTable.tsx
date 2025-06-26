@@ -10,9 +10,12 @@ import {
     type TableCellProps,
 } from '@mui/material'
 
-import { EmptyBodyRow, TransactionGroup } from './Rows'
-import { SystemTransaction } from '../../types'
-import { TransactionActionHandler, TransactionDeleteHandler } from './types'
+import { EmptyBodyRow, SubTransactionBodyRow, TransactionBodyRow } from './Rows'
+import {
+    TransactionActionHandler,
+    TransactionDeleteHandler,
+    type TransactionRow,
+} from './types'
 import { TransactionHandlersProvider } from './context'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
@@ -25,7 +28,7 @@ const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
 ]
 
 export interface TransactionsTableProps {
-    transactions: SystemTransaction[]
+    rows: TransactionRow[]
     handlers: {
         onCommentChange: TransactionActionHandler<string>
         onCategoryChange: TransactionActionHandler<string | null>
@@ -38,7 +41,7 @@ export interface TransactionsTableProps {
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
-    transactions,
+    rows,
     handlers,
 }) => {
     return (
@@ -55,15 +58,22 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {transactions.length === 0 ? (
+                        {rows.length === 0 ? (
                             <EmptyBodyRow colSpan={TABLE_COLUMNS.length} />
                         ) : (
-                            transactions.map((transaction) => (
-                                <TransactionGroup
-                                    key={transaction.id}
-                                    transaction={transaction}
-                                />
-                            ))
+                            rows.map((row) =>
+                                'subTransactionId' in row ? (
+                                    <SubTransactionBodyRow
+                                        key={row.subTransactionId}
+                                        data={row}
+                                    />
+                                ) : (
+                                    <TransactionBodyRow
+                                        key={row.transactionId}
+                                        data={row}
+                                    />
+                                )
+                            )
                         )}
                     </TableBody>
                 </Table>

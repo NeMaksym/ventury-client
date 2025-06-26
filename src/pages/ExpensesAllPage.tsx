@@ -11,7 +11,7 @@ export const ExpensesPage: React.FC = () => {
     const {
         loading,
         error,
-        transactions,
+        rows,
         handlers: expensesHandlers,
     } = useExpenses(filterValues)
 
@@ -27,17 +27,14 @@ export const ExpensesPage: React.FC = () => {
         return (
             <Stack spacing={4}>
                 <Typography variant="body1" gutterBottom>
-                    Total transactions: {transactions.length}
+                    Total transactions: {rows.length}
                 </Typography>
                 <TransactionsFilter
                     options={filterOptions}
                     values={filterValues}
                     handlers={filterHandlers}
                 />
-                <TransactionsTable
-                    transactions={transactions}
-                    handlers={expensesHandlers}
-                />
+                <TransactionsTable rows={rows} handlers={expensesHandlers} />
             </Stack>
         )
     }

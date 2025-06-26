@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
+import { SystemSubTransaction, SystemTransaction } from '../types'
 
 export interface Filters {
     startDate: string
@@ -63,4 +64,63 @@ export const useFilterValues = () => {
         values,
         handlers,
     }
+}
+
+export function shouldShowTransaction(
+    transaction: SystemTransaction,
+    filters: Filters
+) {
+    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
+        return false
+    }
+
+    if (filters.categories.length > 0) {
+        if (
+            !transaction.category ||
+            !filters.categories.includes(transaction.category)
+        ) {
+            return false
+        }
+    }
+
+    if (filters.labels.length > 0) {
+        if (
+            !transaction.labels.some((label) => filters.labels.includes(label))
+        ) {
+            return false
+        }
+    }
+
+    return true
+}
+
+export function shouldShowSubTransaction(
+    transaction: SystemTransaction,
+    subTransaction: SystemSubTransaction,
+    filters: Filters
+) {
+    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
+        return false
+    }
+
+    if (filters.categories.length > 0) {
+        if (
+            !subTransaction.category ||
+            !filters.categories.includes(subTransaction.category)
+        ) {
+            return false
+        }
+    }
+
+    if (filters.labels.length > 0) {
+        if (
+            !subTransaction.labels.some((label) =>
+                filters.labels.includes(label)
+            )
+        ) {
+            return false
+        }
+    }
+
+    return true
 }

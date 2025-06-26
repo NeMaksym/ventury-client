@@ -7,6 +7,10 @@ import { Stores } from '../db/connect'
 export interface ExpenseService {
     transactionExists: (transaction: SystemTransaction) => Promise<boolean>
     getAllTransactions: () => Promise<SystemTransaction[]>
+    getTransactionsByDateRange: (
+        startDate: Date,
+        endDate: Date
+    ) => Promise<SystemTransaction[]>
     getTransactionById: (id: string) => Promise<SystemTransaction | undefined>
     updateTransaction: (
         transaction: SystemTransaction
@@ -56,6 +60,30 @@ export function useExpenseService(): ExpenseService {
             throw error
         }
     }, [getDb])
+
+    const getTransactionsByDateRange = useCallback(
+        async (
+            startDate: Date,
+            endDate: Date
+        ): Promise<SystemTransaction[]> => {
+            const db = await getDb()
+            const tx = db.transaction(Stores.EXPENSES, 'readonly')
+            const store = tx.objectStore(Stores.EXPENSES)
+            const timeIndex = store.index('time')
+
+            try {
+                const range = IDBKeyRange.bound(startDate, endDate)
+                return await timeIndex.getAll(range)
+            } catch (error) {
+                console.error(
+                    'Failed to get transactions by date range:',
+                    error
+                )
+                throw error
+            }
+        },
+        [getDb]
+    )
 
     const getTransactionById = useCallback(
         async (id: string): Promise<SystemTransaction | undefined> => {
@@ -109,6 +137,7 @@ export function useExpenseService(): ExpenseService {
     return {
         transactionExists,
         getAllTransactions,
+        getTransactionsByDateRange,
         getTransactionById,
         updateTransaction,
         deleteTransaction,

@@ -1,12 +1,21 @@
 import { useEffect, useState, useMemo } from 'react'
-import { SystemTransaction, SystemSubTransaction } from '../types'
 import { useExpenseService } from './useExpenseService'
 import { toSmallestUnit } from '../utils/formatAmount'
-import { Filters } from './useFilterValues'
+import {
+    Filters,
+    shouldShowTransaction,
+    shouldShowSubTransaction,
+} from './useFilterValues'
+import { SystemTransaction, SystemSubTransaction } from '../types'
+import {
+    TableTransaction,
+    TableSubTransaction,
+    TransactionRow,
+} from '../components/TransactionsTable/types'
 
 export const useExpenses = (filters: Filters) => {
     const {
-        getAllTransactions,
+        getTransactionsByDateRange,
         getTransactionById,
         updateTransaction,
         deleteTransaction,
@@ -20,14 +29,43 @@ export const useExpenses = (filters: Filters) => {
         setLoading(true)
         setError(null)
 
-        getAllTransactions()
+        const startDate = new Date(filters.startDate + 'T00:00:00')
+        const endDate = new Date(filters.endDate + 'T23:59:59')
+
+        getTransactionsByDateRange(startDate, endDate)
             .then((data) =>
                 data.sort((a, b) => b.time.getTime() - a.time.getTime())
             )
             .then(setTransactions)
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false))
-    }, [getAllTransactions, filters])
+    }, [getTransactionsByDateRange, filters.startDate, filters.endDate])
+
+    const rows = useMemo<TransactionRow[]>(() => {
+        const result = []
+
+        for (const transaction of transactions) {
+            if (shouldShowTransaction(transaction, filters)) {
+                result.push(toTableTransaction(transaction))
+            }
+
+            for (const subTransaction of transaction.subTransactions) {
+                if (
+                    shouldShowSubTransaction(
+                        transaction,
+                        subTransaction,
+                        filters
+                    )
+                ) {
+                    result.push(
+                        toTableSubTransaction(transaction, subTransaction)
+                    )
+                }
+            }
+        }
+
+        return result
+    }, [transactions, filters.banks, filters.categories, filters.labels])
 
     const updateTransactionField = async (
         transactionId: string,
@@ -229,5 +267,57 @@ export const useExpenses = (filters: Filters) => {
         ]
     )
 
-    return { loading, error, transactions, handlers }
+    return { loading, error, rows, handlers }
+}
+
+function toTableTransaction(transaction: SystemTransaction): TableTransaction {
+    const subTransactionsSum = transaction.subTransactions.reduce(
+        (sum, sub) => sum + sub.amount,
+        0n
+    )
+    const subTransactionsRefSum = transaction.subTransactions.reduce(
+        (sum, sub) => sum + sub.referenceAmount,
+        0n
+    )
+    const transactionAmount = transaction.amount - subTransactionsSum
+    const transactionRefAmount =
+        transaction.referenceAmount - subTransactionsRefSum
+
+    return {
+        transactionId: transaction.id,
+        time: transaction.time,
+        bank: transaction.bank,
+        amount: transactionAmount,
+        currencyCode: transaction.currencyCode,
+        referenceAmount: transactionRefAmount,
+        referenceCurrencyCode: transaction.referenceCurrencyCode,
+        description: transaction.description,
+        comment: transaction.comment,
+        category: transaction.category,
+        labels: transaction.labels,
+        hide: transaction.hide,
+        capitalized: transaction.capitalized,
+    }
+}
+
+function toTableSubTransaction(
+    transaction: SystemTransaction,
+    subTransaction: SystemSubTransaction
+): TableSubTransaction {
+    return {
+        transactionId: transaction.id,
+        subTransactionId: subTransaction.id,
+        time: transaction.time,
+        bank: transaction.bank,
+        amount: subTransaction.amount,
+        currencyCode: transaction.currencyCode,
+        referenceAmount: subTransaction.referenceAmount,
+        referenceCurrencyCode: transaction.referenceCurrencyCode,
+        description: transaction.description,
+        comment: subTransaction.comment,
+        category: subTransaction.category,
+        labels: subTransaction.labels,
+        hide: subTransaction.hide,
+        capitalized: subTransaction.capitalized,
+    }
 }

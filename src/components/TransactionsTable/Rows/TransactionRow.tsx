@@ -10,67 +10,40 @@ import {
     ContextMenuCell,
 } from '../Cells'
 import { fromSmallestUnit } from '../../../utils'
-import { SystemTransaction } from '../../../types'
+import { TableTransaction } from '../types'
 
 interface TransactionRowProps {
-    transaction: SystemTransaction
+    data: TableTransaction
 }
 
-export const TransactionRow: React.FC<TransactionRowProps> = ({
-    transaction,
-}) => {
-    const hasSubTransactions = transaction.subTransactions.length > 0
-
-    const subTransactionsSum = transaction.subTransactions.reduce(
-        (sum, sub) => sum + sub.amount,
-        0n
-    )
-    const subTransactionsRefSum = transaction.subTransactions.reduce(
-        (sum, sub) => sum + sub.referenceAmount,
-        0n
-    )
-    const transactionAmount = transaction.amount - subTransactionsSum
-    const transactionRefAmount =
-        transaction.referenceAmount - subTransactionsRefSum
-
-    return (
-        <>
-            <TableRow
-                sx={{
-                    cursor: hasSubTransactions ? 'pointer' : 'default',
-                    opacity: transaction.hide ? 0.5 : 1,
-                }}
-            >
-                <DateCell time={transaction.time} />
-                <DescriptionCell
-                    description={transaction.description}
-                    comment={transaction.comment}
-                />
-                <AmountCell
-                    amount={-fromSmallestUnit(transactionAmount)}
-                    currencyCode={transaction.currencyCode}
-                    referenceAmount={fromSmallestUnit(transactionRefAmount)}
-                    referenceCurrencyCode={transaction.referenceCurrencyCode}
-                />
-                <CategoryCell
-                    transactionId={transaction.id}
-                    category={transaction.category}
-                />
-                <LabelCell
-                    options={[]}
-                    transactionId={transaction.id}
-                    labels={transaction.labels}
-                />
-                <ContextMenuCell
-                    transactionId={transaction.id}
-                    comment={transaction.comment}
-                    isHidden={transaction.hide}
-                    isCapitalized={transaction.capitalized}
-                    maxSubTransactionAmount={
-                        -fromSmallestUnit(transactionAmount)
-                    }
-                />
-            </TableRow>
-        </>
-    )
-}
+export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
+    <TableRow sx={{ opacity: data.hide ? 0.5 : 1 }}>
+        <DateCell time={data.time} />
+        <DescriptionCell
+            description={data.description}
+            comment={data.comment}
+        />
+        <AmountCell
+            amount={-fromSmallestUnit(data.amount)}
+            currencyCode={data.currencyCode}
+            referenceAmount={fromSmallestUnit(data.referenceAmount)}
+            referenceCurrencyCode={data.referenceCurrencyCode}
+        />
+        <CategoryCell
+            transactionId={data.transactionId}
+            category={data.category}
+        />
+        <LabelCell
+            options={[]}
+            transactionId={data.transactionId}
+            labels={data.labels}
+        />
+        <ContextMenuCell
+            transactionId={data.transactionId}
+            comment={data.comment}
+            isHidden={data.hide}
+            isCapitalized={data.capitalized}
+            maxSubTransactionAmount={-fromSmallestUnit(data.amount)}
+        />
+    </TableRow>
+)

@@ -10,20 +10,18 @@ import {
     DateCell,
 } from '../Cells'
 import { fromSmallestUnit } from '../../../utils'
-import { SystemTransaction, SystemSubTransaction } from '../../../types'
+import { TableSubTransaction } from '../types'
 
 interface SubTransactionRowProps {
-    transaction: SystemTransaction
-    subTransaction: SystemSubTransaction
+    data: TableSubTransaction
 }
 
-export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
-    transaction,
-    subTransaction,
+export const SubTransactionBodyRow: React.FC<SubTransactionRowProps> = ({
+    data,
 }) => (
     <TableRow
         sx={{
-            opacity: subTransaction.hide ? 0.5 : 1,
+            opacity: data.hide ? 0.5 : 1,
             backgroundColor: (theme) =>
                 theme.palette.mode === 'dark'
                     ? 'rgba(255, 255, 255, 0.02)'
@@ -31,34 +29,34 @@ export const SubTransactionRow: React.FC<SubTransactionRowProps> = ({
             borderLeft: (theme) => `3px solid ${theme.palette.primary.main}`,
         }}
     >
-        <DateCell time={transaction.time} />
+        <DateCell time={data.time} />
         <DescriptionCell
-            description={transaction.description}
-            comment={subTransaction.comment}
+            description={data.description}
+            comment={data.comment}
         />
         <AmountCell
-            amount={-fromSmallestUnit(subTransaction.amount)}
-            currencyCode={transaction.currencyCode}
-            referenceAmount={fromSmallestUnit(subTransaction.referenceAmount)}
-            referenceCurrencyCode={transaction.referenceCurrencyCode}
+            amount={-fromSmallestUnit(data.amount)}
+            currencyCode={data.currencyCode}
+            referenceAmount={fromSmallestUnit(data.referenceAmount)}
+            referenceCurrencyCode={data.referenceCurrencyCode}
         />
         <CategoryCell
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            category={subTransaction.category}
+            transactionId={data.transactionId}
+            subTransactionId={data.subTransactionId}
+            category={data.category}
         />
         <LabelCell
             options={[]}
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            labels={subTransaction.labels}
+            transactionId={data.transactionId}
+            subTransactionId={data.subTransactionId}
+            labels={data.labels}
         />
         <ContextMenuCell
-            transactionId={transaction.id}
-            subTransactionId={subTransaction.id}
-            comment={subTransaction.comment}
-            isHidden={subTransaction.hide}
-            isCapitalized={subTransaction.capitalized}
+            transactionId={data.transactionId}
+            subTransactionId={data.subTransactionId}
+            comment={data.comment}
+            isHidden={data.hide}
+            isCapitalized={data.capitalized}
         />
     </TableRow>
 )
