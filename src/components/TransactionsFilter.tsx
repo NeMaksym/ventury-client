@@ -60,6 +60,7 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                         shrink: true,
                     },
                     htmlInput: {
+                        min: values.startDate,
                         max: today,
                     },
                 }}
