@@ -12,7 +12,7 @@ import {
 
 interface CommentDialogProps {
     open: boolean
-    comment: string | undefined
+    comment: string
     onSubmit: (comment: string) => void
     onClose: () => void
 }
@@ -23,7 +23,7 @@ export const CommentDialog: React.FC<CommentDialogProps> = ({
     onSubmit,
     onClose,
 }) => {
-    const [value, setValue] = useState(comment || '')
+    const [value, setValue] = useState(comment)
 
     const handleSubmit = () => {
         onSubmit(value)

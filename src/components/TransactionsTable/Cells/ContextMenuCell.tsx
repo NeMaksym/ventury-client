@@ -12,7 +12,7 @@ import {
 interface ContextMenuCellProps {
     transactionId: string
     subTransactionId?: string
-    comment: string | undefined
+    comment: string
     isHidden: boolean
     isCapitalized: boolean
     maxSubTransactionAmount?: number

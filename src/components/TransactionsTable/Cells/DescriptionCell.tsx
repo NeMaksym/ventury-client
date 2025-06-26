@@ -3,12 +3,12 @@ import { TableCell, Tooltip } from '@mui/material'
 
 interface DescriptionCellProps {
     description: string
-    comment?: string | undefined
+    comment: string
 }
 
 export const DescriptionCell: React.FC<DescriptionCellProps> = ({
     description,
-    comment = '',
+    comment,
 }) => {
     return (
         <TableCell>

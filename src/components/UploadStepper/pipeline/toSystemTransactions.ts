@@ -33,6 +33,7 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
             hide: false,
             labels: [],
             subTransactions: [],
+            comment: transaction.comment || '',
         }
     })
 

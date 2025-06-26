@@ -95,6 +95,7 @@ export interface SystemTransaction
     hide: boolean
     labels: string[]
     subTransactions: SystemSubTransaction[]
+    comment: string
 }
 
 /**

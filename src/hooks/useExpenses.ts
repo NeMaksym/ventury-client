@@ -194,6 +194,7 @@ export const useExpenses = (filters: Filters) => {
                         capitalized: false,
                         hide: false,
                         labels: [],
+                        comment: '',
                     }
 
                     const updatedTransaction = await updateTransaction({
