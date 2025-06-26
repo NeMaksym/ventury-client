@@ -31,6 +31,8 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
     values,
     handlers,
 }) => {
+    const today = new Date().toISOString().split('T')[0]
+
     return (
         <Stack direction="row" spacing={2}>
             <TextField
@@ -41,6 +43,9 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                 slotProps={{
                     inputLabel: {
                         shrink: true,
+                    },
+                    htmlInput: {
+                        max: values.endDate || today,
                     },
                 }}
             />
@@ -53,6 +58,9 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                 slotProps={{
                     inputLabel: {
                         shrink: true,
+                    },
+                    htmlInput: {
+                        max: today,
                     },
                 }}
             />
