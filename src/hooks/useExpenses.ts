@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useExpenseService } from './useExpenseService'
-import { toSmallestUnit } from '../utils/formatAmount'
+import { toSmallestUnit, fromSmallestUnit } from '../utils/formatAmount'
 import {
     Filters,
     shouldShowTransaction,
@@ -287,9 +287,9 @@ function toTableTransaction(transaction: SystemTransaction): TableTransaction {
         transactionId: transaction.id,
         time: transaction.time,
         bank: transaction.bank,
-        amount: transactionAmount,
+        amount: -fromSmallestUnit(transactionAmount),
         currencyCode: transaction.currencyCode,
-        referenceAmount: transactionRefAmount,
+        referenceAmount: fromSmallestUnit(transactionRefAmount),
         referenceCurrencyCode: transaction.referenceCurrencyCode,
         description: transaction.description,
         comment: transaction.comment,
@@ -309,9 +309,9 @@ function toTableSubTransaction(
         subTransactionId: subTransaction.id,
         time: transaction.time,
         bank: transaction.bank,
-        amount: subTransaction.amount,
+        amount: -fromSmallestUnit(subTransaction.amount),
         currencyCode: transaction.currencyCode,
-        referenceAmount: subTransaction.referenceAmount,
+        referenceAmount: fromSmallestUnit(subTransaction.referenceAmount),
         referenceCurrencyCode: transaction.referenceCurrencyCode,
         description: transaction.description,
         comment: subTransaction.comment,

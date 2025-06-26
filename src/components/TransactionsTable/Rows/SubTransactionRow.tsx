@@ -9,7 +9,6 @@ import {
     ContextMenuCell,
     DateCell,
 } from '../Cells'
-import { fromSmallestUnit } from '../../../utils'
 import { TableSubTransaction } from '../types'
 
 interface SubTransactionRowProps {
@@ -35,9 +34,9 @@ export const SubTransactionBodyRow: React.FC<SubTransactionRowProps> = ({
             comment={data.comment}
         />
         <AmountCell
-            amount={-fromSmallestUnit(data.amount)}
+            amount={data.amount}
             currencyCode={data.currencyCode}
-            referenceAmount={fromSmallestUnit(data.referenceAmount)}
+            referenceAmount={data.referenceAmount}
             referenceCurrencyCode={data.referenceCurrencyCode}
         />
         <CategoryCell

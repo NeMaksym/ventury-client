@@ -9,7 +9,6 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import { fromSmallestUnit } from '../../../utils'
 import { TableTransaction } from '../types'
 
 interface TransactionRowProps {
@@ -24,9 +23,9 @@ export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
             comment={data.comment}
         />
         <AmountCell
-            amount={-fromSmallestUnit(data.amount)}
+            amount={data.amount}
             currencyCode={data.currencyCode}
-            referenceAmount={fromSmallestUnit(data.referenceAmount)}
+            referenceAmount={data.referenceAmount}
             referenceCurrencyCode={data.referenceCurrencyCode}
         />
         <CategoryCell
@@ -43,7 +42,7 @@ export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
             comment={data.comment}
             isHidden={data.hide}
             isCapitalized={data.capitalized}
-            maxSubTransactionAmount={-fromSmallestUnit(data.amount)}
+            maxSubTransactionAmount={data.amount}
         />
     </TableRow>
 )

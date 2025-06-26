@@ -15,9 +15,7 @@ export type TableTransaction = Pick<
     SystemTransaction,
     | 'time'
     | 'bank'
-    | 'amount'
     | 'currencyCode'
-    | 'referenceAmount'
     | 'referenceCurrencyCode'
     | 'description'
     | 'comment'
@@ -27,6 +25,8 @@ export type TableTransaction = Pick<
     | 'capitalized'
 > & {
     transactionId: string
+    amount: number
+    referenceAmount: number
 }
 
 export type TableSubTransaction = TableTransaction & {
