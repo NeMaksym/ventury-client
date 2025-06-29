@@ -8,7 +8,6 @@ import {
     useExpenseService,
     useIncomeService,
     useMessages,
-    useTransactionService,
 } from '../../../hooks'
 
 interface ResultsRendererProps {
@@ -25,7 +24,6 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
     const { messages, addMessage } = useMessages()
     const expenseService = useExpenseService()
     const incomeService = useIncomeService()
-    const transactionService = useTransactionService()
 
     useEffect(() => {
         const controller = new AbortController()
@@ -34,11 +32,7 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
             { sourceTransactions, addMessage, bank },
             loadExchangeRates,
             toSystemTransactions,
-            addToDB({
-                expenseService,
-                incomeService,
-                transactionService,
-            }),
+            addToDB({ expenseService, incomeService }),
             controller.signal
         )
             .then(() => addMessage('Success'))

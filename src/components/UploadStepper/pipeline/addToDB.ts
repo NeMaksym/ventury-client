@@ -1,8 +1,4 @@
-import {
-    ExpenseService,
-    IncomeService,
-    TransactionService,
-} from '../../../hooks'
+import { ExpenseService, IncomeService } from '../../../hooks'
 import { ToSystemTransactionsDTO } from './toSystemTransactions'
 import { split, splitAsync } from '../../../utils'
 import { SystemTransaction } from '../../../types'
@@ -10,11 +6,10 @@ import { SystemTransaction } from '../../../types'
 type AddToDB = (input: {
     expenseService: ExpenseService
     incomeService: IncomeService
-    transactionService: TransactionService
 }) => (input: ToSystemTransactionsDTO) => Promise<void>
 
 export const addToDB: AddToDB =
-    ({ expenseService, incomeService, transactionService }) =>
+    ({ expenseService, incomeService }) =>
     async (input) => {
         const { systemTransactions, addMessage } = input
 
@@ -43,9 +38,11 @@ export const addToDB: AddToDB =
             )
         }
 
-        await transactionService.addTransactions([
-            ...expensesToAdd,
-            ...incomesToAdd,
+        await Promise.all([
+            ...expensesToAdd.map((expense) =>
+                expenseService.addExpense(expense)
+            ),
+            ...incomesToAdd.map((income) => incomeService.addIncome(income)),
         ])
 
         addMessage(

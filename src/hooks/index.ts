@@ -1,7 +1,6 @@
 export * from './useExpenseService'
 export * from './useIncomeService'
 export * from './useMessages'
-export * from './useTransactionService'
 export * from './useExpenses'
 export * from './useFilterValues'
 export * from './useFilterOptions'

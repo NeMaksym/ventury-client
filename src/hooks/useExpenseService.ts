@@ -12,6 +12,7 @@ export interface ExpenseService {
         endDate: Date
     ) => Promise<SystemTransaction[]>
     getExpenseById: (id: string) => Promise<SystemTransaction | undefined>
+    addExpense: (expense: SystemTransaction) => Promise<SystemTransaction>
     updateExpense: (expense: SystemTransaction) => Promise<SystemTransaction>
     deleteExpense: (id: string) => Promise<void>
 }
@@ -111,6 +112,35 @@ export function useExpenseService(): ExpenseService {
         [getDb]
     )
 
+    const addExpense = useCallback(
+        async (expense: SystemTransaction): Promise<SystemTransaction> => {
+            if (expense.amount >= 0n) {
+                throw new Error('Expense amount must be negative')
+            }
+
+            if (expense.referenceAmount <= 0n) {
+                throw new Error('Expense referenceAmount must be positive')
+            }
+
+            if (expense.operationAmount <= 0n) {
+                throw new Error('Expense operationAmount must be positive')
+            }
+
+            const db = await getDb()
+            const tx = db.transaction(Stores.EXPENSES, 'readwrite')
+            const store = tx.objectStore(Stores.EXPENSES)
+
+            try {
+                await store.add(expense)
+                return expense
+            } catch (error) {
+                console.error('Failed to add expense:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
     const deleteExpense = useCallback(
         async (id: string): Promise<void> => {
             const db = await getDb()
@@ -132,6 +162,7 @@ export function useExpenseService(): ExpenseService {
         getAllExpenses,
         getExpensesByDateRange,
         getExpenseById,
+        addExpense,
         updateExpense,
         deleteExpense,
     }

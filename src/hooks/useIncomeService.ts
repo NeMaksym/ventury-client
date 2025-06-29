@@ -6,6 +6,7 @@ import { Stores } from '../db/connect'
 
 export interface IncomeService {
     transactionExists: (transaction: SystemTransaction) => Promise<boolean>
+    addIncome: (income: SystemTransaction) => Promise<SystemTransaction>
 }
 
 export function useIncomeService(): IncomeService {
@@ -36,5 +37,34 @@ export function useIncomeService(): IncomeService {
         [getDb]
     )
 
-    return { transactionExists }
+    const addIncome = useCallback(
+        async (income: SystemTransaction): Promise<SystemTransaction> => {
+            if (income.amount <= 0n) {
+                throw new Error('Income amount must be positive')
+            }
+
+            if (income.referenceAmount <= 0n) {
+                throw new Error('Income referenceAmount must be positive')
+            }
+
+            if (income.operationAmount <= 0n) {
+                throw new Error('Income operationAmount must be positive')
+            }
+
+            const db = await getDb()
+            const tx = db.transaction(Stores.INCOMES, 'readwrite')
+            const store = tx.objectStore(Stores.INCOMES)
+
+            try {
+                await store.add(income)
+                return income
+            } catch (error) {
+                console.error('Failed to add income:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
+    return { transactionExists, addIncome }
 }
