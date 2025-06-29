@@ -29,7 +29,7 @@ export const addToDB: AddToDB =
 
         const [expensesDuplicates, expensesToAdd] =
             await splitAsync<SystemTransaction>(expenses, async (transaction) =>
-                expenseService.transactionExists(transaction)
+                expenseService.expenseExists(transaction)
             )
 
         const [incomesDuplicates, incomesToAdd] =

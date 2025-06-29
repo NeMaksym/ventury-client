@@ -5,48 +5,44 @@ import { SystemTransaction } from '../types'
 import { Stores } from '../db/connect'
 
 export interface ExpenseService {
-    transactionExists: (transaction: SystemTransaction) => Promise<boolean>
-    getAllTransactions: () => Promise<SystemTransaction[]>
-    getTransactionsByDateRange: (
+    expenseExists: (expense: SystemTransaction) => Promise<boolean>
+    getAllExpenses: () => Promise<SystemTransaction[]>
+    getExpensesByDateRange: (
         startDate: Date,
         endDate: Date
     ) => Promise<SystemTransaction[]>
-    getTransactionById: (id: string) => Promise<SystemTransaction | undefined>
-    updateTransaction: (
-        transaction: SystemTransaction
-    ) => Promise<SystemTransaction>
-    deleteTransaction: (id: string) => Promise<void>
+    getExpenseById: (id: string) => Promise<SystemTransaction | undefined>
+    updateExpense: (expense: SystemTransaction) => Promise<SystemTransaction>
+    deleteExpense: (id: string) => Promise<void>
 }
 
 export function useExpenseService(): ExpenseService {
     const { getDb } = useDb()
 
-    const transactionExists = useCallback(
-        async (transaction: SystemTransaction): Promise<boolean> => {
+    const expenseExists = useCallback(
+        async (expense: SystemTransaction): Promise<boolean> => {
             const db = await getDb()
             const tx = db.transaction(Stores.EXPENSES, 'readonly')
             const store = tx.objectStore(Stores.EXPENSES)
             const timeIndex = store.index('time')
 
             try {
-                const transactionsAtSameTime = await timeIndex.getAll(
-                    transaction.time
-                )
+                const expensesAtSameTime = await timeIndex.getAll(expense.time)
 
-                return transactionsAtSameTime.some(
-                    (dbTransaction) =>
-                        dbTransaction.bank === transaction.bank &&
-                        dbTransaction.amount === transaction.amount
+                return expensesAtSameTime.some(
+                    (dbExpense) =>
+                        dbExpense.bank === expense.bank &&
+                        dbExpense.amount === expense.amount
                 )
             } catch (error) {
-                console.error('Failed to check if transaction exists:', error)
+                console.error('Failed to check if expense exists:', error)
                 throw error
             }
         },
         [getDb]
     )
 
-    const getAllTransactions = useCallback(async (): Promise<
+    const getAllExpenses = useCallback(async (): Promise<
         SystemTransaction[]
     > => {
         const db = await getDb()
@@ -56,12 +52,12 @@ export function useExpenseService(): ExpenseService {
         try {
             return await store.getAll()
         } catch (error) {
-            console.error('Failed to get all transactions:', error)
+            console.error('Failed to get all expenses:', error)
             throw error
         }
     }, [getDb])
 
-    const getTransactionsByDateRange = useCallback(
+    const getExpensesByDateRange = useCallback(
         async (
             startDate: Date,
             endDate: Date
@@ -75,17 +71,14 @@ export function useExpenseService(): ExpenseService {
                 const range = IDBKeyRange.bound(startDate, endDate)
                 return await timeIndex.getAll(range)
             } catch (error) {
-                console.error(
-                    'Failed to get transactions by date range:',
-                    error
-                )
+                console.error('Failed to get expenses by date range:', error)
                 throw error
             }
         },
         [getDb]
     )
 
-    const getTransactionById = useCallback(
+    const getExpenseById = useCallback(
         async (id: string): Promise<SystemTransaction | undefined> => {
             const db = await getDb()
             const tx = db.transaction(Stores.EXPENSES, 'readonly')
@@ -94,31 +87,31 @@ export function useExpenseService(): ExpenseService {
             try {
                 return await store.get(id)
             } catch (error) {
-                console.error('Failed to get transaction by id:', error)
+                console.error('Failed to get expense by id:', error)
                 throw error
             }
         },
         [getDb]
     )
 
-    const updateTransaction = useCallback(
-        async (transaction: SystemTransaction): Promise<SystemTransaction> => {
+    const updateExpense = useCallback(
+        async (expense: SystemTransaction): Promise<SystemTransaction> => {
             const db = await getDb()
             const tx = db.transaction(Stores.EXPENSES, 'readwrite')
             const store = tx.objectStore(Stores.EXPENSES)
 
             try {
-                await store.put(transaction)
-                return transaction
+                await store.put(expense)
+                return expense
             } catch (error) {
-                console.error('Failed to update transaction:', error)
+                console.error('Failed to update expense:', error)
                 throw error
             }
         },
         [getDb]
     )
 
-    const deleteTransaction = useCallback(
+    const deleteExpense = useCallback(
         async (id: string): Promise<void> => {
             const db = await getDb()
             const tx = db.transaction(Stores.EXPENSES, 'readwrite')
@@ -127,7 +120,7 @@ export function useExpenseService(): ExpenseService {
             try {
                 await store.delete(id)
             } catch (error) {
-                console.error('Failed to delete transaction:', error)
+                console.error('Failed to delete expense:', error)
                 throw error
             }
         },
@@ -135,11 +128,11 @@ export function useExpenseService(): ExpenseService {
     )
 
     return {
-        transactionExists,
-        getAllTransactions,
-        getTransactionsByDateRange,
-        getTransactionById,
-        updateTransaction,
-        deleteTransaction,
+        expenseExists,
+        getAllExpenses,
+        getExpensesByDateRange,
+        getExpenseById,
+        updateExpense,
+        deleteExpense,
     }
 }

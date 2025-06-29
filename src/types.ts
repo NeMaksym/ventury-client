@@ -69,7 +69,6 @@ export interface SourceTransaction {
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
  * @property {string | null} category - System-assigned category for the transaction, null if uncategorized
  * @property {string[]} labels - Array of system-assigned labels or tags
- * @property {SystemSubTransaction[]} subTransactions - Array of sub-transactions
  */
 export interface SystemTransaction
     extends Pick<
@@ -94,19 +93,27 @@ export interface SystemTransaction
     capitalized: boolean
     hide: boolean
     labels: string[]
-    subTransactions: SystemSubTransaction[]
     comment: string
 }
 
 /**
  * Represents a sub-transaction of a system transaction.
- *
+ * @interface SystemSubTransaction
+ * @extends SystemTransaction
+ * @property {string} id - Unique identifier for the sub-transaction
+ * @property {string} parentId - Unique identifier for the parent transaction
  */
 export interface SystemSubTransaction
     extends Pick<
         SystemTransaction,
+        | 'time'
+        | 'description'
         | 'amount'
+        | 'currencyCode'
+        | 'accountId'
+        | 'bank'
         | 'referenceAmount'
+        | 'referenceCurrencyCode'
         | 'category'
         | 'capitalized'
         | 'hide'
@@ -114,6 +121,7 @@ export interface SystemSubTransaction
         | 'comment'
     > {
     id: string
+    parentId: string
 }
 
 /**

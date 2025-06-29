@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useExpenseService } from './useExpenseService'
-import { toSmallestUnit, fromSmallestUnit } from '../utils/formatAmount'
+import { useSubExpenseService } from './useSubExpenseService'
 import {
     Filters,
     shouldShowTransaction,
@@ -12,92 +12,144 @@ import {
     TableSubTransaction,
     TransactionRow,
 } from '../components/TransactionsTable/types'
+import { toSmallestUnit, fromSmallestUnit } from '../utils/formatAmount'
 
 export const useExpenses = (filters: Filters) => {
     const {
-        getTransactionsByDateRange,
-        getTransactionById,
-        updateTransaction,
-        deleteTransaction,
+        getExpensesByDateRange,
+        getExpenseById,
+        updateExpense,
+        deleteExpense,
     } = useExpenseService()
+
+    const {
+        getSubExpensesByDateRange,
+        getSubExpenseById,
+        updateSubExpense,
+        deleteSubExpense,
+        addSubExpense,
+    } = useSubExpenseService()
 
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
-    const [transactions, setTransactions] = useState<SystemTransaction[]>([])
+    const [expenses, setExpenses] = useState<SystemTransaction[]>([])
+    const [subExpensesMap, setSubExpensesMap] = useState<
+        Map<string, SystemSubTransaction[]>
+    >(new Map())
 
     useEffect(() => {
         setLoading(true)
         setError(null)
 
-        const startDate = new Date(filters.startDate + 'T00:00:00')
-        const endDate = new Date(filters.endDate + 'T23:59:59')
+        async function fetchExpenses() {
+            const startDate = new Date(filters.startDate + 'T00:00:00')
+            const endDate = new Date(filters.endDate + 'T23:59:59')
 
-        getTransactionsByDateRange(startDate, endDate)
-            .then((data) =>
-                data.sort((a, b) => b.time.getTime() - a.time.getTime())
+            const [expenses, subExpenses] = await Promise.all([
+                getExpensesByDateRange(startDate, endDate),
+                getSubExpensesByDateRange(startDate, endDate),
+            ])
+
+            setExpenses(
+                expenses.sort((a, b) => b.time.getTime() - a.time.getTime())
             )
-            .then(setTransactions)
+
+            setSubExpensesMap(
+                subExpenses.reduce((acc, subExpense) => {
+                    const subExpenses = acc.get(subExpense.parentId) || []
+                    subExpenses.push(subExpense)
+                    acc.set(subExpense.parentId, subExpenses)
+                    return acc
+                }, new Map<string, SystemSubTransaction[]>())
+            )
+        }
+
+        fetchExpenses()
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false))
-    }, [getTransactionsByDateRange, filters.startDate, filters.endDate])
+    }, [
+        getExpensesByDateRange,
+        getSubExpensesByDateRange,
+        filters.startDate,
+        filters.endDate,
+    ])
 
     const rows = useMemo<TransactionRow[]>(() => {
         const result = []
 
-        for (const transaction of transactions) {
-            if (shouldShowTransaction(transaction, filters)) {
-                result.push(toTableTransaction(transaction))
+        for (const expense of expenses) {
+            const subExpenses = subExpensesMap.get(expense.id) || []
+
+            if (shouldShowTransaction(expense, filters)) {
+                result.push(toTableTransaction(expense, subExpenses))
             }
 
-            for (const subTransaction of transaction.subTransactions) {
-                if (
-                    shouldShowSubTransaction(
-                        transaction,
-                        subTransaction,
-                        filters
-                    )
-                ) {
-                    result.push(
-                        toTableSubTransaction(transaction, subTransaction)
-                    )
+            for (const subExpense of subExpenses) {
+                if (shouldShowSubTransaction(expense, subExpense, filters)) {
+                    result.push(toTableSubTransaction(expense, subExpense))
                 }
             }
         }
 
         return result
-    }, [transactions, filters.banks, filters.categories, filters.labels])
+    }, [
+        expenses,
+        subExpensesMap,
+        filters.banks,
+        filters.categories,
+        filters.labels,
+    ])
 
-    const updateTransactionField = async (
-        transactionId: string,
+    const updateExpenseField = async (
+        expenseId: string,
         updates: Partial<SystemTransaction>,
-        errorMessage: string,
-        subTransactionId?: string
+        errorMessage: string
     ) => {
         try {
-            const transaction = await getTransactionById(transactionId)
-            if (!transaction) return
+            const expense = await getExpenseById(expenseId)
+            if (!expense) return
 
-            const payload = subTransactionId
-                ? {
-                      ...transaction,
-                      subTransactions: transaction.subTransactions.map((st) =>
-                          st.id === subTransactionId
-                              ? { ...st, ...updates }
-                              : st
-                      ),
-                  }
-                : {
-                      ...transaction,
-                      ...updates,
-                  }
+            const updatedExpense = await updateExpense({
+                ...expense,
+                ...updates,
+            })
 
-            const updatedTransaction = await updateTransaction(payload)
-
-            setTransactions((prevTransactions) =>
-                prevTransactions.map((t) =>
-                    t.id === transactionId ? updatedTransaction : t
+            setExpenses((prevExpenses) =>
+                prevExpenses.map((e) =>
+                    e.id === expenseId ? updatedExpense : e
                 )
             )
+        } catch (err) {
+            setError(err instanceof Error ? err.message : errorMessage)
+        }
+    }
+
+    const updateSubExpenseField = async (
+        subExpenseId: string,
+        updates: Partial<SystemSubTransaction>,
+        errorMessage: string
+    ) => {
+        try {
+            const subExpense = await getSubExpenseById(subExpenseId)
+            if (!subExpense) return
+
+            const updatedSubExpense = await updateSubExpense({
+                ...subExpense,
+                ...updates,
+            })
+
+            setSubExpensesMap((prevSubExpensesMap) => {
+                const subExpenses =
+                    prevSubExpensesMap.get(subExpense.parentId) || []
+                const updatedSubExpenses = subExpenses.map((subExpense) =>
+                    subExpense.id === subExpenseId
+                        ? updatedSubExpense
+                        : subExpense
+                )
+                const newSubExpensesMap = new Map(prevSubExpensesMap)
+                newSubExpensesMap.set(subExpense.parentId, updatedSubExpenses)
+                return newSubExpensesMap
+            })
         } catch (err) {
             setError(err instanceof Error ? err.message : errorMessage)
         }
@@ -106,97 +158,115 @@ export const useExpenses = (filters: Filters) => {
     const handlers = useMemo(
         () => ({
             onCommentChange: (
-                transactionId: string,
+                expenseId: string,
                 comment: string,
-                subTransactionId?: string
+                subExpenseId?: string
             ) => {
-                return updateTransactionField(
-                    transactionId,
-                    { comment },
-                    'Failed to update comment',
-                    subTransactionId
-                )
+                return subExpenseId
+                    ? updateSubExpenseField(
+                          subExpenseId,
+                          { comment },
+                          'Failed to update comment'
+                      )
+                    : updateExpenseField(
+                          expenseId,
+                          { comment },
+                          'Failed to update comment'
+                      )
             },
 
             onCategoryChange: (
-                transactionId: string,
+                expenseId: string,
                 category: string | null,
-                subTransactionId?: string
+                subExpenseId?: string
             ) => {
-                return updateTransactionField(
-                    transactionId,
-                    { category },
-                    'Failed to update category',
-                    subTransactionId
-                )
+                return subExpenseId
+                    ? updateSubExpenseField(
+                          subExpenseId,
+                          { category },
+                          'Failed to update category'
+                      )
+                    : updateExpenseField(
+                          expenseId,
+                          { category },
+                          'Failed to update category'
+                      )
             },
 
             onLabelChange: (
-                transactionId: string,
+                expenseId: string,
                 labels: string[],
-                subTransactionId?: string
+                subExpenseId?: string
             ) => {
-                return updateTransactionField(
-                    transactionId,
-                    { labels },
-                    'Failed to update labels',
-                    subTransactionId
-                )
+                return subExpenseId
+                    ? updateSubExpenseField(
+                          subExpenseId,
+                          { labels },
+                          'Failed to update labels'
+                      )
+                    : updateExpenseField(
+                          expenseId,
+                          { labels },
+                          'Failed to update labels'
+                      )
             },
 
             onHideChange: (
-                transactionId: string,
+                expenseId: string,
                 hide: boolean,
-                subTransactionId?: string
+                subExpenseId?: string
             ) => {
-                return updateTransactionField(
-                    transactionId,
-                    { hide },
-                    'Failed to update hide status',
-                    subTransactionId
-                )
+                return subExpenseId
+                    ? updateSubExpenseField(
+                          subExpenseId,
+                          { hide },
+                          'Failed to update hide status'
+                      )
+                    : updateExpenseField(
+                          expenseId,
+                          { hide },
+                          'Failed to update hide status'
+                      )
             },
 
             onCapitalizeChange: (
-                transactionId: string,
+                expenseId: string,
                 capitalized: boolean,
-                subTransactionId?: string
+                subExpenseId?: string
             ) => {
-                return updateTransactionField(
-                    transactionId,
-                    { capitalized },
-                    'Failed to update capitalization status',
-                    subTransactionId
-                )
+                return subExpenseId
+                    ? updateSubExpenseField(
+                          subExpenseId,
+                          { capitalized },
+                          'Failed to update capitalization status'
+                      )
+                    : updateExpenseField(
+                          expenseId,
+                          { capitalized },
+                          'Failed to update capitalization status'
+                      )
             },
 
-            onDelete: async (
-                transactionId: string,
-                subTransactionId?: string
-            ) => {
+            onDelete: async (expenseId: string, subExpenseId?: string) => {
                 try {
-                    const transaction = await getTransactionById(transactionId)
-                    if (!transaction) return
-
-                    if (subTransactionId) {
-                        const updatedTransaction = await updateTransaction({
-                            ...transaction,
-                            subTransactions: transaction.subTransactions.filter(
-                                (st) => st.id !== subTransactionId
-                            ),
-                        })
-
-                        setTransactions((prevTransactions) =>
-                            prevTransactions.map((t) =>
-                                t.id === transactionId ? updatedTransaction : t
+                    if (subExpenseId) {
+                        await deleteSubExpense(subExpenseId)
+                        setSubExpensesMap((prevSubExpensesMap) => {
+                            const subExpenses =
+                                prevSubExpensesMap.get(expenseId) || []
+                            return new Map(prevSubExpensesMap).set(
+                                expenseId,
+                                subExpenses.filter(
+                                    (subExpense) =>
+                                        subExpense.id !== subExpenseId
+                                )
                             )
-                        )
+                        })
                     } else {
-                        await deleteTransaction(transactionId)
-
-                        setTransactions((prevTransactions) =>
-                            prevTransactions.filter(
-                                (t) => t.id !== transactionId
+                        await deleteExpense(expenseId)
+                        setExpenses((prevExpenses) =>
+                            prevExpenses.filter(
+                                (expense) => expense.id !== expenseId
                             )
                         )
                     }
@@ -204,27 +274,36 @@ export const useExpenses = (filters: Filters) => {
                     setError(
                         err instanceof Error
                             ? err.message
-                            : 'Failed to delete transaction'
+                            : 'Failed to delete expense'
                     )
                 }
             },
 
             onSubTransactionCreate: async (
-                transactionId: string,
+                expenseId: string,
                 amount: number
             ) => {
                 try {
-                    const transaction = await getTransactionById(transactionId)
-                    if (!transaction) {
-                        setError('Transaction not found')
+                    const expense = await getExpenseById(expenseId)
+                    if (!expense) {
+                        setError('Expense not found')
                         return
                     }
 
                     const exchangeRate =
-                        Number(transaction.referenceAmount) /
-                        Number(-transaction.amount)
+                        Number(expense.referenceAmount) /
+                        Number(-expense.amount)
 
-                    const newSubTransaction: SystemSubTransaction = {
+                    const newSubExpense = await addSubExpense({
+                        // inherited
+                        parentId: expenseId,
+                        accountId: expense.accountId,
+                        bank: expense.bank,
+                        time: expense.time,
+                        description: expense.description,
+                        currencyCode: expense.currencyCode,
+                        referenceCurrencyCode: expense.referenceCurrencyCode,
+                        // own
                         id: crypto.randomUUID(),
                         amount: -toSmallestUnit(amount),
                         referenceAmount: toSmallestUnit(amount * exchangeRate),
@@ -233,21 +312,16 @@ export const useExpenses = (filters: Filters) => {
                         hide: false,
                         labels: [],
                         comment: '',
-                    }
-
-                    const updatedTransaction = await updateTransaction({
-                        ...transaction,
-                        subTransactions: [
-                            ...transaction.subTransactions,
-                            newSubTransaction,
-                        ],
                     })
 
-                    setTransactions((prevTransactions) =>
-                        prevTransactions.map((t) =>
-                            t.id === transactionId ? updatedTransaction : t
+                    setSubExpensesMap((prevSubExpensesMap) => {
+                        const subExpenses =
+                            prevSubExpensesMap.get(newSubExpense.parentId) || []
+                        return new Map(prevSubExpensesMap).set(
+                            newSubExpense.parentId,
+                            [...subExpenses, newSubExpense]
                         )
-                    )
+                    })
                 } catch (err) {
                     setError(
                         err instanceof Error
@@ -258,11 +332,15 @@ export const useExpenses = (filters: Filters) => {
             },
         }),
         [
-            updateTransactionField,
-            getTransactionById,
-            updateTransaction,
-            deleteTransaction,
-            setTransactions,
+            updateExpenseField,
+            updateSubExpenseField,
+            getExpenseById,
+            getSubExpenseById,
+            updateExpense,
+            updateSubExpense,
+            deleteExpense,
+            deleteSubExpense,
+            addSubExpense,
             setError,
         ]
     )
@@ -270,54 +348,56 @@ export const useExpenses = (filters: Filters) => {
     return { loading, error, rows, handlers }
 }
 
-function toTableTransaction(transaction: SystemTransaction): TableTransaction {
-    const subTransactionsSum = transaction.subTransactions.reduce(
-        (sum, sub) => sum + sub.amount,
+function toTableTransaction(
+    expense: SystemTransaction,
+    subExpenses: SystemSubTransaction[]
+): TableTransaction {
+    const subExpensesSum = subExpenses.reduce(
+        (sum, subExpense) => sum + subExpense.amount,
         0n
     )
-    const subTransactionsRefSum = transaction.subTransactions.reduce(
+    const subExpensesRefSum = subExpenses.reduce(
         (sum, sub) => sum + sub.referenceAmount,
         0n
     )
-    const transactionAmount = transaction.amount - subTransactionsSum
-    const transactionRefAmount =
-        transaction.referenceAmount - subTransactionsRefSum
+    const expenseAmount = expense.amount - subExpensesSum
+    const expenseRefAmount = expense.referenceAmount - subExpensesRefSum
 
     return {
-        transactionId: transaction.id,
-        time: transaction.time,
-        bank: transaction.bank,
-        amount: -fromSmallestUnit(transactionAmount),
-        currencyCode: transaction.currencyCode,
-        referenceAmount: fromSmallestUnit(transactionRefAmount),
-        referenceCurrencyCode: transaction.referenceCurrencyCode,
-        description: transaction.description,
-        comment: transaction.comment,
-        category: transaction.category,
-        labels: transaction.labels,
-        hide: transaction.hide,
-        capitalized: transaction.capitalized,
+        transactionId: expense.id,
+        time: expense.time,
+        bank: expense.bank,
+        amount: -fromSmallestUnit(expenseAmount),
+        currencyCode: expense.currencyCode,
+        referenceAmount: fromSmallestUnit(expenseRefAmount),
+        referenceCurrencyCode: expense.referenceCurrencyCode,
+        description: expense.description,
+        comment: expense.comment,
+        category: expense.category,
+        labels: expense.labels,
+        hide: expense.hide,
+        capitalized: expense.capitalized,
     }
 }
 
 function toTableSubTransaction(
-    transaction: SystemTransaction,
-    subTransaction: SystemSubTransaction
+    expense: SystemTransaction,
+    subExpense: SystemSubTransaction
 ): TableSubTransaction {
     return {
-        transactionId: transaction.id,
-        subTransactionId: subTransaction.id,
-        time: transaction.time,
-        bank: transaction.bank,
-        amount: -fromSmallestUnit(subTransaction.amount),
-        currencyCode: transaction.currencyCode,
-        referenceAmount: fromSmallestUnit(subTransaction.referenceAmount),
-        referenceCurrencyCode: transaction.referenceCurrencyCode,
-        description: transaction.description,
-        comment: subTransaction.comment,
-        category: subTransaction.category,
-        labels: subTransaction.labels,
-        hide: subTransaction.hide,
-        capitalized: subTransaction.capitalized,
+        transactionId: expense.id,
+        subTransactionId: subExpense.id,
+        time: expense.time,
+        bank: expense.bank,
+        amount: -fromSmallestUnit(subExpense.amount),
+        currencyCode: expense.currencyCode,
+        referenceAmount: fromSmallestUnit(subExpense.referenceAmount),
+        referenceCurrencyCode: expense.referenceCurrencyCode,
+        description: expense.description,
+        comment: subExpense.comment,
+        category: subExpense.category,
+        labels: subExpense.labels,
+        hide: subExpense.hide,
+        capitalized: subExpense.capitalized,
     }
 }
