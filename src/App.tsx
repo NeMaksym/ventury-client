@@ -1,12 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 
-import { uploadPage, PagePath, expensesPages } from './pages/routes'
+import {
+    uploadPage,
+    PagePath,
+    expensesPages,
+    settingsPages,
+} from './pages/routes'
 import { Layout } from './components'
 import { DbProvider } from './context/DbContext'
 import { CustomThemeProvider } from './context/ThemeContext'
 
-const pages = [...uploadPage, ...expensesPages]
+const pages = [...uploadPage, ...expensesPages, ...settingsPages]
 
 export function App() {
     return (
