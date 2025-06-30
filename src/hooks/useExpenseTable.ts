@@ -7,21 +7,30 @@ import {
     shouldShowSubTransaction,
     shouldShowTransaction,
 } from './useFilterValues'
+import { fromSmallestUnit } from '../utils'
+
+type ExpenseTableResult = {
+    rows: TransactionRow[]
+    totalAmount: number
+    totalRefAmount: number
+}
+
+type SubExpensesMap = Map<string, SystemSubTransaction[]>
 
 export const useExpenseTable = (
     expenses: SystemTransaction[],
     subExpenses: SystemSubTransaction[],
     filters: Filters
-): TransactionRow[] => {
+): ExpenseTableResult => {
     const rows = useMemo<TransactionRow[]>(() => {
         const subExpensesMap = subExpenses
             .sort(timeDesc)
-            .reduce((acc, subExpense) => {
+            .reduce<SubExpensesMap>((acc, subExpense) => {
                 const subExpenses = acc.get(subExpense.parentId) || []
                 subExpenses.push(subExpense)
                 acc.set(subExpense.parentId, subExpenses)
                 return acc
-            }, new Map<string, SystemSubTransaction[]>())
+            }, new Map())
 
         const result: TransactionRow[] = []
 
@@ -48,7 +57,22 @@ export const useExpenseTable = (
         filters.labels,
     ])
 
-    return rows
+    const { totalAmount, totalRefAmount } = useMemo(() => {
+        return rows.reduce(
+            (acc, row) => {
+                acc.totalAmount += row.amount
+                acc.totalRefAmount += row.referenceAmount
+                return acc
+            },
+            { totalAmount: 0n, totalRefAmount: 0n }
+        )
+    }, [rows])
+
+    return {
+        rows,
+        totalAmount: fromSmallestUnit(totalAmount),
+        totalRefAmount: fromSmallestUnit(totalRefAmount),
+    }
 }
 
 function timeDesc(

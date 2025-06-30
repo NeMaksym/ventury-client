@@ -24,7 +24,11 @@ export const ExpensesPage: React.FC = () => {
         handlers: expensesHandlers,
     } = useExpenses(filterValues)
 
-    const rows = useExpenseTable(expenses, subExpenses, filterValues)
+    const { rows, totalAmount, totalRefAmount } = useExpenseTable(
+        expenses,
+        subExpenses,
+        filterValues
+    )
 
     const renderContent = () => {
         if (loading) {
@@ -37,9 +41,14 @@ export const ExpensesPage: React.FC = () => {
 
         return (
             <Stack spacing={4}>
-                <Typography variant="body1" gutterBottom>
-                    Total transactions: {rows.length}
-                </Typography>
+                <Stack direction="row" spacing={2}>
+                    <Typography variant="body1" gutterBottom>
+                        Total transactions: {rows.length}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                        Total amount: {totalAmount} ({totalRefAmount})
+                    </Typography>
+                </Stack>
                 <TransactionsFilter
                     options={filterOptions}
                     values={filterValues}
