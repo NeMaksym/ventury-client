@@ -1,37 +1,53 @@
 import { useMemo } from 'react'
-import { Category } from '../types'
+import { Category, SystemSubTransaction, SystemTransaction } from '../types'
 
 export interface Bank {
     value: string
     label: string
 }
 
-export const useFilterOptions = () => {
-    const options = useMemo(
-        () => ({
-            banks: [
-                { value: 'monobank', label: 'Monobank' },
-                { value: 'privatbank', label: 'PrivatBank' },
-                { value: 'oschadbank', label: 'Oschadbank' },
-                { value: 'raiffeisen', label: 'Raiffeisen' },
-            ] as Bank[],
-            categories: [
-                { id: 'food', label: 'Food' },
-                { id: 'transport', label: 'Transport' },
-                { id: 'entertainment', label: 'Entertainment' },
-                { id: 'shopping', label: 'Shopping' },
-            ] as Category[],
-            labels: [
-                'Work',
-                'Personal',
-                'Travel',
-                'Emergency',
-                'Recurring',
-                'One-time',
-            ] as string[],
-        }),
-        []
-    )
+export const useFilterOptions = (
+    transactions: SystemTransaction[],
+    subTransactions: SystemSubTransaction[],
+    allCategories: Category[]
+) =>
+    useMemo(() => {
+        const uniqueBanks = new Set<string>()
+        const uniqueLabels = new Set<string>()
+        const uniqueCategories = new Set<string>()
 
-    return options
-}
+        const allTransactions = [...transactions, ...subTransactions]
+
+        allTransactions.forEach((transaction) => {
+            uniqueBanks.add(transaction.bank)
+
+            if (transaction.category && transaction.category.trim()) {
+                uniqueCategories.add(transaction.category)
+            }
+
+            transaction.labels.forEach((label) => {
+                if (label.trim()) {
+                    uniqueLabels.add(label)
+                }
+            })
+        })
+
+        const banks: Bank[] = Array.from(uniqueBanks).map((bankValue) => ({
+            value: bankValue,
+            label: bankValue.charAt(0).toUpperCase() + bankValue.slice(1),
+        }))
+
+        const categories: Category[] = Array.from(uniqueCategories).map(
+            (categoryId) => ({
+                id: categoryId,
+                label:
+                    allCategories.find((c) => c.id === categoryId)?.label || '',
+            })
+        )
+
+        return {
+            banks,
+            categories,
+            labels: Array.from(uniqueLabels).sort(),
+        }
+    }, [transactions, subTransactions, allCategories])

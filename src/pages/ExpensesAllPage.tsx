@@ -11,7 +11,6 @@ import {
 import { TransactionsTable, TransactionsFilter } from '../components'
 
 export const ExpensesPage: React.FC = () => {
-    const filterOptions = useFilterOptions()
     const { categories } = useExpenseCategories()
 
     const { values: filterValues, handlers: filterHandlers } = useFilterValues()
@@ -29,6 +28,8 @@ export const ExpensesPage: React.FC = () => {
         subExpenses,
         filterValues
     )
+
+    const filterOptions = useFilterOptions(expenses, subExpenses, categories)
 
     const renderContent = () => {
         if (loading) {
