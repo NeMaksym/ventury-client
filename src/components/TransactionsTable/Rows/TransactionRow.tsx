@@ -9,10 +9,10 @@ import {
     LabelCell,
     ContextMenuCell,
 } from '../Cells'
-import { TableTransaction } from '../types'
+import { SystemTransaction } from '../../../types'
 
 interface TransactionRowProps {
-    data: TableTransaction
+    data: SystemTransaction
 }
 
 export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
@@ -28,13 +28,10 @@ export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
             referenceAmount={data.referenceAmount}
             referenceCurrencyCode={data.referenceCurrencyCode}
         />
-        <CategoryCell
-            transactionId={data.transactionId}
-            category={data.category}
-        />
-        <LabelCell transactionId={data.transactionId} labels={data.labels} />
+        <CategoryCell transactionId={data.id} category={data.category} />
+        <LabelCell transactionId={data.id} labels={data.labels} />
         <ContextMenuCell
-            transactionId={data.transactionId}
+            transactionId={data.id}
             comment={data.comment}
             isHidden={data.hide}
             isCapitalized={data.capitalized}

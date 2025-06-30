@@ -1,11 +1,11 @@
 import React from 'react'
 import { TableCell, Typography, Tooltip } from '@mui/material'
-import { currency } from '../../../utils'
+import { currency, fromSmallestUnit } from '../../../utils'
 
 interface AmountCellProps {
-    amount: number
+    amount: bigint
     currencyCode: number
-    referenceAmount: number
+    referenceAmount: bigint
     referenceCurrencyCode: number
 }
 
@@ -28,14 +28,18 @@ export const AmountCell: React.FC<AmountCellProps> = ({
                     currencyCode !== referenceCurrencyCode ? 'help' : 'default',
             }}
         >
-            {amount} {currencySymbol}
+            {fromSmallestUnit(amount)} {currencySymbol}
         </Typography>
     )
 
     return (
         <TableCell align="right">
             {currencyCode !== referenceCurrencyCode ? (
-                <Tooltip title={`${referenceAmount} ${referenceSymbol}`}>
+                <Tooltip
+                    title={`${fromSmallestUnit(
+                        referenceAmount
+                    )} ${referenceSymbol}`}
+                >
                     {typographyContent}
                 </Tooltip>
             ) : (

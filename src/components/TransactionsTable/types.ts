@@ -1,4 +1,4 @@
-import { SystemTransaction } from '../../types'
+import { SystemTransaction, SystemSubTransaction } from '../../types'
 
 export type TransactionActionHandler<T> = (
     transactionId: string,
@@ -11,26 +11,4 @@ export type TransactionDeleteHandler = (
     subTransactionId?: string
 ) => void
 
-export type TableTransaction = Pick<
-    SystemTransaction,
-    | 'time'
-    | 'bank'
-    | 'currencyCode'
-    | 'referenceCurrencyCode'
-    | 'description'
-    | 'comment'
-    | 'category'
-    | 'labels'
-    | 'hide'
-    | 'capitalized'
-> & {
-    transactionId: string
-    amount: number
-    referenceAmount: number
-}
-
-export type TableSubTransaction = TableTransaction & {
-    subTransactionId: string
-}
-
-export type TransactionRow = TableTransaction | TableSubTransaction
+export type TransactionRow = SystemTransaction | SystemSubTransaction

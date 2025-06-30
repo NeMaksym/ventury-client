@@ -7,12 +7,8 @@ import {
     shouldShowSubTransaction,
 } from './useFilterValues'
 import { SystemTransaction, SystemSubTransaction } from '../types'
-import {
-    TableTransaction,
-    TableSubTransaction,
-    TransactionRow,
-} from '../components/TransactionsTable/types'
-import { toSmallestUnit, fromSmallestUnit } from '../utils/formatAmount'
+import { TransactionRow } from '../components/TransactionsTable/types'
+import { toSmallestUnit } from '../utils/formatAmount'
 
 export const useExpenses = (filters: Filters) => {
     const {
@@ -81,12 +77,12 @@ export const useExpenses = (filters: Filters) => {
             const subExpenses = subExpensesMap.get(expense.id) || []
 
             if (shouldShowTransaction(expense, filters)) {
-                result.push(toTableTransaction(expense, subExpenses))
+                result.push(expenseToTableRow(expense, subExpenses))
             }
 
             for (const subExpense of subExpenses) {
                 if (shouldShowSubTransaction(expense, subExpense, filters)) {
-                    result.push(toTableSubTransaction(expense, subExpense))
+                    result.push(subExpenseToTableRow(subExpense))
                 }
             }
         }
@@ -348,10 +344,10 @@ export const useExpenses = (filters: Filters) => {
     return { loading, error, rows, handlers }
 }
 
-function toTableTransaction(
+function expenseToTableRow(
     expense: SystemTransaction,
     subExpenses: SystemSubTransaction[]
-): TableTransaction {
+): SystemTransaction {
     const subExpensesSum = subExpenses.reduce(
         (sum, subExpense) => sum + subExpense.amount,
         0n
@@ -364,40 +360,17 @@ function toTableTransaction(
     const expenseRefAmount = expense.referenceAmount - subExpensesRefSum
 
     return {
-        transactionId: expense.id,
-        time: expense.time,
-        bank: expense.bank,
-        amount: -fromSmallestUnit(expenseAmount),
-        currencyCode: expense.currencyCode,
-        referenceAmount: fromSmallestUnit(expenseRefAmount),
-        referenceCurrencyCode: expense.referenceCurrencyCode,
-        description: expense.description,
-        comment: expense.comment,
-        category: expense.category,
-        labels: expense.labels,
-        hide: expense.hide,
-        capitalized: expense.capitalized,
+        ...expense,
+        amount: -expenseAmount,
+        referenceAmount: expenseRefAmount,
     }
 }
 
-function toTableSubTransaction(
-    expense: SystemTransaction,
+function subExpenseToTableRow(
     subExpense: SystemSubTransaction
-): TableSubTransaction {
+): SystemSubTransaction {
     return {
-        transactionId: expense.id,
-        subTransactionId: subExpense.id,
-        time: expense.time,
-        bank: expense.bank,
-        amount: -fromSmallestUnit(subExpense.amount),
-        currencyCode: expense.currencyCode,
-        referenceAmount: fromSmallestUnit(subExpense.referenceAmount),
-        referenceCurrencyCode: expense.referenceCurrencyCode,
-        description: expense.description,
-        comment: subExpense.comment,
-        category: subExpense.category,
-        labels: subExpense.labels,
-        hide: subExpense.hide,
-        capitalized: subExpense.capitalized,
+        ...subExpense,
+        amount: -subExpense.amount,
     }
 }

@@ -8,10 +8,11 @@ import {
     TextField,
     Box,
 } from '@mui/material'
+import { fromSmallestUnit } from '../../../utils'
 
 interface SubTransactionDialogProps {
     open: boolean
-    maxAmount: number
+    maxAmount: bigint
     onSubmit: (amount: number) => void
     onCancel: () => void
 }
@@ -68,7 +69,7 @@ export const SubTransactionDialog: React.FC<SubTransactionDialogProps> = ({
                         onChange={(e) =>
                             handleFormChange('amount', e.target.value)
                         }
-                        helperText={`Maximum: ${maxAmount}`}
+                        helperText={`Maximum: ${fromSmallestUnit(maxAmount)}`}
                         fullWidth
                         required
                     />

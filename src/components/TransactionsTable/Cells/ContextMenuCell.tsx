@@ -15,7 +15,7 @@ interface ContextMenuCellProps {
     comment: string
     isHidden: boolean
     isCapitalized: boolean
-    maxSubTransactionAmount?: number
+    maxSubTransactionAmount?: bigint
 }
 
 export const ContextMenuCell: React.FC<ContextMenuCellProps> = ({
