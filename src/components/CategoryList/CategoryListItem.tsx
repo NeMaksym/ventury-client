@@ -3,6 +3,7 @@ import { ListItem, ListItemText, IconButton } from '@mui/material'
 import { Edit, Delete } from '@mui/icons-material'
 
 import { EditCategoryDialog } from './EditCategoryDialog'
+import { DeleteCategoryDialog } from './DeleteCategoryDialog'
 
 interface Category {
     id: string
@@ -21,6 +22,7 @@ export const CategoryListItem: React.FC<CategoryListItemProps> = ({
     onDelete,
 }) => {
     const [editDialogOpen, setEditDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
     const handleOpenEditDialog = () => {
         setEditDialogOpen(true)
@@ -28,6 +30,14 @@ export const CategoryListItem: React.FC<CategoryListItemProps> = ({
 
     const handleCloseEditDialog = () => {
         setEditDialogOpen(false)
+    }
+
+    const handleOpenDeleteDialog = () => {
+        setDeleteDialogOpen(true)
+    }
+
+    const handleCloseDeleteDialog = () => {
+        setDeleteDialogOpen(false)
     }
 
     const handleEditCategory = (newLabel: string) => {
@@ -62,7 +72,7 @@ export const CategoryListItem: React.FC<CategoryListItemProps> = ({
                             <Edit />
                         </IconButton>
                         <IconButton
-                            onClick={handleDeleteCategory}
+                            onClick={handleOpenDeleteDialog}
                             color="error"
                             size="small"
                         >
@@ -73,11 +83,19 @@ export const CategoryListItem: React.FC<CategoryListItemProps> = ({
             >
                 <ListItemText primary={category.label} />
             </ListItem>
+
             <EditCategoryDialog
                 open={editDialogOpen}
                 onClose={handleCloseEditDialog}
                 onSave={handleEditCategory}
                 initialLabel={category.label}
+            />
+
+            <DeleteCategoryDialog
+                open={deleteDialogOpen}
+                onClose={handleCloseDeleteDialog}
+                onConfirm={handleDeleteCategory}
+                categoryLabel={category.label}
             />
         </>
     )
