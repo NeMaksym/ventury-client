@@ -16,7 +16,8 @@ import {
     TransactionDeleteHandler,
     type TransactionRow,
 } from './types'
-import { TransactionHandlersProvider } from './context'
+import { TransactionProvider } from './context'
+import { Category } from '../../types'
 
 const TABLE_COLUMNS: { label: string; cellProps?: TableCellProps }[] = [
     { label: 'Date', cellProps: { sx: { width: 120 } } },
@@ -38,14 +39,19 @@ export interface TransactionsTableProps {
         onDelete: TransactionDeleteHandler
         onSubTransactionCreate: TransactionActionHandler<number>
     }
+    options: {
+        categories: Category[]
+        labels: string[]
+    }
 }
 
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     rows,
     handlers,
+    options,
 }) => {
     return (
-        <TransactionHandlersProvider handlers={handlers}>
+        <TransactionProvider handlers={handlers} options={options}>
             <TableContainer component={Paper} sx={{ mt: 2 }}>
                 <Table size="small">
                     <TableHead>
@@ -78,6 +84,6 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     </TableBody>
                 </Table>
             </TableContainer>
-        </TransactionHandlersProvider>
+        </TransactionProvider>
     )
 }
