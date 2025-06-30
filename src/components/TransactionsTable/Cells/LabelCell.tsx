@@ -6,24 +6,23 @@ import {
     createFilterOptions,
 } from '@mui/material'
 
-import { useTransactionHandlers } from '../context'
+import { useTransactionHandlers, useTransactionOptions } from '../context'
 
 const filter = createFilterOptions<string>()
 
 interface LabelCellProps {
-    options: string[]
     transactionId: string
     subTransactionId?: string
     labels: string[]
 }
 
 export const LabelCell: React.FC<LabelCellProps> = ({
-    options,
     transactionId,
     subTransactionId,
     labels,
 }) => {
     const { onLabelChange } = useTransactionHandlers()
+    const { labels: options } = useTransactionOptions()
 
     return (
         <TableCell onClick={(e) => e.stopPropagation()}>

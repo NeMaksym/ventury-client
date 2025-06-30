@@ -45,7 +45,6 @@ export const SubTransactionBodyRow: React.FC<SubTransactionRowProps> = ({
             category={data.category}
         />
         <LabelCell
-            options={[]}
             transactionId={data.transactionId}
             subTransactionId={data.subTransactionId}
             labels={data.labels}

@@ -32,11 +32,7 @@ export const TransactionBodyRow: React.FC<TransactionRowProps> = ({ data }) => (
             transactionId={data.transactionId}
             category={data.category}
         />
-        <LabelCell
-            options={[]}
-            transactionId={data.transactionId}
-            labels={data.labels}
-        />
+        <LabelCell transactionId={data.transactionId} labels={data.labels} />
         <ContextMenuCell
             transactionId={data.transactionId}
             comment={data.comment}
