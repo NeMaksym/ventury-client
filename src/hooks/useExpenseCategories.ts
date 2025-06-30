@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { Category } from '../types'
-import { useExpenseCategoriesService } from '../db'
+import { useExpenseCategoryService } from '../db'
 
 export interface UseExpenseCategoriesReturn {
     categories: Category[]
@@ -18,7 +18,7 @@ export function useExpenseCategories(): UseExpenseCategoriesReturn {
     const [error, setError] = useState<string | null>(null)
 
     const { getAllCategories, addCategory, renameCategory, removeCategory } =
-        useExpenseCategoriesService()
+        useExpenseCategoryService()
 
     useEffect(() => {
         getAllCategories()

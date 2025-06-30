@@ -4,7 +4,7 @@ import { useDb } from '../context/DbContext'
 import { Category } from '../types'
 import { Stores } from './connect'
 
-export interface ExpenseCategoriesService {
+export interface ExpenseCategoryService {
     getAllCategories: () => Promise<Category[]>
     getCategoryById: (id: string) => Promise<Category | undefined>
     addCategory: (label: string) => Promise<Category>
@@ -12,7 +12,7 @@ export interface ExpenseCategoriesService {
     renameCategory: (id: string, newLabel: string) => Promise<Category>
 }
 
-export function useExpenseCategoriesService(): ExpenseCategoriesService {
+export function useExpenseCategoryService(): ExpenseCategoryService {
     const { getDb } = useDb()
 
     const getAllCategories = useCallback(async (): Promise<Category[]> => {
