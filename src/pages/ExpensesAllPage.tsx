@@ -6,21 +6,25 @@ import {
     useFilterValues,
     useFilterOptions,
     useExpenseCategories,
+    useExpenseTable,
 } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
 
 export const ExpensesPage: React.FC = () => {
     const filterOptions = useFilterOptions()
+    const { categories } = useExpenseCategories()
+
     const { values: filterValues, handlers: filterHandlers } = useFilterValues()
 
     const {
         loading,
         error,
-        rows,
+        expenses,
+        subExpenses,
         handlers: expensesHandlers,
     } = useExpenses(filterValues)
 
-    const { categories } = useExpenseCategories()
+    const rows = useExpenseTable(expenses, subExpenses, filterValues)
 
     const renderContent = () => {
         if (loading) {

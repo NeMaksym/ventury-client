@@ -1,12 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useExpenseService, useSubExpenseService } from '../db'
-import {
-    Filters,
-    shouldShowTransaction,
-    shouldShowSubTransaction,
-} from './useFilterValues'
+import { Filters } from './useFilterValues'
 import { SystemTransaction, SystemSubTransaction } from '../types'
-import { TransactionRow } from '../components/TransactionsTable/types'
 import { toSmallestUnit } from '../utils/formatAmount'
 
 export const useExpenses = (filters: Filters) => {
@@ -28,9 +23,7 @@ export const useExpenses = (filters: Filters) => {
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
     const [expenses, setExpenses] = useState<SystemTransaction[]>([])
-    const [subExpensesMap, setSubExpensesMap] = useState<
-        Map<string, SystemSubTransaction[]>
-    >(new Map())
+    const [subExpenses, setSubExpenses] = useState<SystemSubTransaction[]>([])
 
     useEffect(() => {
         setLoading(true)
@@ -45,18 +38,8 @@ export const useExpenses = (filters: Filters) => {
                 getSubExpensesByDateRange(startDate, endDate),
             ])
 
-            setExpenses(
-                expenses.sort((a, b) => b.time.getTime() - a.time.getTime())
-            )
-
-            setSubExpensesMap(
-                subExpenses.reduce((acc, subExpense) => {
-                    const subExpenses = acc.get(subExpense.parentId) || []
-                    subExpenses.push(subExpense)
-                    acc.set(subExpense.parentId, subExpenses)
-                    return acc
-                }, new Map<string, SystemSubTransaction[]>())
-            )
+            setExpenses(expenses)
+            setSubExpenses(subExpenses)
         }
 
         fetchExpenses()
@@ -67,32 +50,6 @@ export const useExpenses = (filters: Filters) => {
         getSubExpensesByDateRange,
         filters.startDate,
         filters.endDate,
-    ])
-
-    const rows = useMemo<TransactionRow[]>(() => {
-        const result = []
-
-        for (const expense of expenses) {
-            const subExpenses = subExpensesMap.get(expense.id) || []
-
-            if (shouldShowTransaction(expense, filters)) {
-                result.push(expenseToTableRow(expense, subExpenses))
-            }
-
-            for (const subExpense of subExpenses) {
-                if (shouldShowSubTransaction(expense, subExpense, filters)) {
-                    result.push(subExpenseToTableRow(subExpense))
-                }
-            }
-        }
-
-        return result
-    }, [
-        expenses,
-        subExpensesMap,
-        filters.banks,
-        filters.categories,
-        filters.labels,
     ])
 
     const updateExpenseField = async (
@@ -133,17 +90,12 @@ export const useExpenses = (filters: Filters) => {
                 ...updates,
             })
 
-            setSubExpensesMap((prevSubExpensesMap) => {
-                const subExpenses =
-                    prevSubExpensesMap.get(subExpense.parentId) || []
-                const updatedSubExpenses = subExpenses.map((subExpense) =>
+            setSubExpenses((prevSubExpenses) => {
+                return prevSubExpenses.map((subExpense) =>
                     subExpense.id === subExpenseId
                         ? updatedSubExpense
                         : subExpense
                 )
-                const newSubExpensesMap = new Map(prevSubExpensesMap)
-                newSubExpensesMap.set(subExpense.parentId, updatedSubExpenses)
-                return newSubExpensesMap
             })
         } catch (err) {
             setError(err instanceof Error ? err.message : errorMessage)
@@ -246,15 +198,9 @@ export const useExpenses = (filters: Filters) => {
                 try {
                     if (subExpenseId) {
                         await deleteSubExpense(subExpenseId)
-                        setSubExpensesMap((prevSubExpensesMap) => {
-                            const subExpenses =
-                                prevSubExpensesMap.get(expenseId) || []
-                            return new Map(prevSubExpensesMap).set(
-                                expenseId,
-                                subExpenses.filter(
-                                    (subExpense) =>
-                                        subExpense.id !== subExpenseId
-                                )
+                        setSubExpenses((prevSubExpenses) => {
+                            return prevSubExpenses.filter(
+                                (subExpense) => subExpense.id !== subExpenseId
                             )
                         })
                     } else {
@@ -309,13 +255,8 @@ export const useExpenses = (filters: Filters) => {
                         comment: '',
                     })
 
-                    setSubExpensesMap((prevSubExpensesMap) => {
-                        const subExpenses =
-                            prevSubExpensesMap.get(newSubExpense.parentId) || []
-                        return new Map(prevSubExpensesMap).set(
-                            newSubExpense.parentId,
-                            [...subExpenses, newSubExpense]
-                        )
+                    setSubExpenses((prevSubExpenses) => {
+                        return [...prevSubExpenses, newSubExpense]
                     })
                 } catch (err) {
                     setError(
@@ -340,36 +281,5 @@ export const useExpenses = (filters: Filters) => {
         ]
     )
 
-    return { loading, error, rows, handlers }
-}
-
-function expenseToTableRow(
-    expense: SystemTransaction,
-    subExpenses: SystemSubTransaction[]
-): SystemTransaction {
-    const subExpensesSum = subExpenses.reduce(
-        (sum, subExpense) => sum + subExpense.amount,
-        0n
-    )
-    const subExpensesRefSum = subExpenses.reduce(
-        (sum, sub) => sum + sub.referenceAmount,
-        0n
-    )
-    const expenseAmount = expense.amount - subExpensesSum
-    const expenseRefAmount = expense.referenceAmount - subExpensesRefSum
-
-    return {
-        ...expense,
-        amount: -expenseAmount,
-        referenceAmount: expenseRefAmount,
-    }
-}
-
-function subExpenseToTableRow(
-    subExpense: SystemSubTransaction
-): SystemSubTransaction {
-    return {
-        ...subExpense,
-        amount: -subExpense.amount,
-    }
+    return { loading, error, expenses, subExpenses, handlers }
 }
