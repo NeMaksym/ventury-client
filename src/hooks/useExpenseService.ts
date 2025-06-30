@@ -11,10 +11,12 @@ export interface ExpenseService {
         startDate: Date,
         endDate: Date
     ) => Promise<SystemTransaction[]>
+    getExpensesByCategory: (category: string) => Promise<SystemTransaction[]>
     getExpenseById: (id: string) => Promise<SystemTransaction | undefined>
     addExpense: (expense: SystemTransaction) => Promise<SystemTransaction>
     updateExpense: (expense: SystemTransaction) => Promise<SystemTransaction>
     deleteExpense: (id: string) => Promise<void>
+    resetCategory: (category: string) => Promise<void>
 }
 
 export function useExpenseService(): ExpenseService {
@@ -73,6 +75,27 @@ export function useExpenseService(): ExpenseService {
                 return await timeIndex.getAll(range)
             } catch (error) {
                 console.error('Failed to get expenses by date range:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
+    const getExpensesByCategory = useCallback(
+        async (category: string): Promise<SystemTransaction[]> => {
+            if (!category) {
+                return []
+            }
+
+            const db = await getDb()
+            const tx = db.transaction(Stores.EXPENSES, 'readonly')
+            const store = tx.objectStore(Stores.EXPENSES)
+            const categoryIndex = store.index('category')
+
+            try {
+                return await categoryIndex.getAll(category)
+            } catch (error) {
+                console.error('Failed to get expenses by category:', error)
                 throw error
             }
         },
@@ -157,13 +180,32 @@ export function useExpenseService(): ExpenseService {
         [getDb]
     )
 
+    const resetCategory = useCallback(
+        async (category: string): Promise<void> => {
+            try {
+                const expenses = await getExpensesByCategory(category)
+
+                for (const expense of expenses) {
+                    const updatedExpense = { ...expense, category: '' }
+                    await updateExpense(updatedExpense)
+                }
+            } catch (error) {
+                console.error('Failed to reset category:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
     return {
         expenseExists,
         getAllExpenses,
         getExpensesByDateRange,
+        getExpensesByCategory,
         getExpenseById,
         addExpense,
         updateExpense,
         deleteExpense,
+        resetCategory,
     }
 }

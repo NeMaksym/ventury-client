@@ -1,11 +1,7 @@
 import { useMemo } from 'react'
+import { Category } from '../types'
 
 export interface Bank {
-    value: string
-    label: string
-}
-
-export interface Category {
     value: string
     label: string
 }
@@ -20,10 +16,10 @@ export const useFilterOptions = () => {
                 { value: 'raiffeisen', label: 'Raiffeisen' },
             ] as Bank[],
             categories: [
-                { value: 'food', label: 'Food' },
-                { value: 'transport', label: 'Transport' },
-                { value: 'entertainment', label: 'Entertainment' },
-                { value: 'shopping', label: 'Shopping' },
+                { id: 'food', label: 'Food' },
+                { id: 'transport', label: 'Transport' },
+                { id: 'entertainment', label: 'Entertainment' },
+                { id: 'shopping', label: 'Shopping' },
             ] as Category[],
             labels: [
                 'Work',

@@ -12,6 +12,9 @@ export interface SubExpenseService {
     getSubExpensesByParentId: (
         parentId: string
     ) => Promise<SystemSubTransaction[]>
+    getSubExpensesByCategory: (
+        category: string
+    ) => Promise<SystemSubTransaction[]>
     getSubExpenseById: (id: string) => Promise<SystemSubTransaction | undefined>
     addSubExpense: (
         subExpense: SystemSubTransaction
@@ -20,6 +23,7 @@ export interface SubExpenseService {
         subExpense: SystemSubTransaction
     ) => Promise<SystemSubTransaction>
     deleteSubExpense: (id: string) => Promise<void>
+    resetCategory: (category: string) => Promise<void>
 }
 
 export function useSubExpenseService(): SubExpenseService {
@@ -60,6 +64,23 @@ export function useSubExpenseService(): SubExpenseService {
                 return await parentIdIndex.getAll(parentId)
             } catch (error) {
                 console.error('Failed to get sub-expenses by parent ID:', error)
+                throw error
+            }
+        },
+        [getDb]
+    )
+
+    const getSubExpensesByCategory = useCallback(
+        async (category: string): Promise<SystemSubTransaction[]> => {
+            const db = await getDb()
+            const tx = db.transaction(Stores.SUB_EXPENSES, 'readonly')
+            const store = tx.objectStore(Stores.SUB_EXPENSES)
+            const categoryIndex = store.index('category')
+
+            try {
+                return await categoryIndex.getAll(category)
+            } catch (error) {
+                console.error('Failed to get sub-expenses by category:', error)
                 throw error
             }
         },
@@ -144,12 +165,26 @@ export function useSubExpenseService(): SubExpenseService {
         [getDb]
     )
 
+    const resetCategory = useCallback(
+        async (category: string): Promise<void> => {
+            const subExpenses = await getSubExpensesByCategory(category)
+
+            for (const subExpense of subExpenses) {
+                const updatedSubExpense = { ...subExpense, category: '' }
+                await updateSubExpense(updatedSubExpense)
+            }
+        },
+        [getDb]
+    )
+
     return {
         getSubExpensesByDateRange,
         getSubExpensesByParentId,
+        getSubExpensesByCategory,
         getSubExpenseById,
         addSubExpense,
         updateSubExpense,
         deleteSubExpense,
+        resetCategory,
     }
 }

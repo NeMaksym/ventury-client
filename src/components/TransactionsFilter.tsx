@@ -8,7 +8,8 @@ import {
     Stack,
 } from '@mui/material'
 
-import { Filters, Bank, Category } from '../hooks'
+import { Filters, Bank } from '../hooks'
+import { Category } from '../types'
 
 interface TransactionsFilterProps {
     options: {
@@ -100,10 +101,18 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                             typeof value === 'string' ? value.split(',') : value
                         handlers.onCategoriesChange(selectedCategories)
                     }}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected) => {
+                        return selected
+                            .map(
+                                (id) =>
+                                    options.categories.find((c) => c.id === id)
+                                        ?.label
+                            )
+                            .join(', ')
+                    }}
                 >
-                    {options.categories.map(({ value, label }) => (
-                        <MenuItem key={value} value={value}>
+                    {options.categories.map(({ id, label }) => (
+                        <MenuItem key={id} value={id}>
                             {label}
                         </MenuItem>
                     ))}
