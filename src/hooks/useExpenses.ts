@@ -177,7 +177,7 @@ export const useExpenses = (filters: Filters) => {
 
             onCategoryChange: (
                 expenseId: string,
-                category: string | null,
+                category: string,
                 subExpenseId?: string
             ) => {
                 return subExpenseId
@@ -307,7 +307,7 @@ export const useExpenses = (filters: Filters) => {
                         id: crypto.randomUUID(),
                         amount: -toSmallestUnit(amount),
                         referenceAmount: toSmallestUnit(amount * exchangeRate),
-                        category: null,
+                        category: '',
                         capitalized: false,
                         hide: false,
                         labels: [],

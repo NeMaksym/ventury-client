@@ -7,15 +7,11 @@ import {
     SelectChangeEvent,
 } from '@mui/material'
 import { useTransactionHandlers } from '../context'
+import { Category } from '../../../types'
 
 const EMPTY_CATEGORY = ''
 
-interface CategoryItem {
-    id: string
-    label: string
-}
-
-const CATEGORIES: CategoryItem[] = [
+const CATEGORIES: Category[] = [
     { id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', label: '🎓 Education' },
     {
         id: 'b2c3d4e5-f6g7-8901-bcde-f23456789012',
@@ -42,7 +38,7 @@ const CATEGORIES: CategoryItem[] = [
 interface CategoryCellProps {
     transactionId: string
     subTransactionId?: string
-    category: string | null
+    category: string
 }
 
 export const CategoryCell: React.FC<CategoryCellProps> = ({
@@ -53,11 +49,7 @@ export const CategoryCell: React.FC<CategoryCellProps> = ({
     const { onCategoryChange } = useTransactionHandlers()
 
     const handleChange = (e: SelectChangeEvent<string>) => {
-        onCategoryChange(
-            transactionId,
-            e.target.value === EMPTY_CATEGORY ? null : e.target.value,
-            subTransactionId
-        )
+        onCategoryChange(transactionId, e.target.value, subTransactionId)
     }
 
     return (
@@ -66,7 +58,7 @@ export const CategoryCell: React.FC<CategoryCellProps> = ({
                 <Select
                     fullWidth
                     displayEmpty
-                    value={category || EMPTY_CATEGORY}
+                    value={category}
                     onChange={handleChange}
                 >
                     <MenuItem value={EMPTY_CATEGORY}>

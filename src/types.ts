@@ -4,6 +4,17 @@
 export type Bank = 'mono' | 'private'
 
 /**
+ * Represents a category in the system.
+ * @interface Category
+ * @property {string} id - Unique identifier for the category
+ * @property {string} label - Human-readable name of the category
+ */
+export type Category = {
+    id: string
+    label: string
+}
+
+/**
  * Represents different types of account identifiers.
  * @type AccountId
  * @property {Object} iban - International Bank Account Number identifier
@@ -67,7 +78,7 @@ export interface SourceTransaction {
  * @property {Bank} bank - The bank that originated this transaction
  * @property {bigint} referenceAmount - Reference amount in the smallest currency unit for comparison
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
- * @property {string | null} category - System-assigned category for the transaction, null if uncategorized
+ * @property {Category['id'] | ''} category - System-assigned category for the transaction, empty string if uncategorized
  * @property {string[]} labels - Array of system-assigned labels or tags
  */
 export interface SystemTransaction
@@ -89,7 +100,7 @@ export interface SystemTransaction
     bank: Bank
     referenceAmount: bigint
     referenceCurrencyCode: number
-    category: string | null
+    category: Category['id'] | ''
     capitalized: boolean
     hide: boolean
     labels: string[]

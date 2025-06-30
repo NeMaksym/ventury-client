@@ -31,7 +31,7 @@ export interface TransactionsTableProps {
     rows: TransactionRow[]
     handlers: {
         onCommentChange: TransactionActionHandler<string>
-        onCategoryChange: TransactionActionHandler<string | null>
+        onCategoryChange: TransactionActionHandler<string>
         onLabelChange: TransactionActionHandler<string[]>
         onHideChange: TransactionActionHandler<boolean>
         onCapitalizeChange: TransactionActionHandler<boolean>

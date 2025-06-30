@@ -3,7 +3,7 @@ import { TransactionActionHandler, TransactionDeleteHandler } from './types'
 
 export interface TransactionHandlers {
     onCommentChange: TransactionActionHandler<string>
-    onCategoryChange: TransactionActionHandler<string | null>
+    onCategoryChange: TransactionActionHandler<string>
     onLabelChange: TransactionActionHandler<string[]>
     onHideChange: TransactionActionHandler<boolean>
     onCapitalizeChange: TransactionActionHandler<boolean>
