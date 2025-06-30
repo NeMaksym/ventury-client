@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useDb } from '../context/DbContext'
 import { SystemSubTransaction } from '../types'
-import { Stores } from '../db/connect'
+import { Stores } from './connect'
 
 export interface SubExpenseService {
     getSubExpensesByDateRange: (

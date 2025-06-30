@@ -3,12 +3,9 @@ import React, { useEffect } from 'react'
 import { asyncPipe, CancellationError } from '../../../utils/asyncPipe'
 import { Bank, SourceTransaction } from '../../../types'
 
+import { useMessages } from '../../../hooks'
+import { useExpenseService, useIncomeService } from '../../../db'
 import { loadExchangeRates, toSystemTransactions, addToDB } from '../pipeline'
-import {
-    useExpenseService,
-    useIncomeService,
-    useMessages,
-} from '../../../hooks'
 
 interface ResultsRendererProps {
     bank: Bank

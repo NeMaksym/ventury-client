@@ -2,11 +2,8 @@ import React from 'react'
 import { Typography, Box } from '@mui/material'
 
 import { CategoryList } from '../components'
-import {
-    useExpenseCategories,
-    useExpenseService,
-    useSubExpenseService,
-} from '../hooks'
+import { useExpenseCategories } from '../hooks'
+import { useExpenseService, useSubExpenseService } from '../db'
 
 export const SettingsPage: React.FC = () => {
     const {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { Category } from '../types'
-import { useExpenseCategoriesService } from './useExpenseCategoriesService'
+import { useExpenseCategoriesService } from '../db'
 
 export interface UseExpenseCategoriesReturn {
     categories: Category[]

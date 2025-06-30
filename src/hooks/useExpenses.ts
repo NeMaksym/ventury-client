@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useExpenseService } from './useExpenseService'
-import { useSubExpenseService } from './useSubExpenseService'
+import { useExpenseService, useSubExpenseService } from '../db'
 import {
     Filters,
     shouldShowTransaction,

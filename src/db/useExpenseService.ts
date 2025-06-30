@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useDb } from '../context/DbContext'
 import { SystemTransaction } from '../types'
-import { Stores } from '../db/connect'
+import { Stores } from './connect'
 
 export interface ExpenseService {
     expenseExists: (expense: SystemTransaction) => Promise<boolean>

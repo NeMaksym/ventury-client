@@ -1,4 +1,4 @@
-import { ExpenseService, IncomeService } from '../../../hooks'
+import { ExpenseService, IncomeService } from '../../../db'
 import { ToSystemTransactionsDTO } from './toSystemTransactions'
 import { split, splitAsync } from '../../../utils'
 import { SystemTransaction } from '../../../types'
