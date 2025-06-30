@@ -244,14 +244,14 @@ export const useExpenses = (filters: Filters) => {
                         description: expense.description,
                         currencyCode: expense.currencyCode,
                         referenceCurrencyCode: expense.referenceCurrencyCode,
+                        category: expense.category,
+                        labels: expense.labels,
                         // own
                         id: crypto.randomUUID(),
                         amount: -toSmallestUnit(amount),
                         referenceAmount: toSmallestUnit(amount * exchangeRate),
-                        category: '',
                         capitalized: false,
                         hide: false,
-                        labels: [],
                         comment: '',
                     })
 
