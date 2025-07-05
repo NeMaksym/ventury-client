@@ -1,10 +1,12 @@
 import { ExpensesPage } from './ExpensesAllPage'
 import { UploadPage } from './UploadPage'
 import { SettingsPage } from './SettingsPage'
+import { ExpensesGraphPage } from './ExpensesGraphPage'
 
 export const enum PagePath {
     UPLOAD = '/upload',
     EXPENSES = '/expenses',
+    EXPENSES_GRAPH = '/expenses/graph',
     SETTINGS = '/settings',
 }
 export interface PageRoute {
@@ -26,6 +28,11 @@ export const expensesPages: PageRoute[] = [
         element: <ExpensesPage />,
         name: 'Expenses',
         path: PagePath.EXPENSES,
+    },
+    {
+        element: <ExpensesGraphPage />,
+        name: 'Graph',
+        path: PagePath.EXPENSES_GRAPH,
     },
 ]
 

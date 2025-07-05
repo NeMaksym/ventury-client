@@ -34,16 +34,27 @@ export const NavList: React.FC = () => {
                         </ListItemButton>
                     </ListItem>
                 ))}
+
+                <ListItem disablePadding>
+                    <ListItemButton
+                        onClick={() => navigate(expensesPages[0]?.path ?? '')}
+                    >
+                        <ListItemText primary="Expenses" />
+                    </ListItemButton>
+                </ListItem>
+
                 {expensesPages.map(({ path, name }) => (
                     <ListItem key={path} disablePadding>
                         <ListItemButton
                             onClick={() => navigate(path)}
                             selected={location.pathname === path}
+                            sx={{ pl: 4 }}
                         >
                             <ListItemText primary={name} />
                         </ListItemButton>
                     </ListItem>
                 ))}
+
                 {settingsPages.map(({ path, name }) => (
                     <ListItem key={path} disablePadding>
                         <ListItemButton
