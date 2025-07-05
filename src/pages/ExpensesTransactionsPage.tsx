@@ -10,7 +10,7 @@ import {
 } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
 
-export const ExpensesPage: React.FC = () => {
+export const ExpensesTransactionsPage: React.FC = () => {
     const { categories } = useExpenseCategories()
 
     const { values: filterValues, handlers: filterHandlers } = useFilterValues()
@@ -70,7 +70,7 @@ export const ExpensesPage: React.FC = () => {
     return (
         <Box sx={{ padding: 2 }}>
             <Typography variant="h4" gutterBottom>
-                Expenses
+                Transactions
             </Typography>
             {renderContent()}
         </Box>

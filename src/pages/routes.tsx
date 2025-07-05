@@ -1,4 +1,4 @@
-import { ExpensesPage } from './ExpensesAllPage'
+import { ExpensesTransactionsPage } from './ExpensesTransactionsPage'
 import { UploadPage } from './UploadPage'
 import { SettingsPage } from './SettingsPage'
 import { ExpensesGraphPage } from './ExpensesGraphPage'
@@ -6,6 +6,7 @@ import { ExpensesGraphPage } from './ExpensesGraphPage'
 export const enum PagePath {
     UPLOAD = '/upload',
     EXPENSES = '/expenses',
+    EXPENSES_TRANSACTIONS = '/expenses/transactions',
     EXPENSES_GRAPH = '/expenses/graph',
     SETTINGS = '/settings',
 }
@@ -25,9 +26,9 @@ export const uploadPage: PageRoute[] = [
 
 export const expensesPages: PageRoute[] = [
     {
-        element: <ExpensesPage />,
-        name: 'Expenses',
-        path: PagePath.EXPENSES,
+        element: <ExpensesTransactionsPage />,
+        name: 'Transactions',
+        path: PagePath.EXPENSES_TRANSACTIONS,
     },
     {
         element: <ExpensesGraphPage />,

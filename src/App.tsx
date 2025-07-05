@@ -29,6 +29,14 @@ export function App() {
                                 />
                             ))}
                             <Route
+                                path={PagePath.EXPENSES}
+                                element={
+                                    <Navigate
+                                        to={PagePath.EXPENSES_TRANSACTIONS}
+                                    />
+                                }
+                            />
+                            <Route
                                 path="/"
                                 element={
                                     <Navigate to={PagePath.UPLOAD} replace />
