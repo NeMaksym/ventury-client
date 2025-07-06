@@ -1,56 +1,22 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useExpenseService, useSubExpenseService } from '../db'
-import { Filters } from './useFilterValues'
 import { SystemTransaction, SystemSubTransaction } from '../types'
 import { toSmallestUnit } from '../utils/formatAmount'
 
-export const useExpenses = (filters: Filters) => {
-    const {
-        getExpensesByDateRange,
-        getExpenseById,
-        updateExpense,
-        deleteExpense,
-    } = useExpenseService()
+export const useExpensesHandlers = (
+    setExpenses: React.Dispatch<React.SetStateAction<SystemTransaction[]>>,
+    setSubExpenses: React.Dispatch<React.SetStateAction<SystemSubTransaction[]>>
+) => {
+    const [error, setError] = useState<string | null>(null)
+
+    const { getExpenseById, updateExpense, deleteExpense } = useExpenseService()
 
     const {
-        getSubExpensesByDateRange,
         getSubExpenseById,
         updateSubExpense,
         deleteSubExpense,
         addSubExpense,
     } = useSubExpenseService()
-
-    const [loading, setLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | null>(null)
-    const [expenses, setExpenses] = useState<SystemTransaction[]>([])
-    const [subExpenses, setSubExpenses] = useState<SystemSubTransaction[]>([])
-
-    useEffect(() => {
-        setLoading(true)
-        setError(null)
-
-        async function fetchExpenses() {
-            const startDate = new Date(filters.startDate + 'T00:00:00')
-            const endDate = new Date(filters.endDate + 'T23:59:59')
-
-            const [expenses, subExpenses] = await Promise.all([
-                getExpensesByDateRange(startDate, endDate),
-                getSubExpensesByDateRange(startDate, endDate),
-            ])
-
-            setExpenses(expenses)
-            setSubExpenses(subExpenses)
-        }
-
-        fetchExpenses()
-            .catch((err) => setError(err.message))
-            .finally(() => setLoading(false))
-    }, [
-        getExpensesByDateRange,
-        getSubExpensesByDateRange,
-        filters.startDate,
-        filters.endDate,
-    ])
 
     const updateExpenseField = async (
         expenseId: string,
@@ -281,5 +247,5 @@ export const useExpenses = (filters: Filters) => {
         ]
     )
 
-    return { loading, error, expenses, subExpenses, handlers }
+    return { error, handlers }
 }

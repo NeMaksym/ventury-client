@@ -2,7 +2,8 @@ import React from 'react'
 import { Typography, Box, Stack } from '@mui/material'
 
 import {
-    useExpenses,
+    useExpensesData,
+    useExpensesHandlers,
     useFilterValues,
     useFilterOptions,
     useExpenseCategories,
@@ -17,11 +18,15 @@ export const ExpensesTransactionsPage: React.FC = () => {
 
     const {
         loading,
-        error,
+        error: dataError,
         expenses,
         subExpenses,
-        handlers: expensesHandlers,
-    } = useExpenses(filterValues)
+        setExpenses,
+        setSubExpenses,
+    } = useExpensesData(filterValues.startDate, filterValues.endDate)
+
+    const { error: handlerError, handlers: expensesHandlers } =
+        useExpensesHandlers(setExpenses, setSubExpenses)
 
     const { rows, totalAmount, totalRefAmount } = useExpenseTable(
         expenses,
@@ -36,8 +41,12 @@ export const ExpensesTransactionsPage: React.FC = () => {
             return <Typography>Loading transactions...</Typography>
         }
 
-        if (error) {
-            return <Typography color="error">Error: {error}</Typography>
+        if (dataError || handlerError) {
+            return (
+                <Typography color="error">
+                    Error: {dataError || handlerError}
+                </Typography>
+            )
         }
 
         return (
