@@ -2,18 +2,16 @@ import React from 'react'
 import { Typography, Box } from '@mui/material'
 
 import { CategoryList } from '../components'
-import { useExpenseCategories } from '../hooks'
+import { useExpenseCategories, useExpenseCategoriesHandlers } from '../hooks'
 import { useExpenseService, useSubExpenseService } from '../db'
 
 export const SettingsPage: React.FC = () => {
-    const {
-        categories,
-        handleCategoryAdd,
-        handleCategoryRename,
-        handleCategoryDelete,
-    } = useExpenseCategories()
     const expenseService = useExpenseService()
     const subExpenseService = useSubExpenseService()
+
+    const { categories, setCategories } = useExpenseCategories()
+    const { handleCategoryAdd, handleCategoryRename, handleCategoryDelete } =
+        useExpenseCategoriesHandlers(setCategories)
 
     return (
         <Box sx={{ padding: 2 }}>
