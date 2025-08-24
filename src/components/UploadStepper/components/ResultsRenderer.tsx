@@ -5,8 +5,12 @@ import { Bank, SourceTransaction } from '../../../types'
 
 import { useMessages } from '../../../hooks'
 import { useExpenseService, useIncomeService } from '../../../db'
-import { loadExchangeRates, toSystemTransactions, addToDB } from '../pipeline'
-
+import {
+    loadExchangeRates,
+    toSystemTransactions,
+    addToDB,
+    validate,
+} from '../pipeline'
 interface ResultsRendererProps {
     bank: Bank
     sourceTransactions: SourceTransaction[]
@@ -27,6 +31,7 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
 
         asyncPipe(
             { sourceTransactions, addMessage, bank },
+            validate,
             loadExchangeRates,
             toSystemTransactions,
             addToDB({ expenseService, incomeService }),

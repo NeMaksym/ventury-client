@@ -1,13 +1,7 @@
 import { exchangeRate } from '../../../utils/exchangeRate'
-import { AddMessage } from '../../../hooks/useMessages'
-import { Bank, SourceTransaction } from '../../../types'
+import { SourceTransaction } from '../../../types'
 import { currency } from '../../../utils/currency'
-
-interface PipelineInput {
-    sourceTransactions: SourceTransaction[]
-    addMessage: AddMessage
-    bank: Bank
-}
+import { type PipelineInput } from './validate'
 
 type ExchangeRateMap = Map<string, number>
 
