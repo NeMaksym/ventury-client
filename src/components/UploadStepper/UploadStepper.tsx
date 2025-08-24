@@ -37,6 +37,8 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
                     />
                 )
             case 1: {
+                // TODO: Create layout page for uploader. Plugin should provide only the upload logic.
+                // And layout should be responsible for shared elements (header, button, mb bank/country icons)
                 const UploaderComponent = plugins[bank].Uploader
                 return (
                     <UploaderComponent uploadData={(data) => setData(data)} />

@@ -132,6 +132,8 @@ export interface UploaderProps {
     uploadData: (data: SourceTransaction[]) => void
 }
 
+// TODO: Add bank icon
+// TODO: Add .md upload instruction
 /**
  * Represents a bank plugin configuration for the system.
  * @interface BankPlugin

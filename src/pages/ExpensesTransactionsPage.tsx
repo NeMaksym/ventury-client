@@ -28,6 +28,8 @@ export const ExpensesTransactionsPage: React.FC = () => {
     const { error: handlerError, handlers: expensesHandlers } =
         useExpensesHandlers(setExpenses, setSubExpenses)
 
+    // "totalAmount" won't work if transactions of different currencies are present
+    // TODO: Count total by currency
     const { rows, totalAmount, totalRefAmount } = useExpenseTable(
         expenses,
         subExpenses,
@@ -52,6 +54,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
         return (
             <Stack spacing={4}>
                 <Stack direction="row" spacing={2}>
+                    {/* TODO: Make this section collapsable */}
                     <Typography variant="body1" gutterBottom>
                         Total transactions: {rows.length}
                     </Typography>

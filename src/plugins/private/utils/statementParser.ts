@@ -110,6 +110,8 @@ class PrivateBankStatementRow {
         return operationCurrency
     }
 
+    // Data-time isn't in UTC. Likely it's in local time. May affect the duplicate find logic (because it uses time as one of parameters)
+    // TODO: Think how to address via UX
     private getTimestamp(): Date {
         const [datePart, timePart] = this.dateTime.split(' ')
 
