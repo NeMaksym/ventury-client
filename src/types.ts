@@ -15,29 +15,17 @@ export type Category = {
 }
 
 /**
- * Represents different types of account identifiers.
- * @type AccountId
- * @property {Object} iban - International Bank Account Number identifier
- * @property {'iban'} iban.type - Identifier type set to 'iban'
- * @property {string} iban.value - The IBAN string value
- * @property {Object} maskedPan - Masked Primary Account Number identifier
- * @property {'maskedPan'} maskedPan.type - Identifier type set to 'maskedPan'
+ * Represents different types of account data.
+ * @type Account
+ * @property {Object} maskedPan - Masked Primary Account Number
  * @property {string} maskedPan.value - The masked PAN string value
+ * @property {Object} iban - International Bank Account Number
+ * @property {string} iban.value.iban - The IBAN string value
+ * @property {string[]} iban.value.maskedPan - Array of masked PANs. Empty if no cards. Some accounts have multiple cards.
  */
-type AccountId =
-    | { type: 'iban'; value: string }
+type Account =
     | { type: 'maskedPan'; value: string }
-
-/**
- * Represents commission information for a transaction.
- * @interface Commission
- * @property {bigint} rate - Commission rate in the smallest currency unit
- * @property {number} currencyCode - Numerical code representing the commission currency
- */
-interface Commission {
-    rate: bigint
-    currencyCode: number
-}
+    | { type: 'iban'; value: { iban: string; maskedPan: string[] } }
 
 /**
  * Represents the structure for a financial transaction from external sources.
@@ -49,7 +37,7 @@ interface Commission {
  * @property {number} currencyCode - Numerical account currency code (ISO 4217)
  * @property {number} operationAmount - Operation amount in the smallest currency unit
  * @property {number} operationCurrencyCode - Numerical operation currency code (ISO 4217)
- * @property {AccountId} accountId - Account identifier
+ * @property {Account} account - Account info
  * @property {string} [comment] - Optional additional comments about the transaction
  * @property {number} [commissionRate] - Optional commission rate for the transaction in the smallest *account* currency unit.
  * @property {number} [mcc] - Optional Merchant Category Code (MCC) for categorizing the transaction
@@ -63,7 +51,7 @@ export interface SourceTransaction {
     currencyCode: number
     operationAmount: number
     operationCurrencyCode: number
-    accountId: AccountId
+    account: Account
     comment?: string
     commissionRate?: number
     mcc?: number
@@ -91,7 +79,7 @@ export interface SystemTransaction
         | 'currencyCode'
         | 'operationAmount'
         | 'operationCurrencyCode'
-        | 'accountId'
+        | 'account'
         | 'comment'
         | 'mcc'
         | 'hold'
@@ -111,7 +99,6 @@ export interface SystemTransaction
  * Represents a sub-transaction of a system transaction.
  * @interface SystemSubTransaction
  * @extends SystemTransaction
- * @property {string} id - Unique identifier for the sub-transaction
  * @property {string} parentId - Unique identifier for the parent transaction
  */
 export interface SystemSubTransaction
@@ -122,7 +109,7 @@ export interface SystemSubTransaction
         | 'description'
         | 'amount'
         | 'currencyCode'
-        | 'accountId'
+        | 'account'
         | 'bank'
         | 'referenceAmount'
         | 'referenceCurrencyCode'

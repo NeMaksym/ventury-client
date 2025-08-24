@@ -204,7 +204,7 @@ export const useExpensesHandlers = (
                     const newSubExpense = await addSubExpense({
                         // inherited
                         parentId: expenseId,
-                        accountId: expense.accountId,
+                        account: expense.account,
                         bank: expense.bank,
                         time: expense.time,
                         description: expense.description,

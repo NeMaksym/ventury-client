@@ -150,7 +150,7 @@ class PrivateBankStatementRow {
         return Number(code.number)
     }
 
-    private getAccountId(): SourceTransaction['accountId'] {
+    private getAccount(): SourceTransaction['account'] {
         return {
             type: 'maskedPan',
             value: this.maskedPan.trim(),
@@ -168,7 +168,7 @@ class PrivateBankStatementRow {
             operationCurrencyCode: this.toCurrencyCodeNumber(
                 this.operationCurrency
             ),
-            accountId: this.getAccountId(),
+            account: this.getAccount(),
         }
     }
 }
