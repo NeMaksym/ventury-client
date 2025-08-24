@@ -1,5 +1,3 @@
-import { SourceTransaction } from '../../types'
-
 /**
  * Represents client information from the Mono API
  * @interface MonoAPIClientInfo
@@ -9,7 +7,7 @@ import { SourceTransaction } from '../../types'
  * @property {string} permissions - List of permissions granted by the service (1 letter per permission) (e.g. "psfj")
  * @property {MonoAPIAccount[]} accounts - List of available accounts
  */
-interface MonoAPIClientInfo {
+export interface MonoAPIClientInfo {
     clientId: string
     name: string
     webHookUrl: string
@@ -22,8 +20,8 @@ interface MonoAPIClientInfo {
  * @interface MonoAPIAccount
  * @property {string} id - Account identifier (e.g. "kKGVoZuHWzqVoZuH")
  * @property {string} sendId - Identifier for send.monobank.ua/{sendId} service (e.g. "uHWzqVoZuH")
- * @property {bigint} balance - Account balance in minimal currency units (cents) (e.g. 10000000)
- * @property {bigint} creditLimit - Credit limit (e.g. 10000000)
+ * @property {number} balance - Account balance in minimal currency units (cents) (e.g. 10000000)
+ * @property {number} creditLimit - Credit limit (e.g. 10000000)
  * @property {MonoAPIAccountType} type - Account type (e.g. "black")
  * @property {number} currencyCode - Currency code according to ISO 4217 (e.g. 980)
  * @property {MonoAPICashbackType} cashbackType - Type of cashback accrued to the account (e.g. "UAH")
@@ -33,8 +31,8 @@ interface MonoAPIClientInfo {
 interface MonoAPIAccount {
     id: string
     sendId: string
-    balance: bigint
-    creditLimit: bigint
+    balance: number
+    creditLimit: number
     type: MonoAPIAccountType
     currencyCode: number
     cashbackType: MonoAPICashbackType
@@ -56,17 +54,17 @@ type MonoAPICashbackType = 'None' | 'UAH' | 'Miles'
  * Represents a financial transaction from the Mono API
  * @interface MonoAPITransaction
  * @property {string} id - Unique transaction ID (e.g. "ZuHWzqkKGVo=")
- * @property {bigint} time - Transaction timestamp in Unix seconds (e.g. 1554466347)
+ * @property {number} time - Transaction timestamp in Unix seconds (e.g. 1554466347)
  * @property {string} description - Transaction description (e.g. "Покупка щастя")
  * @property {number} mcc - Merchant Category Code according to ISO 18245 (user modified) (e.g. 7997)
  * @property {number} originalMcc - Original Merchant Category Code according to ISO 18245 (e.g. 7997)
  * @property {boolean} hold - Transaction hold status
- * @property {bigint} amount - Amount in account currency (in minimal currency units) (e.g. -95000)
- * @property {bigint} operationAmount - Amount in transaction currency (in minimal currency units) (e.g. -95000)
+ * @property {number} amount - Amount in account currency (in minimal currency units) (e.g. -95000)
+ * @property {number} operationAmount - Amount in transaction currency (in minimal currency units) (e.g. -95000)
  * @property {number} currencyCode - Currency code according to ISO 4217 (e.g. 980 for UAH)
- * @property {bigint} commissionRate - Commission amount in minimal currency units (e.g. 0)
- * @property {bigint} cashbackAmount - Cashback amount in minimal currency units (e.g. 19000)
- * @property {bigint} balance - Account balance in minimal currency units (e.g. 10050000)
+ * @property {number} commissionRate - Commission amount in minimal currency units (e.g. 0)
+ * @property {number} cashbackAmount - Cashback amount in minimal currency units (e.g. 19000)
+ * @property {number} balance - Account balance in minimal currency units (e.g. 10050000)
  * @property {string} [comment] - User-provided transaction comment (e.g. "За каву")
  * @property {string} [receiptId] - Receipt number for check.gov.ua (e.g. "XXXX-XXXX-XXXX-XXXX")
  * @property {string} [invoiceId] - Private entrepreneur receipt number for incoming payments (e.g. "2103.в.27")
@@ -76,17 +74,17 @@ type MonoAPICashbackType = 'None' | 'UAH' | 'Miles'
  */
 export interface MonoAPITransaction {
     id: string
-    time: bigint
+    time: number
     description: string
     mcc: number
     originalMcc: number
     hold: boolean
-    amount: bigint
-    operationAmount: bigint
+    amount: number
+    operationAmount: number
     currencyCode: number
-    commissionRate: bigint
-    cashbackAmount: bigint
-    balance: bigint
+    commissionRate: number
+    cashbackAmount: number
+    balance: number
     comment?: string
     receiptId?: string
     invoiceId?: string
