@@ -117,6 +117,7 @@ export interface SystemTransaction
 export interface SystemSubTransaction
     extends Pick<
         SystemTransaction,
+        | 'id'
         | 'time'
         | 'description'
         | 'amount'
@@ -131,7 +132,6 @@ export interface SystemSubTransaction
         | 'labels'
         | 'comment'
     > {
-    id: string
     parentId: string
 }
 
