@@ -64,7 +64,7 @@ export const useExpenseTable = (
                 acc.totalRefAmount += row.referenceAmount
                 return acc
             },
-            { totalAmount: 0n, totalRefAmount: 0n }
+            { totalAmount: 0, totalRefAmount: 0 }
         )
     }, [rows])
 
@@ -88,11 +88,11 @@ function expenseToTableRow(
 ): SystemTransaction {
     const subExpensesSum = subExpenses.reduce(
         (sum, subExpense) => sum + subExpense.amount,
-        0n
+        0
     )
     const subExpensesRefSum = subExpenses.reduce(
         (sum, sub) => sum + sub.referenceAmount,
-        0n
+        0
     )
     const expenseAmount = expense.amount - subExpensesSum
     const expenseRefAmount = expense.referenceAmount - subExpensesRefSum

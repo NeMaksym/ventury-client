@@ -3,9 +3,9 @@ import { TableCell, Typography, Tooltip } from '@mui/material'
 import { currency, fromSmallestUnit } from '../../../utils'
 
 interface AmountCellProps {
-    amount: bigint
+    amount: number
     currencyCode: number
-    referenceAmount: bigint
+    referenceAmount: number
     referenceCurrencyCode: number
 }
 

@@ -12,7 +12,7 @@ import { fromSmallestUnit } from '../../../utils'
 
 interface SubTransactionDialogProps {
     open: boolean
-    maxAmount: bigint
+    maxAmount: number
     onSubmit: (amount: number) => void
     onCancel: () => void
 }

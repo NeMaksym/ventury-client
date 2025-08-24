@@ -46,7 +46,7 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
 function calculateRefAmount(
     transaction: SourceTransaction,
     exchangeRatesMap: LoadExchangeRatesDTO['exchangeRatesMap']
-): bigint {
+): number {
     const key = encodeKey(transaction)
 
     const rate = exchangeRatesMap.get(key)
@@ -55,5 +55,5 @@ function calculateRefAmount(
         throw new Error(`Exchange rate not found for ${key}`)
     }
 
-    return BigInt(Math.round(Number(transaction.operationAmount) * rate))
+    return Math.round(Number(transaction.operationAmount) * rate)
 }

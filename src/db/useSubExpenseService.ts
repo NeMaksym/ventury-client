@@ -107,11 +107,11 @@ export function useSubExpenseService(): SubExpenseService {
         async (
             subExpense: SystemSubTransaction
         ): Promise<SystemSubTransaction> => {
-            if (subExpense.amount >= 0n) {
+            if (subExpense.amount >= 0) {
                 throw new Error('Sub-expense amount must be negative')
             }
 
-            if (subExpense.referenceAmount <= 0n) {
+            if (subExpense.referenceAmount <= 0) {
                 throw new Error('Sub-expense referenceAmount must be positive')
             }
 

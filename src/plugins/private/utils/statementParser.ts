@@ -134,8 +134,8 @@ class PrivateBankStatementRow {
         )
     }
 
-    private toSmallestUnit(val: number): bigint {
-        return BigInt(Math.round(val * 100))
+    private toSmallestUnit(val: number): number {
+        return Math.round(val * 100)
     }
 
     private toCurrencyCodeNumber(currency: string): number {

@@ -137,15 +137,15 @@ export function useExpenseService(): ExpenseService {
 
     const addExpense = useCallback(
         async (expense: SystemTransaction): Promise<SystemTransaction> => {
-            if (expense.amount >= 0n) {
+            if (expense.amount >= 0) {
                 throw new Error('Expense amount must be negative')
             }
 
-            if (expense.referenceAmount <= 0n) {
+            if (expense.referenceAmount <= 0) {
                 throw new Error('Expense referenceAmount must be positive')
             }
 
-            if (expense.operationAmount <= 0n) {
+            if (expense.operationAmount <= 0) {
                 throw new Error('Expense operationAmount must be positive')
             }
 

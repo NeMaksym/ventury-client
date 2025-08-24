@@ -39,15 +39,15 @@ export function useIncomeService(): IncomeService {
 
     const addIncome = useCallback(
         async (income: SystemTransaction): Promise<SystemTransaction> => {
-            if (income.amount <= 0n) {
+            if (income.amount <= 0) {
                 throw new Error('Income amount must be positive')
             }
 
-            if (income.referenceAmount <= 0n) {
+            if (income.referenceAmount <= 0) {
                 throw new Error('Income referenceAmount must be positive')
             }
 
-            if (income.operationAmount <= 0n) {
+            if (income.operationAmount <= 0) {
                 throw new Error('Income operationAmount must be positive')
             }
 

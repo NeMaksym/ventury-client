@@ -45,13 +45,13 @@ interface Commission {
  * @property {string | null} originalId - Original identifier from the source system (usually transaction id from external source)
  * @property {Date} time - Timestamp of when the transaction occurred
  * @property {string} description - Description or details of the transaction
- * @property {bigint} amount - Transaction amount in the smallest currency unit (e.g., cents)
- * @property {number} currencyCode - Numerical currency code (ISO 4217)
- * @property {bigint} operationAmount - Operation amount in the smallest currency unit
- * @property {number} operationCurrencyCode - Numerical currency code (ISO 4217) for the operation
+ * @property {number} amount - Transaction amount in the smallest account currency unit (e.g., cents)
+ * @property {number} currencyCode - Numerical account currency code (ISO 4217)
+ * @property {number} operationAmount - Operation amount in the smallest currency unit
+ * @property {number} operationCurrencyCode - Numerical operation currency code (ISO 4217)
  * @property {AccountId} accountId - Account identifier
  * @property {string} [comment] - Optional additional comments about the transaction
- * @property {Commission} [commission] - Optional commission information for the transaction
+ * @property {number} [commissionRate] - Optional commission rate for the transaction in the smallest *account* currency unit.
  * @property {number} [mcc] - Optional Merchant Category Code (MCC) for categorizing the transaction
  * @property {boolean} [hold] - Optional flag indicating if the transaction is on hold
  */
@@ -59,13 +59,13 @@ export interface SourceTransaction {
     originalId: string | null
     time: Date
     description: string
-    amount: bigint
+    amount: number
     currencyCode: number
-    operationAmount: bigint
+    operationAmount: number
     operationCurrencyCode: number
     accountId: AccountId
     comment?: string
-    commission?: Commission
+    commissionRate?: number
     mcc?: number
     hold?: boolean
 }
@@ -76,7 +76,7 @@ export interface SourceTransaction {
  * @extends SourceTransaction
  * @property {string} id - Unique identifier for the transaction
  * @property {Bank} bank - The bank that originated this transaction
- * @property {bigint} referenceAmount - Reference amount in the smallest currency unit for comparison
+ * @property {number} referenceAmount - Reference amount in the smallest currency unit for comparison
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
  * @property {Category['id'] | ''} category - System-assigned category for the transaction, empty string if uncategorized
  * @property {string[]} labels - Array of system-assigned labels or tags
@@ -98,7 +98,7 @@ export interface SystemTransaction
     > {
     id: string
     bank: Bank
-    referenceAmount: bigint
+    referenceAmount: number
     referenceCurrencyCode: number
     category: Category['id'] | ''
     capitalized: boolean
