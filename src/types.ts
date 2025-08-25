@@ -31,7 +31,7 @@ type Account =
  * Represents the structure for a financial transaction from external sources.
  * @interface SourceTransaction
  * @property {string | null} originalId - Original identifier from the source system (usually transaction id from external source)
- * @property {Date} time - Timestamp of when the transaction occurred
+ * @property {number} time - Transaction timestamp in Unix milliseconds
  * @property {string} description - Description or details of the transaction
  * @property {number} amount - Transaction amount in the smallest account currency unit (e.g., cents)
  * @property {number} currencyCode - Numerical account currency code (ISO 4217)
@@ -45,7 +45,7 @@ type Account =
  */
 export interface SourceTransaction {
     originalId: string | null
-    time: Date
+    time: number
     description: string
     amount: number
     currencyCode: number

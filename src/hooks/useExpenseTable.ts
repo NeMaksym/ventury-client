@@ -79,7 +79,7 @@ function timeDesc(
     a: SystemTransaction | SystemSubTransaction,
     b: SystemTransaction | SystemSubTransaction
 ) {
-    return b.time.getTime() - a.time.getTime()
+    return b.time - a.time
 }
 
 function expenseToTableRow(

@@ -71,7 +71,10 @@ export function useExpenseService(): ExpenseService {
             const timeIndex = store.index('time')
 
             try {
-                const range = IDBKeyRange.bound(startDate, endDate)
+                const range = IDBKeyRange.bound(
+                    startDate.getTime(),
+                    endDate.getTime()
+                )
                 return await timeIndex.getAll(range)
             } catch (error) {
                 console.error('Failed to get expenses by date range:', error)

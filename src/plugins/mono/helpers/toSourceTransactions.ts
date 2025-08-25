@@ -7,7 +7,7 @@ export function toSourceTransactions(
 ): SourceTransaction[] {
     return transactions.map((transaction) => ({
         originalId: transaction.id,
-        time: new Date(transaction.time * 1000),
+        time: transaction.time * 1000,
         description: transaction.description,
         amount: transaction.amount,
         currencyCode: transaction.currencyCode,

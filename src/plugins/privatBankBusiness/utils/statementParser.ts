@@ -108,7 +108,7 @@ class PrivateBankStatementRow {
         return currency
     }
 
-    private getTimestamp(): Date {
+    private getTimestamp(): number {
         const datePart = this.date
         const timePart = this.time
 
@@ -128,7 +128,7 @@ class PrivateBankStatementRow {
             parseInt(hours),
             parseInt(minutes),
             parseInt(seconds)
-        )
+        ).getTime()
     }
 
     private toSmallestUnit(val: number): number {

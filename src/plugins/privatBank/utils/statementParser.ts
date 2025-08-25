@@ -112,7 +112,7 @@ class PrivateBankStatementRow {
 
     // Data-time isn't in UTC. Likely it's in local time. May affect the duplicate find logic (because it uses time as one of parameters)
     // TODO: Think how to address via UX
-    private getTimestamp(): Date {
+    private getTimestamp(): number {
         const [datePart, timePart] = this.dateTime.split(' ')
 
         if (!datePart || !timePart) {
@@ -133,7 +133,7 @@ class PrivateBankStatementRow {
             parseInt(hours),
             parseInt(minutes),
             parseInt(seconds)
-        )
+        ).getTime()
     }
 
     private toSmallestUnit(val: number): number {

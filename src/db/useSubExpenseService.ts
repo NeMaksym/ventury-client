@@ -40,7 +40,10 @@ export function useSubExpenseService(): SubExpenseService {
             const timeIndex = store.index('time')
 
             try {
-                const range = IDBKeyRange.bound(startDate, endDate)
+                const range = IDBKeyRange.bound(
+                    startDate.getTime(),
+                    endDate.getTime()
+                )
                 return await timeIndex.getAll(range)
             } catch (error) {
                 console.error(

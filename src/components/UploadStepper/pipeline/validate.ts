@@ -2,6 +2,14 @@ import { AddMessage } from '../../../hooks'
 import { Bank, SourceTransaction } from '../../../types'
 import { currency } from '../../../utils'
 
+function isValidUnixMillis(value: number): boolean {
+    return (
+        typeof value === 'number' &&
+        Number.isFinite(value) &&
+        new Date(value).getTime() === value
+    )
+}
+
 export interface PipelineInput {
     sourceTransactions: SourceTransaction[]
     addMessage: AddMessage
@@ -14,8 +22,8 @@ export function validate(input: PipelineInput): PipelineInput {
             throw new Error('Operation amount should be positive')
         }
 
-        if (!(transaction.time instanceof Date)) {
-            throw new Error('Time should be a date')
+        if (!isValidUnixMillis(transaction.time)) {
+            throw new Error('Time should be number in unix milliseconds')
         }
 
         if (!currency.numToAlpha(transaction.currencyCode)) {

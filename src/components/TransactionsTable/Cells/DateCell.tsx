@@ -2,7 +2,7 @@ import React from 'react'
 import { TableCell } from '@mui/material'
 
 interface DateCellProps {
-    time: Date
+    time: number
 }
 
 export const DateCell: React.FC<DateCellProps> = ({ time }) => (
@@ -24,7 +24,8 @@ const monthNames = [
     'Dec',
 ]
 
-function formatDate(date: Date): string {
+function formatDate(time: number): string {
+    const date = new Date(time)
     const day = date.getDate()
 
     const month = monthNames[date.getMonth()]

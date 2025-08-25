@@ -48,7 +48,7 @@ const ExpensesGraphPage: React.FC = () => {
                     }
 
                     const refAmount = fromSmallestUnit(expense.referenceAmount)
-                    const month = expense.time.getMonth()
+                    const month = new Date(expense.time).getMonth()
 
                     if (acc[category][month] !== undefined) {
                         acc[category][month] += refAmount

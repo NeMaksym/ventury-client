@@ -32,7 +32,7 @@ export interface VenturyDB extends DBSchema {
         key: string
         value: SystemTransaction
         indexes: {
-            time: Date
+            time: number
             bank: string
             category: string
             labels: string
@@ -43,7 +43,7 @@ export interface VenturyDB extends DBSchema {
         value: SystemSubTransaction
         indexes: {
             parentId: string
-            time: Date
+            time: number
             bank: string
             category: string
             labels: string
@@ -57,7 +57,7 @@ export interface VenturyDB extends DBSchema {
         key: string
         value: SystemTransaction
         indexes: {
-            time: Date
+            time: number
             bank: string
             category: string
             labels: string
