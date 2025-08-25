@@ -1,11 +1,11 @@
 import { Bank, BankPlugin } from '../types'
 
-import { monoPlugin } from './mono'
+import { monoBankPlugin } from './monoBank'
 import { privatBankPlugin } from './privatBank'
 import { privatBankBusinessPlugin } from './privatBankBusiness'
 
 export const plugins: Record<Bank, BankPlugin> = {
-    mono: monoPlugin,
+    monoBank: monoBankPlugin,
     privatBank: privatBankPlugin,
     privatBankBusiness: privatBankBusinessPlugin,
 } as const
