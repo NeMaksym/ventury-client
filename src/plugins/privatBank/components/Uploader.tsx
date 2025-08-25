@@ -61,10 +61,10 @@ export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
     return (
         <Box sx={{ maxWidth: 600 }}>
             <Typography variant="h4" component="h2" gutterBottom>
-                Private Bank Statement Uploader
+                PrivatBank Statement Uploader
             </Typography>
             <Typography variant="body1" sx={{ mb: 3 }} color="text.secondary">
-                Upload your Private Bank statement file here.
+                Upload your PrivatBank statement file here.
             </Typography>
 
             <Box sx={{ mb: 3 }}>

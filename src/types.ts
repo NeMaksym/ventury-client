@@ -1,7 +1,7 @@
 /**
  * Supported bank types in the system.
  */
-export type Bank = 'mono' | 'private'
+export type Bank = 'mono' | 'privatBank'
 
 /**
  * Represents a category in the system.
