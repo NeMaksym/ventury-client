@@ -5,6 +5,7 @@
     "source": "src/index.html",
     "scripts": {
         "start": "parcel",
+        "clean-start": "rm -rf dist .parcel-cache && npm run start",
         "build": "parcel build"
     },
     "dependencies": {
