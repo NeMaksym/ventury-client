@@ -198,8 +198,7 @@ export const useExpensesHandlers = (
                     }
 
                     const exchangeRate =
-                        Number(expense.referenceAmount) /
-                        Number(-expense.amount)
+                        expense.referenceAmount / -expense.amount
 
                     const newSubExpense = await addSubExpense({
                         // inherited
