@@ -1,17 +1,10 @@
 import React from 'react'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { currency } from '../../../utils/currency'
-
-interface AccountOption {
-    id: string
-    maskedPan: string[]
-    iban: string
-    currencyCode: number
-    type?: string
-}
+import { MonoAPIClientInfo } from '../types'
 
 interface AccountSelectorProps {
-    accounts: AccountOption[]
+    accounts: MonoAPIClientInfo['accounts']
     value: string
     onChange: (id: string) => void
     disabled: boolean
@@ -31,7 +24,7 @@ function getLabel({
     maskedPan,
     iban,
     type,
-}: AccountOption): string {
+}: MonoAPIClientInfo['accounts'][number]): string {
     return `${getPrefix(currencyCode)} ${maskedPan[0] ?? iban} ${getPostfix(
         type
     )}`
