@@ -1,6 +1,7 @@
 import { MonoAPIClientInfo, MonoAPITransaction } from '../types'
 import { SourceTransaction } from '../../../types'
 
+// Mono doc is inaccurate, transaction.currencyCode is a code of operation. Account currencyCode is available in clientInfo
 export function toSourceTransactions(
     transactions: MonoAPITransaction[],
     account: MonoAPIClientInfo['accounts'][number]
@@ -10,7 +11,7 @@ export function toSourceTransactions(
         time: transaction.time * 1000,
         description: transaction.description,
         amount: transaction.amount,
-        currencyCode: transaction.currencyCode,
+        currencyCode: account.currencyCode,
         operationAmount: Math.abs(transaction.operationAmount),
         operationCurrencyCode: transaction.currencyCode,
         account: {

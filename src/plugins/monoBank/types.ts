@@ -61,7 +61,7 @@ type MonoAPICashbackType = 'None' | 'UAH' | 'Miles'
  * @property {boolean} hold - Transaction hold status
  * @property {number} amount - Amount in account currency (in minimal currency units) (e.g. -95000)
  * @property {number} operationAmount - Amount in transaction currency (in minimal currency units) (e.g. -95000)
- * @property {number} currencyCode - Currency code according to ISO 4217 (e.g. 980 for UAH)
+ * @property {number} currencyCode - Operation currency code according to ISO 4217 (e.g. 980 for UAH). !Note: documentation has an error in description
  * @property {number} commissionRate - Commission amount in minimal currency units (e.g. 0)
  * @property {number} cashbackAmount - Cashback amount in minimal currency units (e.g. 19000)
  * @property {number} balance - Account balance in minimal currency units (e.g. 10050000)
