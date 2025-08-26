@@ -35,8 +35,10 @@ export function validate(input: PipelineInput): PipelineInput {
             }
         }
 
-        if (transaction.commissionRate && transaction.commissionRate < 0) {
-            throw new Error('Commission rate should be positive')
+        if (transaction.commissionRate) {
+            if (transaction.commissionRate < 0) {
+                throw new Error('Commission rate should be positive')
+            }
         }
     })
 
