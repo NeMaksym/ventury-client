@@ -44,7 +44,7 @@ export function useClientInfo(): UseDataFetchReturn {
                 const data = await result.json()
 
                 setState({
-                    data,
+                    data: sortAccounts(data),
                     isLoading: false,
                     error: null,
                 })
@@ -70,5 +70,30 @@ export function useClientInfo(): UseDataFetchReturn {
         ...state,
         fetch,
         reset,
+    }
+}
+
+const ORDER: MonoAPIClientInfo['accounts'][number]['type'][] = [
+    'black',
+    'white',
+    'platinum',
+    'iron',
+    'yellow',
+    'eAid',
+    'fop',
+]
+
+function sortAccounts(data: MonoAPIClientInfo): MonoAPIClientInfo {
+    return {
+        ...data,
+        accounts: data.accounts.sort((a, b) => {
+            const aIndex = ORDER.indexOf(a.type)
+            const bIndex = ORDER.indexOf(b.type)
+            const diff = aIndex - bIndex
+
+            if (diff !== 0) return diff
+
+            return a.id.localeCompare(b.id)
+        }),
     }
 }
