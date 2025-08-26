@@ -17,10 +17,12 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
 
     addMessage('Adding reference amount to transactions...')
 
+    // Reference amount should be computed based on account amount.
+    // "amount" is always >= "operation.amount" because of commission, double exchange, etc.
     const systemTransactions = sourceTransactions.map((transaction) => {
         const referenceAmount =
             transaction.currencyCode === REFERENCE_CURRENCY_CODE
-                ? transaction.amount
+                ? Math.abs(transaction.amount)
                 : calculateRefAmount(transaction, exchangeRatesMap)
 
         return {
@@ -55,5 +57,5 @@ function calculateRefAmount(
         throw new Error(`Exchange rate not found for ${key}`)
     }
 
-    return Math.round(transaction.amount * rate)
+    return Math.round(Math.abs(transaction.amount) * rate)
 }
