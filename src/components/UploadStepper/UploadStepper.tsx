@@ -29,6 +29,7 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const renderStepContent = (step: number) => {
         switch (step) {
             case 0:
+                // TODO: Cards with icons instead of selector
                 return (
                     <BankSelector
                         value={bank}
