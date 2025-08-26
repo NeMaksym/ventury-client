@@ -161,7 +161,6 @@ class PrivateBankStatementRow {
 
     public get transaction(): SourceTransaction {
         return {
-            originalId: null,
             time: this.getTimestamp(),
             description: this.description.trim(),
             amount: this.toSmallestUnit(this.amount),

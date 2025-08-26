@@ -30,7 +30,6 @@ type Account =
 /**
  * Represents the structure for a financial transaction from external sources.
  * @interface SourceTransaction
- * @property {string | null} originalId - Original identifier from the source system (usually transaction id from external source)
  * @property {number} time - Transaction timestamp in Unix milliseconds
  * @property {string} description - Description or details of the transaction
  * @property {number} amount - Transaction amount in the smallest account currency unit (e.g., cents)
@@ -38,13 +37,13 @@ type Account =
  * @property {number} operationAmount - Operation amount in the smallest currency unit
  * @property {number} operationCurrencyCode - Numerical operation currency code (ISO 4217)
  * @property {Account} account - Account info
+ * @property {string} [originalId] - Original identifier from the source system (usually transaction id from external source)
  * @property {string} [comment] - Optional additional comments about the transaction
  * @property {number} [commissionRate] - Optional commission rate for the transaction in the smallest *account* currency unit.
  * @property {number} [mcc] - Optional Merchant Category Code (MCC) for categorizing the transaction
  * @property {boolean} [hold] - Optional flag indicating if the transaction is on hold
  */
 export interface SourceTransaction {
-    originalId: string | null
     time: number
     description: string
     amount: number
@@ -52,6 +51,7 @@ export interface SourceTransaction {
     operationAmount: number
     operationCurrencyCode: number
     account: Account
+    originalId?: string
     comment?: string
     commissionRate?: number
     mcc?: number

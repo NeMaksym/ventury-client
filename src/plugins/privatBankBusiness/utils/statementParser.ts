@@ -162,7 +162,6 @@ class PrivateBankStatementRow {
         const currencyCode = this.toCurrencyCodeNumber(this.currency)
 
         return {
-            originalId: null,
             time: this.getTimestamp(),
             description: this.description.trim(),
             amount,
