@@ -2,6 +2,8 @@ import { SourceTransaction, SystemTransaction } from '../../../types'
 import { encodeKey, LoadExchangeRatesDTO } from './loadExchangeRates'
 import { currency } from '../../../utils/currency'
 
+const REFERENCE_CURRENCY_CODE = currency.usdNumCode
+
 export interface ToSystemTransactionsDTO extends LoadExchangeRatesDTO {
     systemTransactions: SystemTransaction[]
 }
@@ -16,10 +18,9 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
     addMessage('Adding reference amount to transactions...')
 
     const systemTransactions = sourceTransactions.map((transaction) => {
-        const referenceCurrencyCode = currency.usdNumCode
         const referenceAmount =
-            transaction.operationCurrencyCode === currency.usdNumCode
-                ? transaction.operationAmount
+            transaction.currencyCode === REFERENCE_CURRENCY_CODE
+                ? transaction.amount
                 : calculateRefAmount(transaction, exchangeRatesMap)
 
         return {
@@ -27,7 +28,7 @@ export const toSystemTransactions: ToSystemTransactions = (input) => {
             id: crypto.randomUUID(),
             bank,
             referenceAmount,
-            referenceCurrencyCode,
+            referenceCurrencyCode: REFERENCE_CURRENCY_CODE,
             category: '',
             capitalized: false,
             hide: false,
@@ -54,5 +55,5 @@ function calculateRefAmount(
         throw new Error(`Exchange rate not found for ${key}`)
     }
 
-    return Math.round(Number(transaction.operationAmount) * rate)
+    return Math.round(transaction.amount * rate)
 }

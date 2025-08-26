@@ -20,7 +20,7 @@ export const loadExchangeRates: LoadExchangeRates = async (input) => {
         sourceTransactions
             .filter(
                 (transaction) =>
-                    transaction.operationCurrencyCode !== currency.usdNumCode
+                    transaction.currencyCode !== currency.usdNumCode
             )
             .map(encodeKey)
     )
@@ -50,8 +50,8 @@ export const loadExchangeRates: LoadExchangeRates = async (input) => {
 const DELIMITER = '__'
 
 export function encodeKey(transaction: SourceTransaction): string {
-    const date = new Date(Number(transaction.time)).toISOString().split('T')[0]
-    const alphaCode = currency.numToAlpha(transaction.operationCurrencyCode)
+    const date = new Date(transaction.time).toISOString().split('T')[0]
+    const alphaCode = currency.numToAlpha(transaction.currencyCode)
 
     return `${date}${DELIMITER}${alphaCode}`
 }
