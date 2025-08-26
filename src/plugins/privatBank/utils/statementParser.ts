@@ -165,10 +165,10 @@ class PrivateBankStatementRow {
             description: this.description.trim(),
             amount: this.toSmallestUnit(this.amount),
             currencyCode: this.toCurrencyCodeNumber(this.currency),
-            operationAmount: this.toSmallestUnit(this.operationAmount),
-            operationCurrencyCode: this.toCurrencyCodeNumber(
-                this.operationCurrency
-            ),
+            operation: {
+                amount: this.toSmallestUnit(this.operationAmount),
+                currencyCode: this.toCurrencyCodeNumber(this.operationCurrency),
+            },
             account: this.getAccount(),
         }
     }

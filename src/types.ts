@@ -28,16 +28,26 @@ type Account =
     | { type: 'iban'; value: { iban: string; maskedPan: string[] } }
 
 /**
+ * Represents the structure for a financial operation.
+ * @interface Operation
+ * @property {number} amount - Operation amount in the smallest currency unit
+ * @property {number} currencyCode - Numerical operation currency code (ISO 4217)
+ */
+export interface Operation {
+    amount: number
+    currencyCode: number
+}
+
+/**
  * Represents the structure for a financial transaction from external sources.
  * @interface SourceTransaction
  * @property {number} time - Transaction timestamp in Unix milliseconds
  * @property {string} description - Description or details of the transaction
  * @property {number} amount - Transaction amount in the smallest account currency unit (e.g., cents)
  * @property {number} currencyCode - Numerical account currency code (ISO 4217)
- * @property {number} operationAmount - Operation amount in the smallest currency unit
- * @property {number} operationCurrencyCode - Numerical operation currency code (ISO 4217)
  * @property {Account} account - Account info
  * @property {string} [originalId] - Original identifier from the source system (usually transaction id from external source)
+ * @property {Operation} [operation] - Operation info
  * @property {string} [comment] - Optional additional comments about the transaction
  * @property {number} [commissionRate] - Optional commission rate for the transaction in the smallest *account* currency unit.
  * @property {number} [mcc] - Optional Merchant Category Code (MCC) for categorizing the transaction
@@ -48,10 +58,9 @@ export interface SourceTransaction {
     description: string
     amount: number
     currencyCode: number
-    operationAmount: number
-    operationCurrencyCode: number
     account: Account
     originalId?: string
+    operation?: Operation
     comment?: string
     commissionRate?: number
     mcc?: number
@@ -68,6 +77,8 @@ export interface SourceTransaction {
  * @property {number} referenceCurrencyCode - Numerical code representing the reference currency
  * @property {Category['id'] | ''} category - System-assigned category for the transaction, empty string if uncategorized
  * @property {string[]} labels - Array of system-assigned labels or tags
+ * @property {boolean} capitalized - Flag indicating if the transaction is capitalized
+ * @property {boolean} hide - Flag indicating if the transaction is hidden
  */
 export interface SystemTransaction
     extends Pick<
@@ -77,8 +88,7 @@ export interface SystemTransaction
         | 'description'
         | 'amount'
         | 'currencyCode'
-        | 'operationAmount'
-        | 'operationCurrencyCode'
+        | 'operation'
         | 'account'
         | 'comment'
         | 'mcc'

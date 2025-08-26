@@ -158,16 +158,11 @@ class PrivateBankStatementRow {
     }
 
     public get transaction(): SourceTransaction {
-        const amount = this.toSmallestUnit(this.amount)
-        const currencyCode = this.toCurrencyCodeNumber(this.currency)
-
         return {
             time: this.getTimestamp(),
             description: this.description.trim(),
-            amount,
-            currencyCode,
-            operationAmount: Math.abs(amount),
-            operationCurrencyCode: currencyCode,
+            amount: this.toSmallestUnit(this.amount),
+            currencyCode: this.toCurrencyCodeNumber(this.currency),
             account: this.getAccount(),
         }
     }

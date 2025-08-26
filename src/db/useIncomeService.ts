@@ -47,8 +47,10 @@ export function useIncomeService(): IncomeService {
                 throw new Error('Income referenceAmount must be positive')
             }
 
-            if (income.operationAmount <= 0) {
-                throw new Error('Income operationAmount must be positive')
+            if (income.operation) {
+                if (income.operation.amount <= 0) {
+                    throw new Error('Income operation amount must be positive')
+                }
             }
 
             const db = await getDb()

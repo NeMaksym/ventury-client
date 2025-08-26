@@ -12,8 +12,10 @@ export function toSourceTransactions(
         description: transaction.description,
         amount: transaction.amount,
         currencyCode: account.currencyCode,
-        operationAmount: Math.abs(transaction.operationAmount),
-        operationCurrencyCode: transaction.currencyCode,
+        operation: {
+            amount: Math.abs(transaction.operationAmount),
+            currencyCode: transaction.currencyCode,
+        },
         account: {
             type: 'iban',
             value: {

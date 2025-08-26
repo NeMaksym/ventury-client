@@ -18,10 +18,6 @@ export interface PipelineInput {
 
 export function validate(input: PipelineInput): PipelineInput {
     input.sourceTransactions.forEach((transaction) => {
-        if (transaction.operationAmount < 0) {
-            throw new Error('Operation amount should be positive')
-        }
-
         if (!isValidUnixMillis(transaction.time)) {
             throw new Error('Time should be number in unix milliseconds')
         }
@@ -30,8 +26,13 @@ export function validate(input: PipelineInput): PipelineInput {
             throw new Error('Invalid currency code')
         }
 
-        if (!currency.numToAlpha(transaction.operationCurrencyCode)) {
-            throw new Error('Invalid operation currency code')
+        if (transaction.operation) {
+            if (transaction.operation.amount <= 0) {
+                throw new Error('Operation amount should be positive')
+            }
+            if (!currency.numToAlpha(transaction.operation.currencyCode)) {
+                throw new Error('Invalid operation currency code')
+            }
         }
 
         if (transaction.commissionRate && transaction.commissionRate < 0) {

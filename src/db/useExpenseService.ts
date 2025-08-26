@@ -148,8 +148,10 @@ export function useExpenseService(): ExpenseService {
                 throw new Error('Expense referenceAmount must be positive')
             }
 
-            if (expense.operationAmount <= 0) {
-                throw new Error('Expense operationAmount must be positive')
+            if (expense.operation) {
+                if (expense.operation.amount <= 0) {
+                    throw new Error('Expense operation amount must be positive')
+                }
             }
 
             const db = await getDb()
