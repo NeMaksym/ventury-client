@@ -20,6 +20,7 @@ import { UploaderProps } from '../../../types'
 import { MonoAPIClientInfo, MonoAPITransaction } from '../types'
 import { toSourceTransactions } from '../helpers/toSourceTransactions'
 
+// TODO: Let user fetch more than 30 days of transactions at once
 export const Uploader: React.FC<UploaderProps> = ({ uploadData }) => {
     const [apiToken, setApiToken] = useTokenInput()
     const {
