@@ -23,7 +23,7 @@ export const UploadStepper: React.FC<UploadStepperProps> = () => {
     const handleNext = () => setActiveStep((prevStep) => prevStep + 1)
     const handleBack = () => setActiveStep((prevStep) => prevStep - 1)
 
-    const [bank, setBank] = useState<Bank>('privatBank')
+    const [bank, setBank] = useState<Bank>('PrivatBank')
     const [data, setData] = useState<SourceTransaction[] | null>(null)
 
     const renderStepContent = (step: number) => {

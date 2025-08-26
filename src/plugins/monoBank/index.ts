@@ -1,8 +1,8 @@
 import { BankPlugin } from '../../types'
 import { Uploader } from './components/Uploader'
 
-export const monoBankPlugin: BankPlugin = {
+export const monobankPlugin: BankPlugin = {
     country: 'ua',
-    label: 'MonoBank',
+    label: 'Monobank',
     Uploader,
 }
