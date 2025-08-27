@@ -28,7 +28,11 @@ export const AmountCell: React.FC<AmountCellProps> = ({
                     currencyCode !== referenceCurrencyCode ? 'help' : 'default',
             }}
         >
-            {fromSmallestUnit(amount)} {currencySymbol}
+            {fromSmallestUnit(amount).toLocaleString('fr-FR', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+            })}{' '}
+            {currencySymbol}
         </Typography>
     )
 
