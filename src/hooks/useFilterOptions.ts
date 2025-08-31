@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Category, SystemSubTransaction, SystemTransaction } from '../types'
+import { useStore } from '../context/StoreContext'
 
 export interface Bank {
     value: string
@@ -8,10 +9,11 @@ export interface Bank {
 
 export const useFilterOptions = (
     transactions: SystemTransaction[],
-    subTransactions: SystemSubTransaction[],
-    allCategories: Category[]
-) =>
-    useMemo(() => {
+    subTransactions: SystemSubTransaction[]
+) => {
+    const { expenseCategoryStore } = useStore()
+
+    return useMemo(() => {
         const uniqueBanks = new Set<string>()
         const uniqueLabels = new Set<string>()
         const uniqueCategories = new Set<string>()
@@ -41,7 +43,9 @@ export const useFilterOptions = (
             (categoryId) => ({
                 id: categoryId,
                 label:
-                    allCategories.find((c) => c.id === categoryId)?.label || '',
+                    expenseCategoryStore.categories.find(
+                        (c) => c.id === categoryId
+                    )?.label || '',
             })
         )
 
@@ -50,4 +54,5 @@ export const useFilterOptions = (
             categories,
             labels: Array.from(uniqueLabels).sort(),
         }
-    }, [transactions, subTransactions, allCategories])
+    }, [transactions, subTransactions, expenseCategoryStore.categories])
+}

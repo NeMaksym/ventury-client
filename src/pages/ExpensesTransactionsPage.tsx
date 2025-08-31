@@ -5,13 +5,13 @@ import {
     useExpensesData,
     useExpensesHandlers,
     useFilterOptions,
-    useExpenseCategories,
     useExpenseTable,
 } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
+import { useStore } from '../context/StoreContext'
 
 export const ExpensesTransactionsPage: React.FC = () => {
-    const { categories } = useExpenseCategories()
+    const { expenseCategoryStore } = useStore()
 
     const {
         loading,
@@ -32,7 +32,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
         subExpenses
     )
 
-    const filterOptions = useFilterOptions(expenses, subExpenses, categories)
+    const filterOptions = useFilterOptions(expenses, subExpenses)
 
     const renderContent = () => {
         if (loading) {
@@ -63,7 +63,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
                     rows={rows}
                     handlers={expensesHandlers}
                     options={{
-                        categories,
+                        categories: expenseCategoryStore.categories,
                         labels: filterOptions.labels,
                     }}
                 />

@@ -1,11 +1,13 @@
 import React from 'react'
 import { Typography, Box, CircularProgress, Alert } from '@mui/material'
 import { YearGraph } from '../components'
-import { useExpensesData, useExpenseCategories } from '../hooks'
+import { useExpensesData } from '../hooks'
 import { fromSmallestUnit } from '../utils/formatAmount'
+import { useStore } from '../context/StoreContext'
 
 const ExpensesGraphPage: React.FC = () => {
-    const { categoriesMap } = useExpenseCategories()
+    const { expenseCategoryStore } = useStore()
+
     const {
         loading,
         error: dataError,
@@ -37,7 +39,8 @@ const ExpensesGraphPage: React.FC = () => {
             <YearGraph
                 data={[...expenses, ...subExpenses].reduce((acc, expense) => {
                     const category =
-                        categoriesMap[expense.category] ?? 'Uncategorized'
+                        expenseCategoryStore.categoriesMap[expense.category] ??
+                        'Uncategorized'
 
                     if (!category) {
                         return acc

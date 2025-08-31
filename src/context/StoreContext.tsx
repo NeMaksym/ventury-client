@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { createContext, useContext, useMemo, useEffect } from 'react'
 import { RootStore } from '../stores/rootStore'
 
 const StoreContext = createContext<RootStore | undefined>(undefined)
@@ -7,6 +7,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
     const store = useMemo(() => new RootStore(), [])
+
+    useEffect(() => {
+        store.expenseCategoryStore.loadAll()
+    }, [])
 
     return (
         <StoreContext.Provider value={store}>{children}</StoreContext.Provider>

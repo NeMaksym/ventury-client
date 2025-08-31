@@ -1,5 +1,5 @@
 export * from './connect'
-export * from './useExpenseCategoryService'
+export * from './expenseCategoryService'
 export * from './useExpenseService'
 export * from './useIncomeService'
 export * from './useSubExpenseService'

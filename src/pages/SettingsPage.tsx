@@ -2,16 +2,13 @@ import React from 'react'
 import { Typography, Box } from '@mui/material'
 
 import { CategoryList } from '../components'
-import { useExpenseCategories, useExpenseCategoriesHandlers } from '../hooks'
 import { useExpenseService, useSubExpenseService } from '../db'
+import { useStore } from '../context/StoreContext'
 
 export const SettingsPage: React.FC = () => {
+    const { expenseCategoryStore } = useStore()
     const expenseService = useExpenseService()
     const subExpenseService = useSubExpenseService()
-
-    const { categories, setCategories } = useExpenseCategories()
-    const { handleCategoryAdd, handleCategoryRename, handleCategoryDelete } =
-        useExpenseCategoriesHandlers(setCategories)
 
     return (
         <Box sx={{ padding: 2 }}>
@@ -19,15 +16,17 @@ export const SettingsPage: React.FC = () => {
                 Settings
             </Typography>
             <CategoryList
-                categories={categories}
-                onCategoryAdd={handleCategoryAdd}
-                onCategoryEdit={handleCategoryRename}
+                categories={expenseCategoryStore.categories}
+                onCategoryAdd={(label) => expenseCategoryStore.add(label)}
+                onCategoryEdit={(id, newLabel) =>
+                    expenseCategoryStore.rename(id, newLabel)
+                }
                 onCategoryDelete={async (id) => {
                     await Promise.all([
                         expenseService.resetCategory(id),
                         subExpenseService.resetCategory(id),
                     ])
-                    await handleCategoryDelete(id)
+                    await expenseCategoryStore.remove(id)
                 }}
             />
         </Box>
