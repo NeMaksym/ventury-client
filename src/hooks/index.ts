@@ -1,5 +1,3 @@
 export * from './useMessages'
-export * from './useExpensesData'
-export * from './useExpensesHandlers'
 export * from './useFilterOptions'
 export * from './useExpenseTable'

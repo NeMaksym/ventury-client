@@ -1,25 +1,14 @@
 import React from 'react'
 import { Typography, Box, CircularProgress, Alert } from '@mui/material'
 import { YearGraph } from '../components'
-import { useExpensesData } from '../hooks'
 import { fromSmallestUnit } from '../utils/formatAmount'
 import { useStore } from '../context/StoreContext'
 
 const ExpensesGraphPage: React.FC = () => {
-    const { expenseCategoryStore } = useStore()
-
-    const {
-        loading,
-        error: dataError,
-        expenses,
-        subExpenses,
-    } = useExpensesData()
-
-    console.log('expenses', expenses)
-    console.log('subExpenses', subExpenses)
+    const { expenseCategoryStore, expenseStore } = useStore()
 
     const renderContent = () => {
-        if (loading) {
+        if (expenseStore.loading) {
             return (
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <CircularProgress />
@@ -27,17 +16,20 @@ const ExpensesGraphPage: React.FC = () => {
             )
         }
 
-        if (dataError) {
+        if (expenseStore.error) {
             return (
                 <Alert severity="error">
-                    Error loading expense data: {dataError}
+                    Error loading expense data: {expenseStore.error}
                 </Alert>
             )
         }
 
         return (
             <YearGraph
-                data={[...expenses, ...subExpenses].reduce((acc, expense) => {
+                data={[
+                    ...expenseStore.expenses,
+                    ...expenseStore.subExpenses,
+                ].reduce((acc, expense) => {
                     const category =
                         expenseCategoryStore.categoriesMap[expense.category] ??
                         'Uncategorized'

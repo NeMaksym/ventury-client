@@ -1,48 +1,34 @@
 import React from 'react'
 import { Typography, Box, Stack } from '@mui/material'
 
-import {
-    useExpensesData,
-    useExpensesHandlers,
-    useFilterOptions,
-    useExpenseTable,
-} from '../hooks'
+import { useFilterOptions, useExpenseTable } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
 import { useStore } from '../context/StoreContext'
 
 export const ExpensesTransactionsPage: React.FC = () => {
-    const { expenseCategoryStore } = useStore()
-
-    const {
-        loading,
-        error: dataError,
-        expenses,
-        subExpenses,
-        setExpenses,
-        setSubExpenses,
-    } = useExpensesData()
-
-    const { error: handlerError, handlers: expensesHandlers } =
-        useExpensesHandlers(setExpenses, setSubExpenses)
+    const { expenseCategoryStore, expenseStore } = useStore()
 
     // "totalAmount" won't work if transactions of different currencies are present
     // TODO: Count total by currency
     const { rows, totalAmount, totalRefAmount } = useExpenseTable(
-        expenses,
-        subExpenses
+        expenseStore.expenses,
+        expenseStore.subExpenses
     )
 
-    const filterOptions = useFilterOptions(expenses, subExpenses)
+    const filterOptions = useFilterOptions(
+        expenseStore.expenses,
+        expenseStore.subExpenses
+    )
 
     const renderContent = () => {
-        if (loading) {
+        if (expenseStore.loading) {
             return <Typography>Loading transactions...</Typography>
         }
 
-        if (dataError || handlerError) {
+        if (expenseStore.error) {
             return (
                 <Typography color="error">
-                    Error: {dataError || handlerError}
+                    Error: {expenseStore.error}
                 </Typography>
             )
         }
@@ -61,7 +47,81 @@ export const ExpensesTransactionsPage: React.FC = () => {
                 <TransactionsFilter options={filterOptions} />
                 <TransactionsTable
                     rows={rows}
-                    handlers={expensesHandlers}
+                    handlers={{
+                        onCommentChange: (expenseId, comment, subExpenseId) =>
+                            subExpenseId
+                                ? expenseStore.updateSubExpenseField(
+                                      subExpenseId,
+                                      { comment },
+                                      'Failed to update comment'
+                                  )
+                                : expenseStore.updateExpenseField(
+                                      expenseId,
+                                      { comment },
+                                      'Failed to update comment'
+                                  ),
+                        onCategoryChange: (expenseId, category, subExpenseId) =>
+                            subExpenseId
+                                ? expenseStore.updateSubExpenseField(
+                                      subExpenseId,
+                                      { category },
+                                      'Failed to update category'
+                                  )
+                                : expenseStore.updateExpenseField(
+                                      expenseId,
+                                      { category },
+                                      'Failed to update category'
+                                  ),
+                        onLabelChange: (expenseId, labels, subExpenseId) =>
+                            subExpenseId
+                                ? expenseStore.updateSubExpenseField(
+                                      subExpenseId,
+                                      { labels },
+                                      'Failed to update labels'
+                                  )
+                                : expenseStore.updateExpenseField(
+                                      expenseId,
+                                      { labels },
+                                      'Failed to update labels'
+                                  ),
+                        onHideChange: (expenseId, hide, subExpenseId) =>
+                            subExpenseId
+                                ? expenseStore.updateSubExpenseField(
+                                      subExpenseId,
+                                      { hide },
+                                      'Failed to update hide'
+                                  )
+                                : expenseStore.updateExpenseField(
+                                      expenseId,
+                                      { hide },
+                                      'Failed to update hide'
+                                  ),
+                        onCapitalizeChange: (
+                            expenseId,
+                            capitalized,
+                            subExpenseId
+                        ) =>
+                            subExpenseId
+                                ? expenseStore.updateSubExpenseField(
+                                      subExpenseId,
+                                      { capitalized },
+                                      'Failed to update capitalization'
+                                  )
+                                : expenseStore.updateExpenseField(
+                                      expenseId,
+                                      { capitalized },
+                                      'Failed to update capitalization'
+                                  ),
+                        onDelete: (expenseId, subExpenseId) =>
+                            subExpenseId
+                                ? expenseStore.delete(expenseId, subExpenseId)
+                                : expenseStore.delete(expenseId),
+                        onSubTransactionCreate: (expenseId, amount) =>
+                            expenseStore.createSubTransaction(
+                                expenseId,
+                                amount
+                            ),
+                    }}
                     options={{
                         categories: expenseCategoryStore.categories,
                         labels: filterOptions.labels,

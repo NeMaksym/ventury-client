@@ -22,6 +22,7 @@ export const useExpenseTable = (
 
     const rows = useMemo<TransactionRow[]>(() => {
         const subExpensesMap = subExpenses
+            .slice()
             .sort(timeDesc)
             .reduce<SubExpensesMap>((acc, subExpense) => {
                 const subExpenses = acc.get(subExpense.parentId) || []
@@ -32,25 +33,28 @@ export const useExpenseTable = (
 
         const result: TransactionRow[] = []
 
-        expenses.sort(timeDesc).forEach((expense) => {
-            const subExpenses = subExpensesMap.get(expense.id) || []
+        expenses
+            .slice()
+            .sort(timeDesc)
+            .forEach((expense) => {
+                const subExpenses = subExpensesMap.get(expense.id) || []
 
-            if (shouldShowTransaction(expense, expenseFilterStore)) {
-                result.push(expenseToTableRow(expense, subExpenses))
-            }
-
-            for (const subExpense of subExpenses) {
-                if (
-                    shouldShowSubTransaction(
-                        expense,
-                        subExpense,
-                        expenseFilterStore
-                    )
-                ) {
-                    result.push(subExpenseToTableRow(subExpense))
+                if (shouldShowTransaction(expense, expenseFilterStore)) {
+                    result.push(expenseToTableRow(expense, subExpenses))
                 }
-            }
-        })
+
+                for (const subExpense of subExpenses) {
+                    if (
+                        shouldShowSubTransaction(
+                            expense,
+                            subExpense,
+                            expenseFilterStore
+                        )
+                    ) {
+                        result.push(subExpenseToTableRow(subExpense))
+                    }
+                }
+            })
 
         return result
     }, [

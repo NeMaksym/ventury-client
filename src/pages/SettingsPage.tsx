@@ -2,13 +2,10 @@ import React from 'react'
 import { Typography, Box } from '@mui/material'
 
 import { CategoryList } from '../components'
-import { useExpenseService, useSubExpenseService } from '../db'
 import { useStore } from '../context/StoreContext'
 
 export const SettingsPage: React.FC = () => {
-    const { expenseCategoryStore } = useStore()
-    const expenseService = useExpenseService()
-    const subExpenseService = useSubExpenseService()
+    const { expenseCategoryStore, expenseStore } = useStore()
 
     return (
         <Box sx={{ padding: 2 }}>
@@ -23,8 +20,8 @@ export const SettingsPage: React.FC = () => {
                 }
                 onCategoryDelete={async (id) => {
                     await Promise.all([
-                        expenseService.resetCategory(id),
-                        subExpenseService.resetCategory(id),
+                        expenseStore.expenseService.resetCategory(id),
+                        expenseStore.subExpenseService.resetCategory(id),
                     ])
                     await expenseCategoryStore.remove(id)
                 }}
