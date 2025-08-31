@@ -45,6 +45,7 @@ export interface TransactionsTableProps {
     }
 }
 
+// TODO: Adjust design for MobX. Today category cell doesn't react to data change.
 export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     rows,
     handlers,
