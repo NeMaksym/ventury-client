@@ -8,8 +8,9 @@ import {
     Stack,
 } from '@mui/material'
 
-import { Filters, Bank } from '../hooks'
+import { Bank } from '../hooks'
 import { Category } from '../types'
+import { useStore } from '../context/StoreContext'
 
 interface TransactionsFilterProps {
     options: {
@@ -17,21 +18,13 @@ interface TransactionsFilterProps {
         categories: Category[]
         labels: string[]
     }
-    values: Filters
-    handlers: {
-        onStartDateChange: (startDate: string) => void
-        onEndDateChange: (endDate: string) => void
-        onBanksChange: (banks: string[]) => void
-        onCategoriesChange: (categories: string[]) => void
-        onLabelsChange: (labels: string[]) => void
-    }
 }
 
 export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
     options,
-    values,
-    handlers,
 }) => {
+    const { expenseFilterStore } = useStore()
+
     const today = new Date().toISOString().split('T')[0]
 
     return (
@@ -39,14 +32,16 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
             <TextField
                 label="Start Date"
                 type="date"
-                value={values.startDate}
-                onChange={(e) => handlers.onStartDateChange(e.target.value)}
+                value={expenseFilterStore.startDate}
+                onChange={(e) =>
+                    expenseFilterStore.updateStartDate(e.target.value)
+                }
                 slotProps={{
                     inputLabel: {
                         shrink: true,
                     },
                     htmlInput: {
-                        max: values.endDate || today,
+                        max: expenseFilterStore.endDate || today,
                     },
                 }}
             />
@@ -54,14 +49,16 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
             <TextField
                 label="End Date"
                 type="date"
-                value={values.endDate}
-                onChange={(e) => handlers.onEndDateChange(e.target.value)}
+                value={expenseFilterStore.endDate}
+                onChange={(e) =>
+                    expenseFilterStore.updateEndDate(e.target.value)
+                }
                 slotProps={{
                     inputLabel: {
                         shrink: true,
                     },
                     htmlInput: {
-                        min: values.startDate,
+                        min: expenseFilterStore.startDate,
                         max: today,
                     },
                 }}
@@ -72,12 +69,12 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                 <Select
                     label="Bank"
                     multiple
-                    value={values.banks}
+                    value={expenseFilterStore.banks}
                     onChange={(e) => {
                         const value = e.target.value
                         const selectedBanks =
                             typeof value === 'string' ? value.split(',') : value
-                        handlers.onBanksChange(selectedBanks)
+                        expenseFilterStore.updateBanks(selectedBanks)
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >
@@ -94,12 +91,12 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                 <Select
                     label="Category"
                     multiple
-                    value={values.categories}
+                    value={expenseFilterStore.categories}
                     onChange={(e) => {
                         const value = e.target.value
                         const selectedCategories =
                             typeof value === 'string' ? value.split(',') : value
-                        handlers.onCategoriesChange(selectedCategories)
+                        expenseFilterStore.updateCategories(selectedCategories)
                     }}
                     renderValue={(selected) => {
                         return selected
@@ -124,12 +121,12 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                 <Select
                     label="Labels"
                     multiple
-                    value={values.labels}
+                    value={expenseFilterStore.labels}
                     onChange={(e) => {
                         const value = e.target.value
                         const selectedLabels =
                             typeof value === 'string' ? value.split(',') : value
-                        handlers.onLabelsChange(selectedLabels)
+                        expenseFilterStore.updateLabels(selectedLabels)
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >

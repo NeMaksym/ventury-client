@@ -2,12 +2,9 @@ import { useMemo } from 'react'
 
 import { SystemSubTransaction, SystemTransaction } from '../types'
 import { TransactionRow } from '../components/TransactionsTable'
-import {
-    Filters,
-    shouldShowSubTransaction,
-    shouldShowTransaction,
-} from './useFilterValues'
 import { fromSmallestUnit } from '../utils'
+import { useStore } from '../context/StoreContext'
+import { ExpenseFilterStore } from '../stores/expenseFilterStore'
 
 type ExpenseTableResult = {
     rows: TransactionRow[]
@@ -19,9 +16,10 @@ type SubExpensesMap = Map<string, SystemSubTransaction[]>
 
 export const useExpenseTable = (
     expenses: SystemTransaction[],
-    subExpenses: SystemSubTransaction[],
-    filters: Filters
+    subExpenses: SystemSubTransaction[]
 ): ExpenseTableResult => {
+    const { expenseFilterStore } = useStore()
+
     const rows = useMemo<TransactionRow[]>(() => {
         const subExpensesMap = subExpenses
             .sort(timeDesc)
@@ -37,12 +35,18 @@ export const useExpenseTable = (
         expenses.sort(timeDesc).forEach((expense) => {
             const subExpenses = subExpensesMap.get(expense.id) || []
 
-            if (shouldShowTransaction(expense, filters)) {
+            if (shouldShowTransaction(expense, expenseFilterStore)) {
                 result.push(expenseToTableRow(expense, subExpenses))
             }
 
             for (const subExpense of subExpenses) {
-                if (shouldShowSubTransaction(expense, subExpense, filters)) {
+                if (
+                    shouldShowSubTransaction(
+                        expense,
+                        subExpense,
+                        expenseFilterStore
+                    )
+                ) {
                     result.push(subExpenseToTableRow(subExpense))
                 }
             }
@@ -52,9 +56,9 @@ export const useExpenseTable = (
     }, [
         expenses,
         subExpenses,
-        filters.banks,
-        filters.categories,
-        filters.labels,
+        expenseFilterStore.banks,
+        expenseFilterStore.categories,
+        expenseFilterStore.labels,
     ])
 
     const { totalAmount, totalRefAmount } = useMemo(() => {
@@ -111,4 +115,63 @@ function subExpenseToTableRow(
         ...subExpense,
         amount: -subExpense.amount,
     }
+}
+
+function shouldShowTransaction(
+    transaction: SystemTransaction,
+    filters: ExpenseFilterStore
+) {
+    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
+        return false
+    }
+
+    if (filters.categories.length > 0) {
+        if (
+            !transaction.category ||
+            !filters.categories.includes(transaction.category)
+        ) {
+            return false
+        }
+    }
+
+    if (filters.labels.length > 0) {
+        if (
+            !transaction.labels.some((label) => filters.labels.includes(label))
+        ) {
+            return false
+        }
+    }
+
+    return true
+}
+
+function shouldShowSubTransaction(
+    transaction: SystemTransaction,
+    subTransaction: SystemSubTransaction,
+    filters: ExpenseFilterStore
+) {
+    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
+        return false
+    }
+
+    if (filters.categories.length > 0) {
+        if (
+            !subTransaction.category ||
+            !filters.categories.includes(subTransaction.category)
+        ) {
+            return false
+        }
+    }
+
+    if (filters.labels.length > 0) {
+        if (
+            !subTransaction.labels.some((label) =>
+                filters.labels.includes(label)
+            )
+        ) {
+            return false
+        }
+    }
+
+    return true
 }

@@ -11,7 +11,7 @@ const ExpensesGraphPage: React.FC = () => {
         error: dataError,
         expenses,
         subExpenses,
-    } = useExpensesData('2025-01-01', '2025-12-31')
+    } = useExpensesData()
 
     console.log('expenses', expenses)
     console.log('subExpenses', subExpenses)

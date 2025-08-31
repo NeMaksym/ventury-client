@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useExpenseService, useSubExpenseService } from '../db'
-import { Filters } from './useFilterValues'
 import { SystemTransaction, SystemSubTransaction } from '../types'
+import { useStore } from '../context/StoreContext'
 
-export const useExpensesData = (
-    startDate: Filters['startDate'],
-    endDate: Filters['endDate']
-) => {
+export const useExpensesData = () => {
+    const { expenseFilterStore } = useStore()
+
     const { getExpensesByDateRange } = useExpenseService()
     const { getSubExpensesByDateRange } = useSubExpenseService()
 
@@ -20,8 +19,8 @@ export const useExpensesData = (
         setError(null)
 
         async function fetchExpenses() {
-            const start = new Date(startDate + 'T00:00:00')
-            const end = new Date(endDate + 'T23:59:59')
+            const start = new Date(expenseFilterStore.startDate + 'T00:00:00')
+            const end = new Date(expenseFilterStore.endDate + 'T23:59:59')
 
             const [expenses, subExpenses] = await Promise.all([
                 getExpensesByDateRange(start, end),
@@ -35,7 +34,12 @@ export const useExpensesData = (
         fetchExpenses()
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false))
-    }, [getExpensesByDateRange, getSubExpensesByDateRange, startDate, endDate])
+    }, [
+        getExpensesByDateRange,
+        getSubExpensesByDateRange,
+        expenseFilterStore.startDate,
+        expenseFilterStore.endDate,
+    ])
 
     return {
         loading,

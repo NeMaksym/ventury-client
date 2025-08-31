@@ -4,7 +4,6 @@ import { Typography, Box, Stack } from '@mui/material'
 import {
     useExpensesData,
     useExpensesHandlers,
-    useFilterValues,
     useFilterOptions,
     useExpenseCategories,
     useExpenseTable,
@@ -14,8 +13,6 @@ import { TransactionsTable, TransactionsFilter } from '../components'
 export const ExpensesTransactionsPage: React.FC = () => {
     const { categories } = useExpenseCategories()
 
-    const { values: filterValues, handlers: filterHandlers } = useFilterValues()
-
     const {
         loading,
         error: dataError,
@@ -23,7 +20,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
         subExpenses,
         setExpenses,
         setSubExpenses,
-    } = useExpensesData(filterValues.startDate, filterValues.endDate)
+    } = useExpensesData()
 
     const { error: handlerError, handlers: expensesHandlers } =
         useExpensesHandlers(setExpenses, setSubExpenses)
@@ -32,8 +29,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
     // TODO: Count total by currency
     const { rows, totalAmount, totalRefAmount } = useExpenseTable(
         expenses,
-        subExpenses,
-        filterValues
+        subExpenses
     )
 
     const filterOptions = useFilterOptions(expenses, subExpenses, categories)
@@ -62,11 +58,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
                         Total amount: {totalAmount} ({totalRefAmount})
                     </Typography>
                 </Stack>
-                <TransactionsFilter
-                    options={filterOptions}
-                    values={filterValues}
-                    handlers={filterHandlers}
-                />
+                <TransactionsFilter options={filterOptions} />
                 <TransactionsTable
                     rows={rows}
                     handlers={expensesHandlers}

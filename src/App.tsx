@@ -11,6 +11,7 @@ import { Layout } from './components'
 import { DbProvider } from './context/DbContext'
 import { CustomThemeProvider } from './context/ThemeContext'
 import { AntdThemeProvider } from './context/AntdThemeProvider'
+import { StoreProvider } from './context/StoreContext'
 
 const pages = [...uploadPage, ...expensesPages, ...settingsPages]
 
@@ -19,37 +20,41 @@ export function App() {
         <CustomThemeProvider>
             <AntdThemeProvider>
                 <DbProvider>
-                    <CssBaseline />
-                    <BrowserRouter>
-                        <Layout>
-                            <Routes>
-                                {pages.map(({ element, path }) => (
+                    <StoreProvider>
+                        <CssBaseline />
+                        <BrowserRouter>
+                            <Layout>
+                                <Routes>
+                                    {pages.map(({ element, path }) => (
+                                        <Route
+                                            key={path}
+                                            path={path}
+                                            element={element}
+                                        />
+                                    ))}
                                     <Route
-                                        key={path}
-                                        path={path}
-                                        element={element}
+                                        path={PagePath.EXPENSES}
+                                        element={
+                                            <Navigate
+                                                to={
+                                                    PagePath.EXPENSES_TRANSACTIONS
+                                                }
+                                            />
+                                        }
                                     />
-                                ))}
-                                <Route
-                                    path={PagePath.EXPENSES}
-                                    element={
-                                        <Navigate
-                                            to={PagePath.EXPENSES_TRANSACTIONS}
-                                        />
-                                    }
-                                />
-                                <Route
-                                    path="/"
-                                    element={
-                                        <Navigate
-                                            to={PagePath.UPLOAD}
-                                            replace
-                                        />
-                                    }
-                                />
-                            </Routes>
-                        </Layout>
-                    </BrowserRouter>
+                                    <Route
+                                        path="/"
+                                        element={
+                                            <Navigate
+                                                to={PagePath.UPLOAD}
+                                                replace
+                                            />
+                                        }
+                                    />
+                                </Routes>
+                            </Layout>
+                        </BrowserRouter>
+                    </StoreProvider>
                 </DbProvider>
             </AntdThemeProvider>
         </CustomThemeProvider>
