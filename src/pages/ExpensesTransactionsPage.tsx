@@ -52,50 +52,38 @@ export const ExpensesTransactionsPage: React.FC = () => {
                             subExpenseId
                                 ? expenseStore.updateSubExpenseField(
                                       subExpenseId,
-                                      { comment },
-                                      'Failed to update comment'
+                                      { comment }
                                   )
-                                : expenseStore.updateExpenseField(
-                                      expenseId,
-                                      { comment },
-                                      'Failed to update comment'
-                                  ),
+                                : expenseStore.updateExpenseField(expenseId, {
+                                      comment,
+                                  }),
                         onCategoryChange: (expenseId, category, subExpenseId) =>
                             subExpenseId
                                 ? expenseStore.updateSubExpenseField(
                                       subExpenseId,
-                                      { category },
-                                      'Failed to update category'
+                                      { category }
                                   )
-                                : expenseStore.updateExpenseField(
-                                      expenseId,
-                                      { category },
-                                      'Failed to update category'
-                                  ),
+                                : expenseStore.updateExpenseField(expenseId, {
+                                      category,
+                                  }),
                         onLabelChange: (expenseId, labels, subExpenseId) =>
                             subExpenseId
                                 ? expenseStore.updateSubExpenseField(
                                       subExpenseId,
-                                      { labels },
-                                      'Failed to update labels'
+                                      { labels }
                                   )
-                                : expenseStore.updateExpenseField(
-                                      expenseId,
-                                      { labels },
-                                      'Failed to update labels'
-                                  ),
+                                : expenseStore.updateExpenseField(expenseId, {
+                                      labels,
+                                  }),
                         onHideChange: (expenseId, hide, subExpenseId) =>
                             subExpenseId
                                 ? expenseStore.updateSubExpenseField(
                                       subExpenseId,
-                                      { hide },
-                                      'Failed to update hide'
+                                      { hide }
                                   )
-                                : expenseStore.updateExpenseField(
-                                      expenseId,
-                                      { hide },
-                                      'Failed to update hide'
-                                  ),
+                                : expenseStore.updateExpenseField(expenseId, {
+                                      hide,
+                                  }),
                         onCapitalizeChange: (
                             expenseId,
                             capitalized,
@@ -104,14 +92,11 @@ export const ExpensesTransactionsPage: React.FC = () => {
                             subExpenseId
                                 ? expenseStore.updateSubExpenseField(
                                       subExpenseId,
-                                      { capitalized },
-                                      'Failed to update capitalization'
+                                      { capitalized }
                                   )
-                                : expenseStore.updateExpenseField(
-                                      expenseId,
-                                      { capitalized },
-                                      'Failed to update capitalization'
-                                  ),
+                                : expenseStore.updateExpenseField(expenseId, {
+                                      capitalized,
+                                  }),
                         onDelete: (expenseId, subExpenseId) =>
                             subExpenseId
                                 ? expenseStore.delete(expenseId, subExpenseId)

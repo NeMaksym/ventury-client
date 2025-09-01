@@ -16,17 +16,7 @@ export class ExpenseStore {
     subExpenses: SystemSubTransaction[] = []
 
     async expenseExists(expense: SystemTransaction): Promise<boolean> {
-        this.error = null
-
-        try {
-            return await this.expenseService.expenseExists(expense)
-        } catch (e) {
-            this.error =
-                e instanceof Error
-                    ? e.message
-                    : 'Failed to check if expense exists'
-            throw new Error(this.error)
-        }
+        return await this.expenseService.expenseExists(expense)
     }
 
     constructor(
@@ -69,6 +59,7 @@ export class ExpenseStore {
                 this.expenseService.getExpensesByDateRange(start, end),
                 this.subExpenseService.getSubExpensesByDateRange(start, end),
             ])
+
             this.expenses = expenses
             this.subExpenses = subExpenses
         } catch (e) {
@@ -81,142 +72,101 @@ export class ExpenseStore {
 
     *updateExpenseField(
         expenseId: string,
-        updates: Partial<SystemTransaction>,
-        errorMessage: string
+        updates: Partial<SystemTransaction>
     ) {
-        this.error = null
+        const expense: SystemTransaction | undefined =
+            yield this.expenseService.getExpenseById(expenseId)
+        if (!expense) return
 
-        try {
-            const expense: SystemTransaction | undefined =
-                yield this.expenseService.getExpenseById(expenseId)
-            if (!expense) return
+        const updated: SystemTransaction =
+            yield this.expenseService.updateExpense({
+                ...expense,
+                ...updates,
+            })
 
-            const updated: SystemTransaction =
-                yield this.expenseService.updateExpense({
-                    ...expense,
-                    ...updates,
-                })
-            this.expenses = this.expenses.map((e) =>
-                e.id === expenseId ? updated : e
-            )
-        } catch (e) {
-            this.error = e instanceof Error ? e.message : errorMessage
-        }
+        this.expenses = this.expenses.map((e) =>
+            e.id === expenseId ? updated : e
+        )
     }
 
     *updateSubExpenseField(
         subExpenseId: string,
-        updates: Partial<SystemSubTransaction>,
-        errorMessage: string
+        updates: Partial<SystemSubTransaction>
     ) {
-        this.error = null
+        const sub: SystemSubTransaction | undefined =
+            yield this.subExpenseService.getSubExpenseById(subExpenseId)
+        if (!sub) return
 
-        try {
-            const sub: SystemSubTransaction | undefined =
-                yield this.subExpenseService.getSubExpenseById(subExpenseId)
-            if (!sub) return
+        const updated: SystemSubTransaction =
+            yield this.subExpenseService.updateSubExpense({
+                ...sub,
+                ...updates,
+            })
 
-            const updated: SystemSubTransaction =
-                yield this.subExpenseService.updateSubExpense({
-                    ...sub,
-                    ...updates,
-                })
-            this.subExpenses = this.subExpenses.map((s) =>
-                s.id === subExpenseId ? updated : s
-            )
-        } catch (e) {
-            this.error = e instanceof Error ? e.message : errorMessage
-        }
+        this.subExpenses = this.subExpenses.map((s) =>
+            s.id === subExpenseId ? updated : s
+        )
     }
 
     *delete(expenseId: string, subExpenseId?: string) {
-        this.error = null
+        if (subExpenseId) {
+            yield this.subExpenseService.deleteSubExpense(subExpenseId)
 
-        try {
-            if (subExpenseId) {
-                yield this.subExpenseService.deleteSubExpense(subExpenseId)
-                this.subExpenses = this.subExpenses.filter(
-                    (s) => s.id !== subExpenseId
-                )
-            } else {
-                yield this.expenseService.deleteExpense(expenseId)
-                this.expenses = this.expenses.filter((e) => e.id !== expenseId)
-            }
-        } catch (e) {
-            this.error =
-                e instanceof Error ? e.message : 'Failed to delete expense'
+            this.subExpenses = this.subExpenses.filter(
+                (s) => s.id !== subExpenseId
+            )
+        } else {
+            yield this.expenseService.deleteExpense(expenseId)
+
+            this.expenses = this.expenses.filter((e) => e.id !== expenseId)
         }
     }
 
     *createSubTransaction(expenseId: string, amount: number) {
-        this.error = null
+        const expense: SystemTransaction | undefined =
+            yield this.expenseService.getExpenseById(expenseId)
+        if (!expense) return
 
-        try {
-            const expense: SystemTransaction | undefined =
-                yield this.expenseService.getExpenseById(expenseId)
-            if (!expense) {
-                this.error = 'Expense not found'
-                return
-            }
-            const exchangeRate = expense.referenceAmount / -expense.amount
-            const subExpense: SystemSubTransaction =
-                yield this.subExpenseService.addSubExpense({
-                    // inherited
-                    parentId: expenseId,
-                    account: expense.account,
-                    bank: expense.bank,
-                    time: expense.time,
-                    description: expense.description,
-                    currencyCode: expense.currencyCode,
-                    referenceCurrencyCode: expense.referenceCurrencyCode,
-                    category: expense.category,
-                    labels: expense.labels,
-                    // own
-                    id: crypto.randomUUID(),
-                    amount: -toSmallestUnit(amount),
-                    referenceAmount: toSmallestUnit(amount * exchangeRate),
-                    capitalized: false,
-                    hide: false,
-                    comment: '',
-                })
-            this.subExpenses = [...this.subExpenses, subExpense]
-        } catch (e) {
-            this.error =
-                e instanceof Error
-                    ? e.message
-                    : 'Failed to create sub-transaction'
-        }
+        const exchangeRate = expense.referenceAmount / -expense.amount
+        const subExpense: SystemSubTransaction =
+            yield this.subExpenseService.addSubExpense({
+                // inherited
+                parentId: expenseId,
+                account: expense.account,
+                bank: expense.bank,
+                time: expense.time,
+                description: expense.description,
+                currencyCode: expense.currencyCode,
+                referenceCurrencyCode: expense.referenceCurrencyCode,
+                category: expense.category,
+                labels: expense.labels,
+                // own
+                id: crypto.randomUUID(),
+                amount: -toSmallestUnit(amount),
+                referenceAmount: toSmallestUnit(amount * exchangeRate),
+                capitalized: false,
+                hide: false,
+                comment: '',
+            })
+
+        this.subExpenses.push(subExpense)
     }
 
     *resetCategory(categoryId: string) {
-        this.error = null
+        yield this.expenseService.resetCategory(categoryId)
+        yield this.subExpenseService.resetCategory(categoryId)
 
-        try {
-            yield this.expenseService.resetCategory(categoryId)
-            yield this.subExpenseService.resetCategory(categoryId)
-
-            this.expenses = this.expenses.map((e) =>
-                e.category === categoryId ? { ...e, category: '' } : e
-            )
-            this.subExpenses = this.subExpenses.map((s) =>
-                s.category === categoryId ? { ...s, category: '' } : s
-            )
-        } catch (e) {
-            this.error =
-                e instanceof Error ? e.message : 'Failed to reset category'
-        }
+        this.expenses = this.expenses.map((e) =>
+            e.category === categoryId ? { ...e, category: '' } : e
+        )
+        this.subExpenses = this.subExpenses.map((s) =>
+            s.category === categoryId ? { ...s, category: '' } : s
+        )
     }
 
     *addExpense(expense: SystemTransaction) {
-        this.error = null
+        expense = yield this.expenseService.addExpense(expense)
 
-        try {
-            expense = yield this.expenseService.addExpense(expense)
-            this.expenses.push(expense)
-        } catch (e) {
-            this.error =
-                e instanceof Error ? e.message : 'Failed to add expense'
-            throw new Error(this.error)
-        }
+        this.expenses.push(expense)
     }
 }
