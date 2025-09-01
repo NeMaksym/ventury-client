@@ -1,6 +1,8 @@
 import { AddMessage } from '../../../hooks'
 import { Bank, SourceTransaction } from '../../../types'
 import { currency } from '../../../utils'
+import { IncomeService } from '../../../db'
+import { ExpenseStore } from '../../../stores/expenseStore'
 
 function isValidUnixMillis(value: number): boolean {
     return (
@@ -14,6 +16,8 @@ export interface PipelineInput {
     sourceTransactions: SourceTransaction[]
     addMessage: AddMessage
     bank: Bank
+    expenseStore: ExpenseStore
+    incomeService: IncomeService
 }
 
 export function validate(input: PipelineInput): PipelineInput {

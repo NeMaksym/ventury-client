@@ -19,10 +19,7 @@ export const SettingsPage: React.FC = () => {
                     expenseCategoryStore.rename(id, newLabel)
                 }
                 onCategoryDelete={async (id) => {
-                    await Promise.all([
-                        expenseStore.expenseService.resetCategory(id),
-                        expenseStore.subExpenseService.resetCategory(id),
-                    ])
+                    await expenseStore.resetCategory(id)
                     await expenseCategoryStore.remove(id)
                 }}
             />

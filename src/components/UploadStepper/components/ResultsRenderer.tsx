@@ -33,14 +33,17 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
         const controller = new AbortController()
 
         asyncPipe(
-            { sourceTransactions, addMessage, bank },
+            {
+                sourceTransactions,
+                addMessage,
+                bank,
+                expenseStore,
+                incomeService,
+            },
             validate,
             loadExchangeRates,
             toSystemTransactions,
-            addToDB({
-                expenseService: expenseStore.expenseService,
-                incomeService,
-            }),
+            addToDB,
             controller.signal
         )
             .then(() => addMessage('Success'))

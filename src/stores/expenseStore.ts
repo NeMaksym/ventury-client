@@ -6,14 +6,28 @@ import { RootStore } from './rootStore'
 import { toSmallestUnit } from '../utils/formatAmount'
 
 export class ExpenseStore {
-    root: RootStore
-    expenseService: ExpenseService
-    subExpenseService: SubExpenseService
+    private readonly root: RootStore
+    private readonly expenseService: ExpenseService
+    private readonly subExpenseService: SubExpenseService
 
     loading = false
     error: string | null = null
     expenses: SystemTransaction[] = []
     subExpenses: SystemSubTransaction[] = []
+
+    async expenseExists(expense: SystemTransaction): Promise<boolean> {
+        this.error = null
+
+        try {
+            return await this.expenseService.expenseExists(expense)
+        } catch (e) {
+            this.error =
+                e instanceof Error
+                    ? e.message
+                    : 'Failed to check if expense exists'
+            throw new Error(this.error)
+        }
+    }
 
     constructor(
         root: RootStore,
@@ -70,6 +84,8 @@ export class ExpenseStore {
         updates: Partial<SystemTransaction>,
         errorMessage: string
     ) {
+        this.error = null
+
         try {
             const expense: SystemTransaction | undefined =
                 yield this.expenseService.getExpenseById(expenseId)
@@ -93,6 +109,8 @@ export class ExpenseStore {
         updates: Partial<SystemSubTransaction>,
         errorMessage: string
     ) {
+        this.error = null
+
         try {
             const sub: SystemSubTransaction | undefined =
                 yield this.subExpenseService.getSubExpenseById(subExpenseId)
@@ -112,6 +130,8 @@ export class ExpenseStore {
     }
 
     *delete(expenseId: string, subExpenseId?: string) {
+        this.error = null
+
         try {
             if (subExpenseId) {
                 yield this.subExpenseService.deleteSubExpense(subExpenseId)
@@ -129,6 +149,8 @@ export class ExpenseStore {
     }
 
     *createSubTransaction(expenseId: string, amount: number) {
+        this.error = null
+
         try {
             const expense: SystemTransaction | undefined =
                 yield this.expenseService.getExpenseById(expenseId)
@@ -163,6 +185,38 @@ export class ExpenseStore {
                 e instanceof Error
                     ? e.message
                     : 'Failed to create sub-transaction'
+        }
+    }
+
+    *resetCategory(categoryId: string) {
+        this.error = null
+
+        try {
+            yield this.expenseService.resetCategory(categoryId)
+            yield this.subExpenseService.resetCategory(categoryId)
+
+            this.expenses = this.expenses.map((e) =>
+                e.category === categoryId ? { ...e, category: '' } : e
+            )
+            this.subExpenses = this.subExpenses.map((s) =>
+                s.category === categoryId ? { ...s, category: '' } : s
+            )
+        } catch (e) {
+            this.error =
+                e instanceof Error ? e.message : 'Failed to reset category'
+        }
+    }
+
+    *addExpense(expense: SystemTransaction) {
+        this.error = null
+
+        try {
+            expense = yield this.expenseService.addExpense(expense)
+            this.expenses.push(expense)
+        } catch (e) {
+            this.error =
+                e instanceof Error ? e.message : 'Failed to add expense'
+            throw new Error(this.error)
         }
     }
 }
