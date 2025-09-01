@@ -8,21 +8,9 @@ import {
     Stack,
 } from '@mui/material'
 
-import { Bank } from '../hooks'
-import { Category } from '../types'
 import { useStore } from '../context/StoreContext'
 
-interface TransactionsFilterProps {
-    options: {
-        banks: Bank[]
-        categories: Category[]
-        labels: string[]
-    }
-}
-
-export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
-    options,
-}) => {
+export const TransactionsFilter: React.FC = () => {
     const { expenseFilterStore } = useStore()
 
     const today = new Date().toISOString().split('T')[0]
@@ -78,11 +66,13 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                    {options.banks.map(({ value, label }) => (
-                        <MenuItem key={value} value={value}>
-                            {label}
-                        </MenuItem>
-                    ))}
+                    {expenseFilterStore.options.banks.map(
+                        ({ value, label }) => (
+                            <MenuItem key={value} value={value}>
+                                {label}
+                            </MenuItem>
+                        )
+                    )}
                 </Select>
             </FormControl>
 
@@ -102,17 +92,20 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                         return selected
                             .map(
                                 (id) =>
-                                    options.categories.find((c) => c.id === id)
-                                        ?.label
+                                    expenseFilterStore.options.categories.find(
+                                        (c) => c.id === id
+                                    )?.label
                             )
                             .join(', ')
                     }}
                 >
-                    {options.categories.map(({ id, label }) => (
-                        <MenuItem key={id} value={id}>
-                            {label}
-                        </MenuItem>
-                    ))}
+                    {expenseFilterStore.options.categories.map(
+                        ({ id, label }) => (
+                            <MenuItem key={id} value={id}>
+                                {label}
+                            </MenuItem>
+                        )
+                    )}
                 </Select>
             </FormControl>
 
@@ -130,7 +123,7 @@ export const TransactionsFilter: React.FC<TransactionsFilterProps> = ({
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                    {options.labels.map((label) => (
+                    {expenseFilterStore.options.labels.map((label) => (
                         <MenuItem key={label} value={label}>
                             {label}
                         </MenuItem>

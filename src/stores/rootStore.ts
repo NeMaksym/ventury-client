@@ -1,5 +1,6 @@
 import { ExpenseFilterStore } from './expenseFilterStore'
 import { ExpenseCategoryStore } from './expenseCategoryStore'
+import { ExpenseListStore } from './expenseListStore'
 import { ExpenseCategoryService } from '../db/expenseCategoryService'
 import { ExpenseStore } from './expenseStore'
 import { ExpenseService } from '../db/expenseService'
@@ -9,9 +10,10 @@ export class RootStore {
     expenseFilterStore: ExpenseFilterStore
     expenseCategoryStore: ExpenseCategoryStore
     expenseStore: ExpenseStore
+    expenseListStore: ExpenseListStore
 
     constructor() {
-        this.expenseFilterStore = new ExpenseFilterStore()
+        this.expenseFilterStore = new ExpenseFilterStore(this)
 
         const categoryService = new ExpenseCategoryService()
         this.expenseCategoryStore = new ExpenseCategoryStore(categoryService)
@@ -23,5 +25,7 @@ export class RootStore {
             expenseService,
             subExpenseService
         )
+
+        this.expenseListStore = new ExpenseListStore(this)
     }
 }

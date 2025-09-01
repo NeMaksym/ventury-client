@@ -4,6 +4,9 @@ import { ExpenseService } from '../db/expenseService'
 import { SubExpenseService } from '../db/subExpenseService'
 import { RootStore } from './rootStore'
 import { toSmallestUnit } from '../utils/formatAmount'
+import { timeDesc } from '../utils'
+
+type SubExpensesMap = Map<string, SystemSubTransaction[]>
 
 export class ExpenseStore {
     private readonly root: RootStore
@@ -39,6 +42,18 @@ export class ExpenseStore {
             },
             { fireImmediately: true }
         )
+    }
+
+    get subExpensesMap() {
+        return this.subExpenses
+            .slice()
+            .sort(timeDesc)
+            .reduce<SubExpensesMap>((acc, subExpense) => {
+                const subExpenses = acc.get(subExpense.parentId) || []
+                subExpenses.push(subExpense)
+                acc.set(subExpense.parentId, subExpenses)
+                return acc
+            }, new Map())
     }
 
     *loadByDateRange() {

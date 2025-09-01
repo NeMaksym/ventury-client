@@ -1,24 +1,16 @@
 import React from 'react'
 import { Typography, Box, Stack } from '@mui/material'
 
-import { useFilterOptions, useExpenseTable } from '../hooks'
 import { TransactionsTable, TransactionsFilter } from '../components'
 import { useStore } from '../context/StoreContext'
 
 export const ExpensesTransactionsPage: React.FC = () => {
-    const { expenseCategoryStore, expenseStore } = useStore()
-
-    // "totalAmount" won't work if transactions of different currencies are present
-    // TODO: Count total by currency
-    const { rows, totalAmount, totalRefAmount } = useExpenseTable(
-        expenseStore.expenses,
-        expenseStore.subExpenses
-    )
-
-    const filterOptions = useFilterOptions(
-        expenseStore.expenses,
-        expenseStore.subExpenses
-    )
+    const {
+        expenseCategoryStore,
+        expenseStore,
+        expenseFilterStore,
+        expenseListStore,
+    } = useStore()
 
     const renderContent = () => {
         if (expenseStore.loading) {
@@ -38,15 +30,16 @@ export const ExpensesTransactionsPage: React.FC = () => {
                 <Stack direction="row" spacing={2}>
                     {/* TODO: Make this section collapsable */}
                     <Typography variant="body1" gutterBottom>
-                        Total transactions: {rows.length}
+                        Total transactions: {expenseListStore.rows.length}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        Total amount: {totalAmount} ({totalRefAmount})
+                        Total amount: {expenseListStore.amounts.totalAmount} (
+                        {expenseListStore.amounts.totalRefAmount})
                     </Typography>
                 </Stack>
-                <TransactionsFilter options={filterOptions} />
+                <TransactionsFilter />
                 <TransactionsTable
-                    rows={rows}
+                    rows={expenseListStore.rows}
                     handlers={{
                         onCommentChange: (expenseId, comment, subExpenseId) =>
                             subExpenseId
@@ -109,7 +102,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
                     }}
                     options={{
                         categories: expenseCategoryStore.categories,
-                        labels: filterOptions.labels,
+                        labels: expenseFilterStore.options.labels,
                     }}
                 />
             </Stack>

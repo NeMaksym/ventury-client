@@ -1,4 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx'
+import { RootStore } from './rootStore'
+import { Category } from '../types'
 
 export const STORAGE_KEYS = {
     START_DATE: 'filter-start-date',
@@ -40,15 +42,23 @@ const getInitialEndDate = (): string => {
     }
 }
 
+interface Bank {
+    value: string
+    label: string
+}
+
 export class ExpenseFilterStore {
+    root: RootStore
+
     startDate = ''
     endDate = ''
     banks: string[] = []
     categories: string[] = []
     labels: string[] = []
 
-    constructor() {
+    constructor(root: RootStore) {
         makeAutoObservable(this)
+        this.root = root
         this.startDate = getInitialStartDate()
         this.endDate = getInitialEndDate()
 
@@ -79,6 +89,52 @@ export class ExpenseFilterStore {
                 }
             }
         )
+    }
+
+    get options() {
+        const uniqueBanks = new Set<string>()
+        const uniqueLabels = new Set<string>()
+        const uniqueCategories = new Set<string>()
+
+        const allTransactions = [
+            ...this.root.expenseStore.expenses,
+            ...this.root.expenseStore.subExpenses,
+        ]
+
+        allTransactions.forEach((transaction) => {
+            uniqueBanks.add(transaction.bank)
+
+            if (transaction.category && transaction.category.trim()) {
+                uniqueCategories.add(transaction.category)
+            }
+
+            transaction.labels.forEach((label) => {
+                if (label.trim()) {
+                    uniqueLabels.add(label)
+                }
+            })
+        })
+
+        const banks: Bank[] = Array.from(uniqueBanks).map((bankValue) => ({
+            value: bankValue,
+            label: bankValue.charAt(0).toUpperCase() + bankValue.slice(1),
+        }))
+
+        const categories: Category[] = Array.from(uniqueCategories).map(
+            (categoryId) => ({
+                id: categoryId,
+                label:
+                    this.root.expenseCategoryStore.categories.find(
+                        (c) => c.id === categoryId
+                    )?.label || '',
+            })
+        )
+
+        return {
+            banks,
+            categories,
+            labels: Array.from(uniqueLabels).sort(),
+        }
     }
 
     updateStartDate(startDate: string) {
