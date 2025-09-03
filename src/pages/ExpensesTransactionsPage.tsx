@@ -3,17 +3,19 @@ import { Typography, Box, Stack } from '@mui/material'
 
 import { TransactionsTable, TransactionsFilter } from '../components'
 import { useStore } from '../context/StoreContext'
-import { useExpenseHandlers } from '../hooks'
+import {
+    useExpenseHandlers,
+    useExpenseTableRows,
+    useExpenseTableStats,
+} from '../hooks'
 
 export const ExpensesTransactionsPage: React.FC = () => {
-    const {
-        expenseCategoryStore,
-        expenseStore,
-        expenseFilterStore,
-        expenseListStore,
-    } = useStore()
+    const { expenseCategoryStore, expenseStore, expenseFilterStore } =
+        useStore()
 
     const handlers = useExpenseHandlers()
+    const rows = useExpenseTableRows()
+    const stats = useExpenseTableStats(rows)
 
     const renderContent = () => {
         if (expenseStore.loading) {
@@ -33,16 +35,16 @@ export const ExpensesTransactionsPage: React.FC = () => {
                 <Stack direction="row" spacing={2}>
                     {/* TODO: Make this section collapsable */}
                     <Typography variant="body1" gutterBottom>
-                        Total transactions: {expenseListStore.rows.length}
+                        Total transactions: {rows.length}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        Total amount: {expenseListStore.amounts.totalAmount} (
-                        {expenseListStore.amounts.totalRefAmount})
+                        Total amount: {stats.totalAmount} (
+                        {stats.totalRefAmount})
                     </Typography>
                 </Stack>
                 <TransactionsFilter />
                 <TransactionsTable
-                    rows={expenseListStore.rows}
+                    rows={rows}
                     handlers={handlers}
                     options={{
                         categories: expenseCategoryStore.categories,
