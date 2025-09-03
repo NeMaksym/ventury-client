@@ -99,50 +99,61 @@ export class ExpenseFilterStore {
         return new Date(this.endDate + 'T23:59:59').getTime()
     }
 
-    get options() {
-        const uniqueBanks = new Set<string>()
-        const uniqueLabels = new Set<string>()
-        const uniqueCategories = new Set<string>()
+    get bankOptions() {
+        const uniqueBanks = new Set<string>([
+            ...this.root.expenseStore.expensesInDateRange.map(
+                (expense) => expense.bank
+            ),
+            ...this.root.expenseStore.subExpensesInDateRange.map(
+                (subExpense) => subExpense.bank
+            ),
+        ])
 
-        const allTransactions = [
-            ...this.root.expenseStore.expenses,
-            ...this.root.expenseStore.subExpenses,
-        ]
+        return Array.from(uniqueBanks).map((bank) => ({
+            value: bank,
+            label: bank.charAt(0).toUpperCase() + bank.slice(1),
+        }))
+    }
 
-        allTransactions.forEach((transaction) => {
-            uniqueBanks.add(transaction.bank)
+    get categoryOptions() {
+        const uniqueCategories = new Set<string>([
+            ...this.root.expenseStore.expensesInDateRange.map(
+                (expense) => expense.category
+            ),
+            ...this.root.expenseStore.subExpensesInDateRange.map(
+                (subExpense) => subExpense.category
+            ),
+        ])
 
-            if (transaction.category && transaction.category.trim()) {
-                uniqueCategories.add(transaction.category)
+        return Array.from(uniqueCategories).map((categoryId) => {
+            const category =
+                this.root.expenseCategoryStore.getCategoryById(categoryId)
+
+            return {
+                id: categoryId,
+                label: category?.label ?? '',
             }
+        })
+    }
 
-            transaction.labels.forEach((label) => {
-                if (label.trim()) {
-                    uniqueLabels.add(label)
-                }
+    get labelOptions() {
+        const labelCount: Record<string, number> = {}
+
+        this.root.expenseStore.expenses.forEach((expense) => {
+            expense.labels.forEach((label) => {
+                labelCount[label] = (labelCount[label] || 0) + 1
             })
         })
 
-        const banks: Bank[] = Array.from(uniqueBanks).map((bankValue) => ({
-            value: bankValue,
-            label: bankValue.charAt(0).toUpperCase() + bankValue.slice(1),
-        }))
-
-        const categories: Category[] = Array.from(uniqueCategories).map(
-            (categoryId) => ({
-                id: categoryId,
-                label:
-                    this.root.expenseCategoryStore.categories.find(
-                        (c) => c.id === categoryId
-                    )?.label || '',
+        this.root.expenseStore.subExpenses.forEach((subExpense) => {
+            subExpense.labels.forEach((label) => {
+                labelCount[label] = (labelCount[label] || 0) + 1
             })
-        )
+        })
 
-        return {
-            banks,
-            categories,
-            labels: Array.from(uniqueLabels).sort(),
-        }
+        return Object.entries(labelCount)
+            .sort((a, b) => b[1] - a[1])
+            .map(([label]) => label)
     }
 
     updateStartDate(startDate: string) {

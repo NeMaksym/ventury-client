@@ -10,6 +10,10 @@ export class ExpenseCategoryStore {
     loading = false
     error: string | null = null
 
+    getCategoryById(id: string): Category | undefined {
+        return this.categories.find((c) => c.id === id)
+    }
+
     constructor(service: ExpenseCategoryService) {
         makeAutoObservable(this)
         this.service = service

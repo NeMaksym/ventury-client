@@ -46,7 +46,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
                     handlers={handlers}
                     options={{
                         categories: expenseCategoryStore.categories,
-                        labels: expenseFilterStore.options.labels,
+                        labels: expenseFilterStore.labelOptions,
                     }}
                 />
             </Stack>

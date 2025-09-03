@@ -66,13 +66,11 @@ export const TransactionsFilter: React.FC = () => {
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                    {expenseFilterStore.options.banks.map(
-                        ({ value, label }) => (
-                            <MenuItem key={value} value={value}>
-                                {label}
-                            </MenuItem>
-                        )
-                    )}
+                    {expenseFilterStore.bankOptions.map(({ value, label }) => (
+                        <MenuItem key={value} value={value}>
+                            {label}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
 
@@ -92,20 +90,18 @@ export const TransactionsFilter: React.FC = () => {
                         return selected
                             .map(
                                 (id) =>
-                                    expenseFilterStore.options.categories.find(
+                                    expenseFilterStore.categoryOptions.find(
                                         (c) => c.id === id
                                     )?.label
                             )
                             .join(', ')
                     }}
                 >
-                    {expenseFilterStore.options.categories.map(
-                        ({ id, label }) => (
-                            <MenuItem key={id} value={id}>
-                                {label}
-                            </MenuItem>
-                        )
-                    )}
+                    {expenseFilterStore.categoryOptions.map(({ id, label }) => (
+                        <MenuItem key={id} value={id}>
+                            {label}
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
 
@@ -123,7 +119,7 @@ export const TransactionsFilter: React.FC = () => {
                     }}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                    {expenseFilterStore.options.labels.map((label) => (
+                    {expenseFilterStore.labelOptions.map((label) => (
                         <MenuItem key={label} value={label}>
                             {label}
                         </MenuItem>
