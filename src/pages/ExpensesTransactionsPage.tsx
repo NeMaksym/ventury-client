@@ -3,6 +3,7 @@ import { Typography, Box, Stack } from '@mui/material'
 
 import { TransactionsTable, TransactionsFilter } from '../components'
 import { useStore } from '../context/StoreContext'
+import { useExpenseHandlers } from '../hooks'
 
 export const ExpensesTransactionsPage: React.FC = () => {
     const {
@@ -11,6 +12,8 @@ export const ExpensesTransactionsPage: React.FC = () => {
         expenseFilterStore,
         expenseListStore,
     } = useStore()
+
+    const handlers = useExpenseHandlers()
 
     const renderContent = () => {
         if (expenseStore.loading) {
@@ -40,66 +43,7 @@ export const ExpensesTransactionsPage: React.FC = () => {
                 <TransactionsFilter />
                 <TransactionsTable
                     rows={expenseListStore.rows}
-                    handlers={{
-                        onCommentChange: (expenseId, comment, subExpenseId) =>
-                            subExpenseId
-                                ? expenseStore.updateSubExpenseField(
-                                      subExpenseId,
-                                      { comment }
-                                  )
-                                : expenseStore.updateExpenseField(expenseId, {
-                                      comment,
-                                  }),
-                        onCategoryChange: (expenseId, category, subExpenseId) =>
-                            subExpenseId
-                                ? expenseStore.updateSubExpenseField(
-                                      subExpenseId,
-                                      { category }
-                                  )
-                                : expenseStore.updateExpenseField(expenseId, {
-                                      category,
-                                  }),
-                        onLabelChange: (expenseId, labels, subExpenseId) =>
-                            subExpenseId
-                                ? expenseStore.updateSubExpenseField(
-                                      subExpenseId,
-                                      { labels }
-                                  )
-                                : expenseStore.updateExpenseField(expenseId, {
-                                      labels,
-                                  }),
-                        onHideChange: (expenseId, hide, subExpenseId) =>
-                            subExpenseId
-                                ? expenseStore.updateSubExpenseField(
-                                      subExpenseId,
-                                      { hide }
-                                  )
-                                : expenseStore.updateExpenseField(expenseId, {
-                                      hide,
-                                  }),
-                        onCapitalizeChange: (
-                            expenseId,
-                            capitalized,
-                            subExpenseId
-                        ) =>
-                            subExpenseId
-                                ? expenseStore.updateSubExpenseField(
-                                      subExpenseId,
-                                      { capitalized }
-                                  )
-                                : expenseStore.updateExpenseField(expenseId, {
-                                      capitalized,
-                                  }),
-                        onDelete: (expenseId, subExpenseId) =>
-                            subExpenseId
-                                ? expenseStore.delete(expenseId, subExpenseId)
-                                : expenseStore.delete(expenseId),
-                        onSubTransactionCreate: (expenseId, amount) =>
-                            expenseStore.createSubTransaction(
-                                expenseId,
-                                amount
-                            ),
-                    }}
+                    handlers={handlers}
                     options={{
                         categories: expenseCategoryStore.categories,
                         labels: expenseFilterStore.options.labels,
