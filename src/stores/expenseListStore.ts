@@ -113,12 +113,14 @@ export class ExpenseListStore {
     get rows() {
         const result: (SystemTransaction | SystemSubTransaction)[] = []
 
-        this.root.expenseStore.expenses
+        this.root.expenseStore.expensesInDateRange
             .slice()
             .sort(timeDesc)
             .forEach((expense) => {
                 const subExpenses =
-                    this.root.expenseStore.subExpensesMap.get(expense.id) || []
+                    this.root.expenseStore.subExpensesInDateRangeMap.get(
+                        expense.id
+                    ) || []
 
                 if (
                     this.shouldShowTransaction(

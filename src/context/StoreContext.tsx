@@ -10,6 +10,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({
 
     useEffect(() => {
         store.expenseCategoryStore.loadAll()
+        store.expenseStore.loadAll()
     }, [])
 
     return (

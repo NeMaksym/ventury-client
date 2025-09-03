@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 import { SystemTransaction, SystemSubTransaction } from '../types'
 import { ExpenseService } from '../db/expenseService'
 import { SubExpenseService } from '../db/subExpenseService'
@@ -31,21 +31,28 @@ export class ExpenseStore {
         this.root = root
         this.expenseService = expenseService
         this.subExpenseService = subExpenseService
-
-        reaction(
-            () => [
-                this.root.expenseFilterStore.startDate,
-                this.root.expenseFilterStore.endDate,
-            ],
-            () => {
-                this.loadByDateRange()
-            },
-            { fireImmediately: true }
-        )
     }
 
-    get subExpensesMap() {
-        return this.subExpenses
+    get expensesInDateRange() {
+        return this.expenses.filter((expense) => {
+            return (
+                expense.time >= this.root.expenseFilterStore.unixStartDate &&
+                expense.time <= this.root.expenseFilterStore.unixEndDate
+            )
+        })
+    }
+
+    get subExpensesInDateRange() {
+        return this.subExpenses.filter((subExpense) => {
+            return (
+                subExpense.time >= this.root.expenseFilterStore.unixStartDate &&
+                subExpense.time <= this.root.expenseFilterStore.unixEndDate
+            )
+        })
+    }
+
+    get subExpensesInDateRangeMap() {
+        return this.subExpensesInDateRange
             .slice()
             .sort(timeDesc)
             .reduce<SubExpensesMap>((acc, subExpense) => {
@@ -56,23 +63,17 @@ export class ExpenseStore {
             }, new Map())
     }
 
-    *loadByDateRange() {
+    *loadAll() {
         this.loading = true
         this.error = null
 
         try {
-            const start = new Date(
-                this.root.expenseFilterStore.startDate + 'T00:00:00'
-            )
-            const end = new Date(
-                this.root.expenseFilterStore.endDate + 'T23:59:59'
-            )
             const [expenses, subExpenses]: [
                 SystemTransaction[],
                 SystemSubTransaction[]
             ] = yield Promise.all([
-                this.expenseService.getExpensesByDateRange(start, end),
-                this.subExpenseService.getSubExpensesByDateRange(start, end),
+                this.expenseService.getAllExpenses(),
+                this.subExpenseService.getAllSubExpenses(),
             ])
 
             this.expenses = expenses

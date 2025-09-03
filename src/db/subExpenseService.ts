@@ -2,6 +2,19 @@ import { getDb, Stores } from './connect'
 import { SystemSubTransaction } from '../types'
 
 export class SubExpenseService {
+    async getAllSubExpenses(): Promise<SystemSubTransaction[]> {
+        const db = await getDb()
+        const tx = db.transaction(Stores.SUB_EXPENSES, 'readonly')
+        const store = tx.objectStore(Stores.SUB_EXPENSES)
+
+        try {
+            return await store.getAll()
+        } catch (error) {
+            console.error('Failed to get all sub-expenses:', error)
+            throw error
+        }
+    }
+
     async getSubExpensesByDateRange(
         startDate: Date,
         endDate: Date

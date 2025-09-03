@@ -91,6 +91,14 @@ export class ExpenseFilterStore {
         )
     }
 
+    get unixStartDate() {
+        return new Date(this.startDate + 'T00:00:00').getTime()
+    }
+
+    get unixEndDate() {
+        return new Date(this.endDate + 'T23:59:59').getTime()
+    }
+
     get options() {
         const uniqueBanks = new Set<string>()
         const uniqueLabels = new Set<string>()
