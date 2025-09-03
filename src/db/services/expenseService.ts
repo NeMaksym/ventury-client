@@ -1,5 +1,5 @@
-import { getDb, Stores } from './connect'
-import { SystemTransaction } from '../types'
+import { getDb, Stores } from '../connect'
+import { SystemTransaction } from '../../types'
 
 export class ExpenseService {
     async expenseExists(expense: SystemTransaction): Promise<boolean> {

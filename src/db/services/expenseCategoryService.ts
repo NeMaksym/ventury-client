@@ -1,5 +1,5 @@
-import { getDb, Stores } from './connect'
-import { Category } from '../types'
+import { getDb, Stores } from '../connect'
+import { Category } from '../../types'
 
 export class ExpenseCategoryService {
     async getAllCategories(): Promise<Category[]> {

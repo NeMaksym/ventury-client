@@ -1,5 +1,5 @@
-import { getDb, Stores } from './connect'
-import { SystemSubTransaction } from '../types'
+import { getDb, Stores } from '../connect'
+import { SystemSubTransaction } from '../../types'
 
 export class SubExpenseService {
     async getAllSubExpenses(): Promise<SystemSubTransaction[]> {

@@ -1,9 +1,11 @@
+import {
+    ExpenseCategoryService,
+    ExpenseService,
+    SubExpenseService,
+} from '../db/services'
 import { ExpenseFilterStore } from './expenseFilterStore'
 import { ExpenseCategoryStore } from './expenseCategoryStore'
-import { ExpenseCategoryService } from '../db/expenseCategoryService'
 import { ExpenseStore } from './expenseStore'
-import { ExpenseService } from '../db/expenseService'
-import { SubExpenseService } from '../db/subExpenseService'
 
 export class RootStore {
     expenseFilterStore: ExpenseFilterStore

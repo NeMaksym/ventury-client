@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { Category } from '../types'
-import { ExpenseCategoryService } from '../db'
+import { ExpenseCategoryService } from '../db/services'
 
 // TODO: Add "order" property to keep the order on page refresh (after new item added)
 export class ExpenseCategoryStore {
