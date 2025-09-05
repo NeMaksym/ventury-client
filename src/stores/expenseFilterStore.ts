@@ -1,6 +1,5 @@
 import { makeAutoObservable, reaction } from 'mobx'
 import { RootStore } from './rootStore'
-import { Category } from '../types'
 
 export const STORAGE_KEYS = {
     START_DATE: 'filter-start-date',

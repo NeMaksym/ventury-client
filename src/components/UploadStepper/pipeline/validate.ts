@@ -1,7 +1,7 @@
 import { AddMessage } from '../../../hooks'
 import { Bank, SourceTransaction } from '../../../types'
 import { currency } from '../../../utils'
-import { RootStore } from '../../../stores/rootStore'
+import { RootStore } from '../../../stores'
 
 function isValidUnixMillis(value: number): boolean {
     return (

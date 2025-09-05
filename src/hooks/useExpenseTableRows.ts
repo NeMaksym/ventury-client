@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { timeDesc } from '../utils'
-import { RootStore } from '../stores/rootStore'
+import { RootStore } from '../stores'
 import { useStore } from '../context/StoreContext'
 import { SystemTransaction, SystemSubTransaction } from '../types'
 
