@@ -8,7 +8,7 @@ export const addToDB: AddToDB = async ({
     systemTransactions,
     addMessage,
     expenseStore,
-    incomeService,
+    incomeStore,
 }) => {
     const [expenses, incomes] = split<SystemTransaction>(
         systemTransactions,
@@ -26,7 +26,7 @@ export const addToDB: AddToDB = async ({
 
     const [incomesDuplicates, incomesToAdd] =
         await splitAsync<SystemTransaction>(incomes, async (transaction) =>
-            incomeService.transactionExists(transaction)
+            incomeStore.incomeExists(transaction)
         )
 
     if (expensesDuplicates.length || incomesDuplicates.length) {
@@ -37,7 +37,7 @@ export const addToDB: AddToDB = async ({
 
     await Promise.all([
         ...expensesToAdd.map((expense) => expenseStore.addExpense(expense)),
-        ...incomesToAdd.map((income) => incomeService.addIncome(income)),
+        ...incomesToAdd.map((income) => incomeStore.addIncome(income)),
     ])
 
     addMessage(

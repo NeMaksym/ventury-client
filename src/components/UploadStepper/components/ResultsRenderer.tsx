@@ -4,7 +4,6 @@ import { asyncPipe, CancellationError } from '../../../utils/asyncPipe'
 import { Bank, SourceTransaction } from '../../../types'
 
 import { useMessages } from '../../../hooks'
-import { useIncomeService } from '../../../db'
 import {
     loadExchangeRates,
     toSystemTransactions,
@@ -24,10 +23,9 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
     bank,
     sourceTransactions,
 }) => {
-    const { expenseStore } = useStore()
+    const { expenseStore, incomeStore } = useStore()
 
     const { messages, addMessage } = useMessages()
-    const incomeService = useIncomeService()
 
     useEffect(() => {
         const controller = new AbortController()
@@ -38,7 +36,7 @@ export const ResultsRenderer: React.FC<ResultsRendererProps> = ({
                 addMessage,
                 bank,
                 expenseStore,
-                incomeService,
+                incomeStore,
             },
             validate,
             loadExchangeRates,
