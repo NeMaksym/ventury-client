@@ -8,49 +8,43 @@ import {
     settingsPages,
 } from './pages/routes'
 import { Layout, Theme } from './components'
-import { DbProvider } from './context/DbContext'
 import { StoreProvider } from './context/StoreContext'
 
 const pages = [...uploadPage, ...expensesPages, ...settingsPages]
 
 export function App() {
     return (
-        <DbProvider>
-            <StoreProvider>
-                <Theme>
-                    <CssBaseline />
-                    <BrowserRouter>
-                        <Layout>
-                            <Routes>
-                                {pages.map(({ element, path }) => (
-                                    <Route
-                                        key={path}
-                                        path={path}
-                                        element={element}
+        <StoreProvider>
+            <Theme>
+                <CssBaseline />
+                <BrowserRouter>
+                    <Layout>
+                        <Routes>
+                            {pages.map(({ element, path }) => (
+                                <Route
+                                    key={path}
+                                    path={path}
+                                    element={element}
+                                />
+                            ))}
+                            <Route
+                                path={PagePath.EXPENSES}
+                                element={
+                                    <Navigate
+                                        to={PagePath.EXPENSES_TRANSACTIONS}
                                     />
-                                ))}
-                                <Route
-                                    path={PagePath.EXPENSES}
-                                    element={
-                                        <Navigate
-                                            to={PagePath.EXPENSES_TRANSACTIONS}
-                                        />
-                                    }
-                                />
-                                <Route
-                                    path="/"
-                                    element={
-                                        <Navigate
-                                            to={PagePath.UPLOAD}
-                                            replace
-                                        />
-                                    }
-                                />
-                            </Routes>
-                        </Layout>
-                    </BrowserRouter>
-                </Theme>
-            </StoreProvider>
-        </DbProvider>
+                                }
+                            />
+                            <Route
+                                path="/"
+                                element={
+                                    <Navigate to={PagePath.UPLOAD} replace />
+                                }
+                            />
+                        </Routes>
+                    </Layout>
+                </BrowserRouter>
+            </Theme>
+        </StoreProvider>
     )
 }
