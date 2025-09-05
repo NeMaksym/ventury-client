@@ -7,10 +7,10 @@ import IconButton from '@mui/material/IconButton'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 
-import { useTheme } from '../context/ThemeContext'
+import { useStore } from '../context/StoreContext'
 
 export const TopBar: React.FC = () => {
-    const { mode, toggleMode } = useTheme()
+    const { uiStore } = useStore()
 
     return (
         <AppBar position="static">
@@ -23,10 +23,10 @@ export const TopBar: React.FC = () => {
                 </Typography>
                 <IconButton
                     color="inherit"
-                    onClick={toggleMode}
+                    onClick={() => uiStore.toggleMode()}
                     aria-label="toggle theme"
                 >
-                    {mode === 'dark' ? (
+                    {uiStore.mode === 'dark' ? (
                         <Brightness7Icon />
                     ) : (
                         <Brightness4Icon />
