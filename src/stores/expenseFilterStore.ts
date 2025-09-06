@@ -1,5 +1,6 @@
 import { makeAutoObservable, reaction } from 'mobx'
 import { RootStore } from './rootStore'
+import { fromBankAccountValue, getBankAccountValue } from '../utils'
 
 export const STORAGE_KEYS = {
     START_DATE: 'filter-start-date',
@@ -52,6 +53,7 @@ export class ExpenseFilterStore {
     startDate = ''
     endDate = ''
     banks: string[] = []
+    bankAccounts: string[] = []
     categories: string[] = []
     labels: string[] = []
 
@@ -114,6 +116,32 @@ export class ExpenseFilterStore {
         }))
     }
 
+    get bankAccountOptions() {
+        const uniqueBankAccounts = new Set<string>()
+
+        const allTransactions = [
+            ...this.root.expenseStore.expensesInDateRange,
+            ...this.root.expenseStore.subExpensesInDateRange,
+        ]
+
+        allTransactions.forEach((transaction) => {
+            const accountValue = getBankAccountValue(transaction)
+            uniqueBankAccounts.add(accountValue)
+        })
+
+        return Array.from(uniqueBankAccounts)
+            .map((bankAccountValue) => {
+                const { bank, accountValue } =
+                    fromBankAccountValue(bankAccountValue)
+
+                return {
+                    value: bankAccountValue,
+                    label: `${bank} ${accountValue}`,
+                }
+            })
+            .sort((a, b) => a.label.localeCompare(b.label))
+    }
+
     get categoryOptions() {
         const uniqueCategories = new Set<string>([
             ...this.root.expenseStore.expensesInDateRange.map(
@@ -165,6 +193,10 @@ export class ExpenseFilterStore {
 
     updateBanks(banks: string[]) {
         this.banks = banks
+    }
+
+    updateBankAccounts(bankAccounts: string[]) {
+        this.bankAccounts = bankAccounts
     }
 
     updateCategories(categories: string[]) {

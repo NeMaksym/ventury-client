@@ -75,6 +75,30 @@ export const TransactionsFilter: React.FC = () => {
             </FormControl>
 
             <FormControl sx={{ width: 200 }}>
+                <InputLabel>Account</InputLabel>
+                <Select
+                    label="Account"
+                    multiple
+                    value={expenseFilterStore.bankAccounts}
+                    onChange={(e) => {
+                        const value = e.target.value
+                        const selectedAccounts =
+                            typeof value === 'string' ? value.split(',') : value
+                        expenseFilterStore.updateBankAccounts(selectedAccounts)
+                    }}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {expenseFilterStore.bankAccountOptions.map(
+                        ({ value, label }) => (
+                            <MenuItem key={value} value={value}>
+                                {label}
+                            </MenuItem>
+                        )
+                    )}
+                </Select>
+            </FormControl>
+
+            <FormControl sx={{ width: 200 }}>
                 <InputLabel>Category</InputLabel>
                 <Select
                     label="Category"

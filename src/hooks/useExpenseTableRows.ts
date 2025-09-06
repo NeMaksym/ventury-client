@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { timeDesc } from '../utils'
+import { timeDesc, getBankAccountValue } from '../utils'
 import { RootStore } from '../stores'
 import { useStore } from '../context/StoreContext'
 import { SystemTransaction, SystemSubTransaction } from '../types'
@@ -40,6 +40,7 @@ export function useExpenseTableRows() {
         expenseStore.expensesInDateRange,
         expenseStore.subExpensesInDateRangeMap,
         expenseFilterStore.banks,
+        expenseFilterStore.bankAccounts,
         expenseFilterStore.categories,
         expenseFilterStore.labels,
     ])
@@ -51,6 +52,13 @@ function shouldShowTransaction(
 ) {
     if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
         return false
+    }
+
+    if (filters.bankAccounts.length > 0) {
+        const accountValue = getBankAccountValue(transaction)
+        if (!filters.bankAccounts.includes(accountValue)) {
+            return false
+        }
     }
 
     if (filters.categories.length > 0) {
@@ -80,6 +88,13 @@ function shouldShowSubTransaction(
 ) {
     if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
         return false
+    }
+
+    if (filters.bankAccounts.length > 0) {
+        const accountValue = getBankAccountValue(transaction)
+        if (!filters.bankAccounts.includes(accountValue)) {
+            return false
+        }
     }
 
     if (filters.categories.length > 0) {
