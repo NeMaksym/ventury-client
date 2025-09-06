@@ -14,7 +14,7 @@ export const SubTransactionMenuItem: React.FC<SubTransactionMenuItemProps> = ({
             <ListItemIcon>
                 <CallSplit />
             </ListItemIcon>
-            <ListItemText>Sub-transaction</ListItemText>
+            <ListItemText>Split</ListItemText>
         </MenuItem>
     )
 }
