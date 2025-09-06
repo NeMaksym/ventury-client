@@ -1,7 +1,11 @@
 import React from 'react'
-import { Typography, Box, Stack } from '@mui/material'
+import { Typography, Stack } from '@mui/material'
 
-import { TransactionsTable, TransactionsFilter } from '../components'
+import {
+    TransactionsTable,
+    TransactionsFilter,
+    PageLayout,
+} from '../components'
 import { useStore } from '../context/StoreContext'
 import {
     useExpenseHandlers,
@@ -55,12 +59,5 @@ export const ExpensesTransactionsPage: React.FC = () => {
         )
     }
 
-    return (
-        <Box sx={{ padding: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Transactions
-            </Typography>
-            {renderContent()}
-        </Box>
-    )
+    return <PageLayout title="Transactions">{renderContent()}</PageLayout>
 }

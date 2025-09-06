@@ -1,17 +1,13 @@
 import React from 'react'
-import { Typography, Box } from '@mui/material'
 
-import { CategoryList } from '../components'
+import { CategoryList, PageLayout } from '../components'
 import { useStore } from '../context/StoreContext'
 
 export const SettingsPage: React.FC = () => {
     const { expenseCategoryStore, expenseStore } = useStore()
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Settings
-            </Typography>
+        <PageLayout title="Settings">
             <CategoryList
                 categories={expenseCategoryStore.categories}
                 onCategoryAdd={(label) => expenseCategoryStore.add(label)}
@@ -23,6 +19,6 @@ export const SettingsPage: React.FC = () => {
                     await expenseCategoryStore.remove(id)
                 }}
             />
-        </Box>
+        </PageLayout>
     )
 }

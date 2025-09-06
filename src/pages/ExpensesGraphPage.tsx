@@ -1,6 +1,7 @@
 import React from 'react'
-import { Typography, Box, CircularProgress, Alert } from '@mui/material'
-import { YearGraph } from '../components'
+import { Box, CircularProgress, Alert } from '@mui/material'
+
+import { YearGraph, PageLayout } from '../components'
 import { fromSmallestUnit } from '../utils/formatAmount'
 import { useStore } from '../context/StoreContext'
 
@@ -55,14 +56,7 @@ const ExpensesGraphPage: React.FC = () => {
         )
     }
 
-    return (
-        <Box sx={{ padding: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Graph
-            </Typography>
-            {renderContent()}
-        </Box>
-    )
+    return <PageLayout title="Graph">{renderContent()}</PageLayout>
 }
 
 export { ExpensesGraphPage }
