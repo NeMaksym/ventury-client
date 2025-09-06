@@ -1,6 +1,6 @@
 import { ExpensesTransactionsPage } from './ExpensesTransactionsPage'
 import { UploadPage } from './UploadPage'
-import { SettingsPage as ExpensesConfigPage } from './ExpensesConfigPage'
+import { ExpensesConfigPage } from './ExpensesConfigPage'
 import { ExpensesGraphPage } from './ExpensesGraphPage'
 
 export const enum PagePath {

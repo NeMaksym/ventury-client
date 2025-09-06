@@ -3,11 +3,11 @@ import React from 'react'
 import { CategoryList, PageLayout } from '../components'
 import { useStore } from '../context/StoreContext'
 
-export const SettingsPage: React.FC = () => {
+export const ExpensesConfigPage: React.FC = () => {
     const { expenseCategoryStore, expenseStore } = useStore()
 
     return (
-        <PageLayout title="Settings">
+        <PageLayout title="Configuration">
             <CategoryList
                 categories={expenseCategoryStore.categories}
                 onCategoryAdd={(label) => expenseCategoryStore.add(label)}
