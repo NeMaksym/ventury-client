@@ -7,7 +7,7 @@ import {
     expensesPages,
     settingsPages,
 } from './pages/routes'
-import { Layout, Theme } from './components'
+import { AppLayout, Theme } from './components'
 import { StoreProvider } from './context/StoreContext'
 
 const pages = [...uploadPage, ...expensesPages, ...settingsPages]
@@ -18,7 +18,7 @@ export function App() {
             <Theme>
                 <CssBaseline />
                 <BrowserRouter>
-                    <Layout>
+                    <AppLayout>
                         <Routes>
                             {pages.map(({ element, path }) => (
                                 <Route
@@ -42,7 +42,7 @@ export function App() {
                                 }
                             />
                         </Routes>
-                    </Layout>
+                    </AppLayout>
                 </BrowserRouter>
             </Theme>
         </StoreProvider>

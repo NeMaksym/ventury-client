@@ -3,9 +3,9 @@ import { PropsWithChildren } from 'react'
 
 import { TopBar, NavList } from '.'
 
-interface LayoutProps extends PropsWithChildren {}
+interface AppLayoutProps extends PropsWithChildren {}
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => (
+export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => (
     <Box
         sx={{
             display: 'flex',
