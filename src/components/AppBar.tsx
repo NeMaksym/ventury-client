@@ -13,7 +13,10 @@ export const TopBar: React.FC = () => {
     const { uiStore } = useStore()
 
     return (
-        <AppBar position="static">
+        <AppBar
+            position="static"
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Ventury{' '}
