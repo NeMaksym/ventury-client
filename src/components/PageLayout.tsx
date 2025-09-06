@@ -1,4 +1,4 @@
-import { Box, Typography, Stack } from '@mui/material'
+import { Typography, Stack } from '@mui/material'
 import { PropsWithChildren } from 'react'
 
 interface PageLayoutProps extends PropsWithChildren {
