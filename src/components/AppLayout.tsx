@@ -22,7 +22,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => (
                 sx={{
                     flexGrow: 1,
                     overflow: 'auto',
-                    padding: 2,
+                    padding: 4,
                     minHeight: 0,
                 }}
             >
