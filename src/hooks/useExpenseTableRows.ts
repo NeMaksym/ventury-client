@@ -39,7 +39,6 @@ export function useExpenseTableRows() {
     }, [
         expenseStore.expensesInDateRange,
         expenseStore.subExpensesInDateRangeMap,
-        expenseFilterStore.banks,
         expenseFilterStore.bankAccounts,
         expenseFilterStore.categories,
         expenseFilterStore.labels,
@@ -50,10 +49,6 @@ function shouldShowTransaction(
     transaction: SystemTransaction,
     filters: RootStore['expenseFilterStore']
 ) {
-    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
-        return false
-    }
-
     if (filters.bankAccounts.length > 0) {
         const accountValue = getBankAccountValue(transaction)
         if (!filters.bankAccounts.includes(accountValue)) {
@@ -86,10 +81,6 @@ function shouldShowSubTransaction(
     subTransaction: SystemSubTransaction,
     filters: RootStore['expenseFilterStore']
 ) {
-    if (filters.banks.length > 0 && !filters.banks.includes(transaction.bank)) {
-        return false
-    }
-
     if (filters.bankAccounts.length > 0) {
         const accountValue = getBankAccountValue(transaction)
         if (!filters.bankAccounts.includes(accountValue)) {

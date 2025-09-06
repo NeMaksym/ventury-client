@@ -52,7 +52,6 @@ export class ExpenseFilterStore {
 
     startDate = ''
     endDate = ''
-    banks: string[] = []
     bankAccounts: string[] = []
     categories: string[] = []
     labels: string[] = []
@@ -98,22 +97,6 @@ export class ExpenseFilterStore {
 
     get unixEndDate() {
         return new Date(this.endDate + 'T23:59:59').getTime()
-    }
-
-    get bankOptions() {
-        const uniqueBanks = new Set<string>([
-            ...this.root.expenseStore.expensesInDateRange.map(
-                (expense) => expense.bank
-            ),
-            ...this.root.expenseStore.subExpensesInDateRange.map(
-                (subExpense) => subExpense.bank
-            ),
-        ])
-
-        return Array.from(uniqueBanks).map((bank) => ({
-            value: bank,
-            label: bank.charAt(0).toUpperCase() + bank.slice(1),
-        }))
     }
 
     get bankAccountOptions() {
@@ -189,10 +172,6 @@ export class ExpenseFilterStore {
 
     updateEndDate(endDate: string) {
         this.endDate = endDate
-    }
-
-    updateBanks(banks: string[]) {
-        this.banks = banks
     }
 
     updateBankAccounts(bankAccounts: string[]) {
