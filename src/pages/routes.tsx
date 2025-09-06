@@ -1,6 +1,6 @@
 import { ExpensesTransactionsPage } from './ExpensesTransactionsPage'
 import { UploadPage } from './UploadPage'
-import { SettingsPage } from './SettingsPage'
+import { SettingsPage as ExpensesConfigPage } from './ExpensesConfigPage'
 import { ExpensesGraphPage } from './ExpensesGraphPage'
 
 export const enum PagePath {
@@ -8,7 +8,7 @@ export const enum PagePath {
     EXPENSES = '/expenses',
     EXPENSES_TRANSACTIONS = '/expenses/transactions',
     EXPENSES_GRAPH = '/expenses/graph',
-    SETTINGS = '/settings',
+    EXPENSES_CONFIG = '/expenses/config',
 }
 export interface PageRoute {
     element: React.ReactNode
@@ -35,12 +35,9 @@ export const expensesPages: PageRoute[] = [
         name: 'Graph',
         path: PagePath.EXPENSES_GRAPH,
     },
-]
-
-export const settingsPages: PageRoute[] = [
     {
-        element: <SettingsPage />,
-        name: 'Settings',
-        path: PagePath.SETTINGS,
+        element: <ExpensesConfigPage />,
+        name: 'Configuration',
+        path: PagePath.EXPENSES_CONFIG,
     },
 ]

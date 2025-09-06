@@ -1,16 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CssBaseline from '@mui/material/CssBaseline'
 
-import {
-    uploadPage,
-    PagePath,
-    expensesPages,
-    settingsPages,
-} from './pages/routes'
+import { uploadPage, PagePath, expensesPages } from './pages/routes'
 import { AppLayout, Theme } from './components'
 import { StoreProvider } from './context/StoreContext'
 
-const pages = [...uploadPage, ...expensesPages, ...settingsPages]
+const pages = [...uploadPage, ...expensesPages]
 
 export function App() {
     return (
