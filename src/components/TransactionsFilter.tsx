@@ -11,7 +11,7 @@ import {
 import { useStore } from '../context/StoreContext'
 
 export const TransactionsFilter: React.FC = () => {
-    const { expenseFilterStore } = useStore()
+    const { expenseFilterStore, expenseCategoryStore } = useStore()
 
     const today = new Date().toISOString().split('T')[0]
 
@@ -94,14 +94,13 @@ export const TransactionsFilter: React.FC = () => {
                         return selected
                             .map(
                                 (id) =>
-                                    expenseFilterStore.categoryOptions.find(
-                                        (c) => c.id === id
-                                    )?.label
+                                    expenseCategoryStore.getCategoryById(id)
+                                        ?.label
                             )
                             .join(', ')
                     }}
                 >
-                    {expenseFilterStore.categoryOptions.map(({ id, label }) => (
+                    {expenseCategoryStore.categories.map(({ id, label }) => (
                         <MenuItem key={id} value={id}>
                             {label}
                         </MenuItem>

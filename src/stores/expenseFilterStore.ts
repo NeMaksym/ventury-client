@@ -125,27 +125,6 @@ export class ExpenseFilterStore {
             .sort((a, b) => a.label.localeCompare(b.label))
     }
 
-    get categoryOptions() {
-        const uniqueCategories = new Set<string>([
-            ...this.root.expenseStore.expensesInDateRange.map(
-                (expense) => expense.category
-            ),
-            ...this.root.expenseStore.subExpensesInDateRange.map(
-                (subExpense) => subExpense.category
-            ),
-        ])
-
-        return Array.from(uniqueCategories).map((categoryId) => {
-            const category =
-                this.root.expenseCategoryStore.getCategoryById(categoryId)
-
-            return {
-                id: categoryId,
-                label: category?.label ?? '',
-            }
-        })
-    }
-
     get labelOptions() {
         const labelCount: Record<string, number> = {}
 
