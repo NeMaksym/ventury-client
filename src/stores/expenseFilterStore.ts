@@ -103,8 +103,8 @@ export class ExpenseFilterStore {
         const uniqueBankAccounts = new Set<string>()
 
         const allTransactions = [
-            ...this.root.expenseStore.expensesInDateRange,
-            ...this.root.expenseStore.subExpensesInDateRange,
+            ...this.root.expenseStore.expenses,
+            ...this.root.expenseStore.subExpenses,
         ]
 
         allTransactions.forEach((transaction) => {
