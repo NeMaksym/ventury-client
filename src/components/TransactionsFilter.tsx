@@ -16,7 +16,7 @@ export const TransactionsFilter: React.FC = () => {
     const today = new Date().toISOString().split('T')[0]
 
     return (
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ width: '100%' }}>
             <TextField
                 label="Start Date"
                 type="date"
@@ -24,6 +24,7 @@ export const TransactionsFilter: React.FC = () => {
                 onChange={(e) =>
                     expenseFilterStore.updateStartDate(e.target.value)
                 }
+                sx={{ width: 120, flexShrink: 0 }}
                 slotProps={{
                     inputLabel: {
                         shrink: true,
@@ -41,6 +42,7 @@ export const TransactionsFilter: React.FC = () => {
                 onChange={(e) =>
                     expenseFilterStore.updateEndDate(e.target.value)
                 }
+                sx={{ width: 120, flexShrink: 0 }}
                 slotProps={{
                     inputLabel: {
                         shrink: true,
@@ -52,7 +54,7 @@ export const TransactionsFilter: React.FC = () => {
                 }}
             />
 
-            <FormControl sx={{ width: 200 }}>
+            <FormControl sx={{ flex: 1 }}>
                 <InputLabel>Account</InputLabel>
                 <Select
                     label="Account"
@@ -76,7 +78,7 @@ export const TransactionsFilter: React.FC = () => {
                 </Select>
             </FormControl>
 
-            <FormControl sx={{ width: 200 }}>
+            <FormControl sx={{ flex: 1 }}>
                 <InputLabel>Category</InputLabel>
                 <Select
                     label="Category"
@@ -107,7 +109,7 @@ export const TransactionsFilter: React.FC = () => {
                 </Select>
             </FormControl>
 
-            <FormControl sx={{ width: 200 }}>
+            <FormControl sx={{ flex: 1 }}>
                 <InputLabel>Labels</InputLabel>
                 <Select
                     label="Labels"
