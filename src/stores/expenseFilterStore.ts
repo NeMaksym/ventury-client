@@ -128,17 +128,18 @@ export class ExpenseFilterStore {
     get labelOptions() {
         const labelCount: Record<string, number> = {}
 
-        this.root.expenseStore.expenses.forEach((expense) => {
-            expense.labels.forEach((label) => {
-                labelCount[label] = (labelCount[label] || 0) + 1
-            })
-        })
-
-        this.root.expenseStore.subExpenses.forEach((subExpense) => {
-            subExpense.labels.forEach((label) => {
-                labelCount[label] = (labelCount[label] || 0) + 1
-            })
-        })
+        Promise.all([
+            this.root.expenseStore.expenses.forEach((expense) => {
+                expense.labels.forEach((label) => {
+                    labelCount[label] = (labelCount[label] || 0) + 1
+                })
+            }),
+            this.root.expenseStore.subExpenses.forEach((subExpense) => {
+                subExpense.labels.forEach((label) => {
+                    labelCount[label] = (labelCount[label] || 0) + 1
+                })
+            }),
+        ])
 
         return Object.entries(labelCount)
             .sort((a, b) => b[1] - a[1])
