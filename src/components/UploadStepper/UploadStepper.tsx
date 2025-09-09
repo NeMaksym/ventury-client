@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box } from '@mui/material'
+import Box from '@mui/material/Box'
 
 import { Header, Footer, BankSelector, ResultsRenderer } from './components'
 import { Bank, SourceTransaction } from '../../types'

@@ -1,5 +1,6 @@
 import React from 'react'
-import { TableCell, Tooltip } from '@mui/material'
+import TableCell from '@mui/material/TableCell'
+import Tooltip from '@mui/material/Tooltip'
 
 interface DescriptionCellProps {
     description: string

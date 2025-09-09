@@ -1,11 +1,9 @@
 import React, { useCallback } from 'react'
-import {
-    Typography,
-    Stack,
-    Button,
-    Grid,
-    CircularProgress,
-} from '@mui/material'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { useTokenInput } from '../hooks/useTokenInput'
 import { useTransactions } from '../hooks/useTransactions'

@@ -1,5 +1,7 @@
 import React from 'react'
-import { Box, CircularProgress, Alert } from '@mui/material'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import Alert from '@mui/material/Alert'
 
 import { YearGraph, PageLayout } from '../components'
 import { fromSmallestUnit } from '../utils/formatAmount'

@@ -1,5 +1,8 @@
 import React from 'react'
-import { TableCell, Typography, Tooltip } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import TableCell from '@mui/material/TableCell'
+import Tooltip from '@mui/material/Tooltip'
+
 import { currency, fromSmallestUnit } from '../../../utils'
 
 interface AmountCellProps {

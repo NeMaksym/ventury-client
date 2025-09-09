@@ -1,11 +1,10 @@
 import React from 'react'
-import {
-    TableCell,
-    Select,
-    MenuItem,
-    FormControl,
-    SelectChangeEvent,
-} from '@mui/material'
+import FormControl from '@mui/material/FormControl'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
+import { SelectChangeEvent } from '@mui/material/Select'
+import TableCell from '@mui/material/TableCell'
+
 import { useTransactionHandlers, useTransactionOptions } from '../context'
 
 const EMPTY_CATEGORY = ''

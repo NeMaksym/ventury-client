@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { Box, Button, Typography, styled } from '@mui/material'
-import { CloudUpload } from '@mui/icons-material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import CloudUpload from '@mui/icons-material/CloudUpload'
+import { styled } from '@mui/system'
 
 import { UploaderProps } from '../../../types'
 import { parsePrivateBankStatement } from '../utils/statementParser'

@@ -1,5 +1,7 @@
 import React from 'react'
-import { TableRow, TableCell, Typography } from '@mui/material'
+import Typography from '@mui/material/Typography'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
 
 interface EmptyBodyRowProps {
     colSpan: number

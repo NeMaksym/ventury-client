@@ -1,6 +1,8 @@
 import React from 'react'
-import { MenuItem, ListItemIcon, ListItemText } from '@mui/material'
-import { Comment } from '@mui/icons-material'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Comment from '@mui/icons-material/Comment'
 
 interface CommentMenuItemProps {
     onClick: () => void

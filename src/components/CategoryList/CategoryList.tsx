@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
-import { Box, List, Divider } from '@mui/material'
+import Box from '@mui/material/Box'
+import List from '@mui/material/List'
+import Divider from '@mui/material/Divider'
+
 import { CategoryListHeader } from './CategoryListHeader'
 import { CategoryListItem } from './CategoryListItem'
 import { AddCategoryDialog } from './AddCategoryDialog'

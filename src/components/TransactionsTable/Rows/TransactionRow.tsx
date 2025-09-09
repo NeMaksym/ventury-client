@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableRow } from '@mui/material'
+import TableRow from '@mui/material/TableRow'
 
 import {
     DateCell,

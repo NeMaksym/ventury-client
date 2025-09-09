@@ -1,5 +1,6 @@
 import React from 'react'
-import { Menu } from '@mui/material'
+import Menu from '@mui/material/Menu'
+
 import { VisibilityMenuItem } from './VisibilityMenuItem'
 import { CapitalizeMenuItem } from './CapitalizeMenuItem'
 import { SubTransactionMenuItem } from './SubTransactionMenuItem'

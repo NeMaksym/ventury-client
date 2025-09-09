@@ -1,12 +1,10 @@
 import React from 'react'
-import {
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Stack,
-} from '@mui/material'
+import Stack from '@mui/material/Stack'
+import TextField from '@mui/material/TextField'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 import { useStore } from '../context/StoreContext'
 

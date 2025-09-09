@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableCell } from '@mui/material'
+import TableCell from '@mui/material/TableCell'
 
 interface DateCellProps {
     time: number

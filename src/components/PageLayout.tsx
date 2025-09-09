@@ -1,5 +1,6 @@
-import { Typography, Stack } from '@mui/material'
 import { PropsWithChildren } from 'react'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
 
 interface PageLayoutProps extends PropsWithChildren {
     title: string

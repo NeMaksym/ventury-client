@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import { ListItem, ListItemText, IconButton } from '@mui/material'
-import { Edit, Delete } from '@mui/icons-material'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import IconButton from '@mui/material/IconButton'
+import Edit from '@mui/icons-material/Edit'
+import Delete from '@mui/icons-material/Delete'
 
 import { EditCategoryDialog } from './EditCategoryDialog'
 import { DeleteCategoryDialog } from './DeleteCategoryDialog'

@@ -1,6 +1,8 @@
 import React from 'react'
-import { ListItem, ListItemText, IconButton } from '@mui/material'
-import { Add } from '@mui/icons-material'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import IconButton from '@mui/material/IconButton'
+import Add from '@mui/icons-material/Add'
 
 interface CategoryListHeaderProps {
     onAddClick: () => void

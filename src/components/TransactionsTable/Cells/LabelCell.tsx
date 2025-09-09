@@ -1,10 +1,8 @@
 import React from 'react'
-import {
-    TableCell,
-    Autocomplete,
-    TextField,
-    createFilterOptions,
-} from '@mui/material'
+import TableCell from '@mui/material/TableCell'
+import Autocomplete from '@mui/material/Autocomplete'
+import TextField from '@mui/material/TextField'
+import { createFilterOptions } from '@mui/material/Autocomplete'
 
 import { useTransactionHandlers, useTransactionOptions } from '../context'
 

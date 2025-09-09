@@ -1,6 +1,8 @@
 import React from 'react'
-import { MenuItem, ListItemIcon, ListItemText } from '@mui/material'
-import { MonetizationOnRounded } from '@mui/icons-material'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import MonetizationOnRounded from '@mui/icons-material/MonetizationOnRounded'
 
 interface CapitalizeMenuItemProps {
     isCapitalized: boolean

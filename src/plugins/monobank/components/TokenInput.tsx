@@ -1,10 +1,8 @@
 import React from 'react'
-import {
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    OutlinedInput,
-} from '@mui/material'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import FormHelperText from '@mui/material/FormHelperText'
+import OutlinedInput from '@mui/material/OutlinedInput'
 
 interface TokenInputProps {
     value: string

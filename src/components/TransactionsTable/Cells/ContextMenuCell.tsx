@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { IconButton, TableCell } from '@mui/material'
-import { MoreVert } from '@mui/icons-material'
+import MoreVert from '@mui/icons-material/MoreVert'
+import TableCell from '@mui/material/TableCell'
+import IconButton from '@mui/material/IconButton'
+
 import { useTransactionHandlers } from '../context'
 import { ContextMenu } from '../ContextMenu'
 import {

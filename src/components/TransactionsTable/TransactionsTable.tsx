@@ -1,14 +1,11 @@
 import React from 'react'
-import {
-    Table,
-    TableBody,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    TableCell,
-    type TableCellProps,
-} from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
+import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 
 import { EmptyBodyRow, SubTransactionBodyRow, TransactionBodyRow } from './Rows'
 import {

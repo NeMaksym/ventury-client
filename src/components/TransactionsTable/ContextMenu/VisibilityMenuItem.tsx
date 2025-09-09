@@ -1,6 +1,9 @@
 import React from 'react'
-import { MenuItem, ListItemIcon, ListItemText } from '@mui/material'
-import { VisibilityOff, Visibility } from '@mui/icons-material'
+import MenuItem from '@mui/material/MenuItem'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import Visibility from '@mui/icons-material/Visibility'
 
 interface VisibilityMenuItemProps {
     isHidden: boolean

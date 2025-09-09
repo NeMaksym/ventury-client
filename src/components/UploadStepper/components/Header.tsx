@@ -1,5 +1,7 @@
 import React from 'react'
-import { Stepper, Step, StepLabel } from '@mui/material'
+import Stepper from '@mui/material/Stepper'
+import Step from '@mui/material/Step'
+import StepLabel from '@mui/material/StepLabel'
 
 interface HeaderProps {
     activeStep: number
