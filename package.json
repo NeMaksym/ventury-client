@@ -2,7 +2,10 @@
     "name": "venturi-client",
     "private": true,
     "version": "0.0.0",
-    "source": "src/index.html",
+    "source": [
+        "src/index.html",
+        "src/404.html"
+    ],
     "scripts": {
         "start": "parcel",
         "clean-start": "rm -rf dist .parcel-cache && npm run start",
